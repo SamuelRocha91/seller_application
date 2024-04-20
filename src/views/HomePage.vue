@@ -11,6 +11,14 @@
       <button id="register"><a href="#name-total">Cadastrar</a></button>
     </div>
   </header>
+  <main>
+    <div class="welcome-text">
+      <h1>Quer rapidez na entrega?</h1>
+      <p>
+        Nosso delivery é o caminho certo para satisfazer seu desejo de forma rápida e eficiente!
+      </p>
+    </div>
+  </main>
 </template>
 
 <style scoped>
@@ -74,6 +82,36 @@ header {
 a {
   text-decoration: none;
   color: white;
+}
+
+main {
+  height: 92vh;
+  width: 100%;
+  background-image: url('../assets/imageContainer/Apples.jpg');
+  background-size: cover;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.welcome-text {
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff8f8;
+  gap: 10px;
+}
+
+.welcome-text h1 {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.welcome-text p {
+  font-size: 30px;
+  font-weight: bold;
+  align-items: center;
 }
 
   @media (max-width: 500px) {
