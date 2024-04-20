@@ -76,4 +76,24 @@ a {
   color: white;
 }
 
+  @media (max-width: 500px) {
+    #register {
+      display: none;
+    }
+  }
+
+
+  @media (max-width: 280px) {
+    #logo h1 {
+      font-size: 30px;
+    }
+
+    #links-auth {
+      font-size: 20px;
+
+    }
+    #enter {
+      height: 60%;
+    }
+  }
 </style>
