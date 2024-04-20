@@ -2,7 +2,7 @@
 
 Este projeto representa a aplicação do lojista em uma aplicação mais ampla de delivery, que inclui um backend em Rails. Atualmente, o projeto está em desenvolvimento.
 
-[![Em desenvolvimento](https://img.shields.io/badge/Status-Em%20desenvolvimento-yellow)]
+![Em desenvolvimento](https://img.shields.io/badge/Status-Em%20desenvolvimento-yellow)
 ## Setup do Projeto
 
 ```sh
