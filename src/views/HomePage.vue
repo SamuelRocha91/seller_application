@@ -1,4 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { RouterLink } from 'vue-router'
+import FormHome from '@/components/forms/FormHome.vue'
+</script>
 
 <template>
   <header>
@@ -18,6 +21,7 @@
         Nosso delivery é o caminho certo para satisfazer seu desejo de forma rápida e eficiente!
       </p>
     </div>
+    <FormHome />
   </main>
 </template>
 
@@ -114,24 +118,22 @@ main {
   align-items: center;
 }
 
-  @media (max-width: 500px) {
-    #register {
-      display: none;
-    }
+@media (max-width: 500px) {
+  #register {
+    display: none;
+  }
+}
+
+@media (max-width: 280px) {
+  #logo h1 {
+    font-size: 30px;
   }
 
-
-  @media (max-width: 280px) {
-    #logo h1 {
-      font-size: 30px;
-    }
-
-    #links-auth {
-      font-size: 20px;
-
-    }
-    #enter {
-      height: 60%;
-    }
+  #links-auth {
+    font-size: 20px;
   }
+  #enter {
+    height: 60%;
+  }
+}
 </style>
