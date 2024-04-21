@@ -14,17 +14,17 @@ import { RouterLink } from 'vue-router';
         <img class="image-dimension" src="../../assets/navBar/Store.png" alt="ícone de loja" />
         <RouterLink class="links-style"  to="/dashboard/loja">Gerenciar loja</RouterLink></li>
       <li class="links-button">
-        <img src="../../assets/navBar/Reports.png"  alt="ícone de relatório" />
+        <img class="image-dimension" src="../../assets/navBar/Reports.png"  alt="ícone de relatório" />
         <RouterLink class="links-style" to="/dashboard/relatorios">Relatórios</RouterLink>
       </li>
       <li class="links-button">
-        <img src="../../assets/navBar/Finance.png" alt="ícone de finanças" />
+        <img class="image-dimension" src="../../assets/navBar/Finance.png" alt="ícone de finanças" />
         <RouterLink class="links-style"  to="/dashboard/finacas">Finanças</RouterLink></li>
       <li class="links-button">
         <img class="image-dimension" src="../../assets/navBar/Settings.png" alt="Ícone de configurações">
         <RouterLink class="links-style"  to="/configuracoes">Configurações</RouterLink></li>
       <li class="links-button">
-        <img src="../../assets/navBar/Logout.png" alt="Ícone de sair">
+        <img  class="image-dimension" src="../../assets/navBar/Logout.png" alt="Ícone de sair">
         <RouterLink class="links-style"  to="/">Sair</RouterLink></li>
     </ul>
   </nav>
@@ -81,5 +81,30 @@ img {
 
 .links-style:hover {
   color: red;
+}
+@media (max-width: 540px) {
+    .image-dimension {
+    width: 20px;
+    height: 20px;
+  }
+
+}
+
+@media (max-width: 460px) {
+  .image-dimension {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 380px) {
+  .image-dimension {
+    width: 20px;
+    height: 20px;
+  }
+
+  .nav-links {
+    font-size: small;
+  }
 }
 </style>

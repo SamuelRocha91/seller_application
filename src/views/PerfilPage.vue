@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import NavBar from '../components/dashboard/NavBar.vue';
+import NavBar from '../components/dashboard/NavBar.vue'
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue'
 const BignavBar = ref(true)
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue'
@@ -15,7 +15,12 @@ function handleClick() {
       <div class="header-nav">
         <div class="nav-links">
           <div class="filter">
-            <img @click="handleClick" src="../assets/navBar/ToggleNav.png" alt="Botão para reduzir navbar" />
+            <img
+              class="toogle"
+              @click="handleClick"
+              src="../assets/navBar/ToggleNav.png"
+              alt="Botão para reduzir navbar"
+            />
           </div>
           <NavBar />
         </div>
@@ -25,7 +30,11 @@ function handleClick() {
       <div class="header-nav-small">
         <div class="nav-links-phone">
           <div class="filter-small">
-            <img @click="handleClick" src="../assets/navBar/ToggleNav.png" alt="Botão para aumentar navbar"  />
+            <img
+              @click="handleClick"
+              src="../assets/navBar/ToggleNav.png"
+              alt="Botão para aumentar navbar"
+            />
           </div>
           <NavBarSmall />
         </div>
@@ -35,8 +44,7 @@ function handleClick() {
       <div class="header-content">
         <HeaderDashboard />
       </div>
-      <main>
-      </main>
+      <main></main>
     </div>
   </div>
 </template>
@@ -53,7 +61,7 @@ function handleClick() {
 }
 
 .header-nav-small {
-  width: 8vw;
+  width: 6vw;
   height: 100vh;
   display: flex;
 }
@@ -126,5 +134,60 @@ main {
   display: flex;
   height: 80%;
   width: 100%;
+}
+
+@media (max-width: 860px) {
+  .header-nav {
+    width: 30vw;
+    height: 100vh;
+    display: flex;
+  }
+
+  .filter .toogle {
+    height: 60px;
+    width: 80px;
+  }
+
+  .header-nav-small {
+    width: 15vw;}
+}
+
+
+@media (max-width: 540px) {
+  .header-nav {
+    width: 30vw;
+    height: 100vh;
+    display: flex;
+  }
+
+  .filter .toogle {
+    height: 60px;
+    width: 80px;
+  }
+
+.header-nav {
+ font-size: small;
+}
+}
+
+@media (max-width: 460px) {
+  .header-nav {
+    width: 38vw;
+    height: 100vh;
+    display: flex;
+  }
+
+  .filter .toogle {
+    height: 60px;
+    width: 80px;
+  }
+
+.header-nav-small {
+  width: 23vw;}
+
+  .filter .toogle {
+    height: 50px;
+    width: 60px;
+  }
 }
 </style>
