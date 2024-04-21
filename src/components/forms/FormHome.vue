@@ -167,7 +167,6 @@ form {
   box-shadow: 10px 5px 5px black;
 }
 
-
 .label-register input {
   border: 1px solid #dedede;
   padding: 13px;
@@ -212,92 +211,87 @@ form h1 {
 }
 
 @media (max-width: 1290px) {
- form {
-  padding: 20px;
-  height: fit-content;
-  gap: 10px;
-  width: 35%;
-}
+  form {
+    padding: 20px;
+    height: fit-content;
+    gap: 10px;
+    width: 35%;
+  }
 }
 
 @media (max-width: 1100px) {
- form {
-  padding: 20px;
-  height: fit-content;
-  gap: 10px;
-  width: 40%;
+  form {
+    padding: 20px;
+    height: fit-content;
+    gap: 10px;
+    width: 40%;
+  }
 }
-}
-
 
 @media (max-width: 920px) {
- form {
-  padding: 20px;
-  height: fit-content;
-  gap: 10px;
-  width: 45%;
-}
+  form {
+    padding: 20px;
+    height: fit-content;
+    gap: 10px;
+    width: 45%;
+  }
 }
 
 @media (max-width: 540px) {
- form {
-  padding: 20px;
-  height: fit-content;
-  gap: 10px;
-  width: 60%;
-}
+  form {
+    padding: 20px;
+    height: fit-content;
+    gap: 10px;
+    width: 60%;
+  }
 
-form h1 {
-  font-size: 20px;
-}
+  form h1 {
+    font-size: 20px;
+  }
 
-form button {
-  font-size: 20px;
-}
-
+  form button {
+    font-size: 20px;
+  }
 }
 @media (max-width: 440px) {
- form {
-  padding: 10px;
-  height: fit-content;
-  gap: 10px;
-  width: 80%;
-}
+  form {
+    padding: 10px;
+    height: fit-content;
+    gap: 10px;
+    width: 80%;
+  }
 
-form h1 {
-  font-size: 18px;
-}
+  form h1 {
+    font-size: 18px;
+  }
 
-form p {
-  font-size: 15px;
-}
-form button {
-  font-size: 18px;
-}
-.label-register input {
-  padding: 10px;
-  width: 100%;
-  height: 35px;
-  font-size: 14px
-}
+  form p {
+    font-size: 15px;
+  }
+  form button {
+    font-size: 18px;
+  }
+  .label-register input {
+    padding: 10px;
+    width: 100%;
+    height: 35px;
+    font-size: 14px;
+  }
 }
 @media (max-width: 280px) {
- form {
-  padding: 20px;
-  height: fit-content;
-  gap: 10px;
-  width: 90%;
-}
+  form {
+    padding: 20px;
+    height: fit-content;
+    gap: 10px;
+    width: 90%;
+  }
 
+  form h1 {
+    font-size: 20px;
+  }
 
-
-form h1 {
-  font-size: 20px;
-}
-
-form button {
-  font-size: 20px;
-}
-
+  form button {
+    font-size: 20px;
+  }
 }
 </style>
