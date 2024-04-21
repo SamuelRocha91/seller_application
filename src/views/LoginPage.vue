@@ -34,4 +34,19 @@ main {
   height: 100%;
   margin: auto;
 }
+
+@media (max-width: 768px) {
+  main {
+     width: 40%;
+     text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  main {
+     width: 100%;
+     text-align: center;
+  }
+
+}
 </style>

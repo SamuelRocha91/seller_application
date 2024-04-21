@@ -30,4 +30,10 @@ defineProps<{
   height: 100vh;
   object-fit: cover;
 }
+
+@media (max-width: 640px) {
+  .picture-login {
+    display: none;
+  }
+}
 </style>

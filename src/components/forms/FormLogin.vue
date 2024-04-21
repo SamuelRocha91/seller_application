@@ -175,4 +175,53 @@ form {
   font-size: smaller;
   transition: max-height 0.2s ease; /* Adicione uma transição suave para a altura */
 }
+@media (max-width: 1024px) {
+  .form-container {
+     width: 80%;
+     text-align: center;
+  }
+
+  form {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
+@media (max-width: 820px) {
+  .form-container {
+     width: 100%;
+     text-align: center;
+  }
+
+  form {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-container {
+     width: 100%;
+     text-align: center;
+  }
+
+  form {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
+@media (max-width: 640px) {
+  .form-container {
+     width: 100%;
+     text-align: center;
+  }
+
+  form {
+    width: 100%;
+    text-align: center;
+  }
+}
 </style>
