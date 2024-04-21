@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
-
 import HeaderAccess from '../components/access/HeaderAccess.vue';
 import ImageContainer from '../components/access/ImageContainer.vue';
 import Hamburguer from '../assets/imageContainer/Hamburger.jpg'
