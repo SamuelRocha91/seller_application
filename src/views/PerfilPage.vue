@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import NavBar from '../components/dashboard/NavBar.vue';
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue'
 const BignavBar = ref(true)
-import HeaderDashboard from '../components/HeaderDashboard.vue'
+import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue'
 function handleClick() {
   BignavBar.value = !BignavBar.value
 }
