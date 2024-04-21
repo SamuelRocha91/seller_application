@@ -117,12 +117,45 @@ main {
   font-weight: bold;
   align-items: center;
 }
+@media (max-width: 650px) {
+.welcome-text {
+  width: 40%;
+  color: #fff8f8;
+  gap: 10px;
+  padding: 15px;
+}
 
+.welcome-text h1 {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.welcome-text p {
+  font-size: 20px;
+  font-weight: bold;
+  align-items: center;
+}
+}
 @media (max-width: 500px) {
   #register {
     display: none;
   }
 }
+
+@media (max-width: 440px) {
+  main {
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+  }
+  .welcome-text{
+    height: 40%;
+    width: 100%;
+    text-align: center;
+  }
+}
+
 
 @media (max-width: 280px) {
   #logo h1 {
@@ -134,6 +167,9 @@ main {
   }
   #enter {
     height: 60%;
+  }
+  .welcome-text {
+    display: none;
   }
 }
 </style>
