@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import HeaderAccess from '../components/access/HeaderAccess.vue';
 import ImageContainer from '../components/access/ImageContainer.vue';
+import FormRegister from '@/components/forms/FormRegister.vue';
 import Platter from '../assets/imageContainer/Platter.jpg'
 </script>
 
@@ -32,5 +33,19 @@ main {
   width: 50vw;
   height: 100%;
   margin: auto;
+}
+
+@media (max-width: 768px) {
+  main {
+     width: 40%;
+     text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  main {
+     width: 100%;
+     text-align: center;
+  }
 }
 </style>
