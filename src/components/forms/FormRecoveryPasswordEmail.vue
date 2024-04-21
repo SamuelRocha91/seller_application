@@ -190,3 +190,5 @@ form {
     text-align: center;
   }
 }
+
+</style>
