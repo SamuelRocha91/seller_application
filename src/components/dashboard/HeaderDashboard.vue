@@ -5,7 +5,7 @@ const user = auth.currentUser()
 </script>
 <template>
   <header>
-    <h1>Seja bem vindo, {{JSON.parse(user?.email || '')}}</h1>
+    <h1 v-if="user">Seja bem vindo, {{ user.email || '' }}</h1>
   </header>
 </template>
 <style scoped>

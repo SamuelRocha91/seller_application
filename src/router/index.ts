@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
   const auth = new Auth();
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // Esta rota requer autenticação
-    if (to.matched.some(record => record.meta.requiresAuth) && !auth.isLoggedIn()) {
+    if (!auth.isLoggedIn()) {
       // Se o usuário não estiver autenticado, redirecione-o para a página de login
       next('/')
     } else {
