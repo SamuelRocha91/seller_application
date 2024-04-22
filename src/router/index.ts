@@ -39,7 +39,7 @@ const router = createRouter({
     },
     {
       path: '/dashboard/perfil',
-      name: 'perfil',
+      name: '/dashboard/perfil',
       meta: { requiresAuth: true },
       component: PerfilPage
     }
@@ -50,16 +50,19 @@ router.beforeEach((to, from, next) => {
   const auth = new Auth();
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // Esta rota requer autenticação
-    if (!auth.isLoggedIn()) {
+      if (!auth.isLoggedIn()) {
       // Se o usuário não estiver autenticado, redirecione-o para a página de login
-      next('/')
+        next('/')
+      } else {
+        next()
+      }
+    } else if (auth.isLoggedIn()) {
+      // Se o usuário estiver autenticado e tentar acessar uma rota que não requer autenticação,
+      // redirecione-o para o perfil
+      next('/dashboard/perfil');
     } else {
       // Se o usuário estiver autenticado, permita o acesso à rota
       next()
     }
-  } else {
-    // Esta rota não requer autenticação, permita o acesso diretamente
-    next()
-  }
 })
 export default router
