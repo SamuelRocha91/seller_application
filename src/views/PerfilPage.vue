@@ -44,7 +44,8 @@ function handleClick() {
       <div class="header-content">
         <HeaderDashboard />
       </div>
-      <main></main>
+      <main>
+      </main>
     </div>
   </div>
 </template>

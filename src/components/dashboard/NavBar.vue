@@ -5,24 +5,24 @@ import { RouterLink } from 'vue-router';
   <nav class="nav-links">
     <ul>
       <li class="links-button">
-        <img class="image-dimension" src="../../assets//navBar/Home.png" alt="Ícone de home" />
-        <RouterLink class="links-style" to="/dashboard">Início</RouterLink></li>
+        <img class="image-dimension" src="../../assets/navBar/Home.png" alt="Ícone de home" />
+        <RouterLink class="links-style" to="/dashboard/perfil">Início</RouterLink></li>
       <li class="links-button">
-        <img class="image-dimension" src="../../assets//navBar/Order.png" alt="ícone de pedidos" />
-        <RouterLink class="links-style"  to="/dashboard/pedidos">Pedidos</RouterLink></li>
+        <img class="image-dimension" src="../../assets/navBar/Order.png" alt="ícone de pedidos" />
+        <RouterLink class="links-style"  to="/dashboard/perfil">Pedidos</RouterLink></li>
       <li class="links-button">
         <img class="image-dimension" src="../../assets/navBar/Store.png" alt="ícone de loja" />
-        <RouterLink class="links-style"  to="/dashboard/loja">Gerenciar loja</RouterLink></li>
+        <RouterLink class="links-style"  to="/dashboard/perfil">Gerenciar loja</RouterLink></li>
       <li class="links-button">
         <img class="image-dimension" src="../../assets/navBar/Reports.png"  alt="ícone de relatório" />
-        <RouterLink class="links-style" to="/dashboard/relatorios">Relatórios</RouterLink>
+        <RouterLink class="links-style" to="/dashboard/perfil">Relatórios</RouterLink>
       </li>
       <li class="links-button">
         <img class="image-dimension" src="../../assets/navBar/Finance.png" alt="ícone de finanças" />
-        <RouterLink class="links-style"  to="/dashboard/finacas">Finanças</RouterLink></li>
+        <RouterLink class="links-style"  to="/dashboard/perfil">Finanças</RouterLink></li>
       <li class="links-button">
         <img class="image-dimension" src="../../assets/navBar/Settings.png" alt="Ícone de configurações">
-        <RouterLink class="links-style"  to="/configuracoes">Configurações</RouterLink></li>
+        <RouterLink class="links-style"  to="/dashboard/perfil">Configurações</RouterLink></li>
       <li class="links-button">
         <img  class="image-dimension" src="../../assets/navBar/Logout.png" alt="Ícone de sair">
         <RouterLink class="links-style"  to="/">Sair</RouterLink></li>

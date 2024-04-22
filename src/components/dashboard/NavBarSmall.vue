@@ -5,10 +5,10 @@ import { RouterLink } from 'vue-router';
   <nav class="nav-links">
     <ul>
       <li class="links-button">
-        <img class="image-dimension" src="../../assets//navBar/Home.png" alt="Ícone de home" />
+        <img class="image-dimension" src="../../assets/navBar/Home.png" alt="Ícone de home" />
         <RouterLink class="links-style" to="/dashboard">Início</RouterLink></li>
       <li class="links-button">
-        <img class="image-dimension" src="../../assets//navBar/Order.png" alt="ícone de pedidos" />
+        <img class="image-dimension" src="../../assets/navBar/Order.png" alt="ícone de pedidos" />
         <RouterLink class="links-style"  to="/dashboard/pedidos">Pedidos</RouterLink></li>
       <li class="links-button">
         <img class="image-dimension" src="../../assets/navBar/Store.png" alt="ícone de loja" />
