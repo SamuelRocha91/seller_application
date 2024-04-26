@@ -185,7 +185,7 @@ form {
   color: #ffffff;
   background-color: #ff1818;
   padding: 10px;
-  font-size: 18px;
+  font-size: 16px;
   border-radius: 5px;
 }
 
@@ -194,8 +194,16 @@ form {
 }
 
 form h1 {
-  font-size: 24px;
+  font-size: 22px;
   text-align: center;
+}
+
+label p {
+  font-size: 14px;
+}
+
+label input {
+  font-size: 14px;
 }
 
 .div-error {
@@ -206,7 +214,7 @@ form h1 {
 
 .error {
   color: #ff1818;
-  font-size: smaller;
+  font-size: x-small;
   transition: max-height 0.2s ease; /* Adicione uma transição suave para a altura */
 }
 

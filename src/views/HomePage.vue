@@ -35,7 +35,7 @@ header {
 }
 
 #airplane {
-  height: 7vh;
+  height: 6vh;
   max-width: 30%;
 }
 
@@ -47,7 +47,7 @@ header {
 
 #logo h1 {
   font-family: 'Ingrid Darling', cursive;
-  font-size: 46px;
+  font-size: 40px;
   color: #ff1818;
 }
 
@@ -59,8 +59,9 @@ header {
 #enter {
   color: #ff1818;
   border: 1px solid #ff1818;
+  border-radius: 5px;
   padding: 10px;
-  font-size: 18px;
+  font-size: 16px;
   text-decoration: none;
 }
 
@@ -70,7 +71,7 @@ header {
   color: #fff8f8;
   border-radius: 5px;
   padding: 10px;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 #register:hover {
@@ -80,7 +81,8 @@ header {
 
 #enter:hover {
   cursor: pointer;
-  filter: brightness(3);
+  background-color: #fab0b0;
+  transition: 1s;
 }
 
 a {
@@ -108,12 +110,12 @@ main {
 }
 
 .welcome-text h1 {
-  font-size: 40px;
+  font-size: 38px;
   font-weight: bold;
 }
 
 .welcome-text p {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: bold;
   align-items: center;
 }
