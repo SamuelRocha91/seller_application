@@ -158,7 +158,7 @@ form {
   color: #ffffff;
   background-color: #ff1818;
   padding: 10px;
-  font-size: 18px;
+  font-size: 16px;
   border-radius: 5px;
 }
 
@@ -177,6 +177,7 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-size: 12px;
   gap: 20px;
 }
 
@@ -185,7 +186,7 @@ form {
 }
 
 .checkbox-label p {
-  font-size: 15px;
+  font-size: 12px;
 }
 
 .form-container {
@@ -207,8 +208,16 @@ form {
 
 .error {
   color: #ff1818;
-  font-size: smaller;
+  font-size: x-small;
   transition: max-height 0.2s ease; /* Adicione uma transição suave para a altura */
+}
+
+label p {
+  font-size: 14px;
+}
+
+label input {
+  font-size: 14px;
 }
 
 @media (max-width: 1024px) {
