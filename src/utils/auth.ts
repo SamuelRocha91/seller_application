@@ -69,8 +69,9 @@ class Auth {
     fetch(`${URL}/sign_in`, {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'API-X-KEY': "dfdfscsvfrhfvnb"
       },
       body: JSON.stringify(body)
     }).then((response) => {

@@ -163,7 +163,7 @@ form {
   width: fit-content;
   gap: 10px;
   width: 25%;
-  border-radius: 5px;
+  border-radius: 12px;
   box-shadow: 10px 5px 5px black;
 }
 
