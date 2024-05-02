@@ -16,6 +16,7 @@ const handleCount = () => {
     count.value += 1;
   }
 }
+
 onMounted(() => {
     setInterval(handleCount, 8000)
   }) 
