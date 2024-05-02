@@ -71,7 +71,7 @@ form {
   color: #ffffff;
   background-color: #ff1818;
   padding: 10px;
-  font-size: 18px;
+  font-size: 14px;
   border-radius: 5px;
 }
 
@@ -91,14 +91,11 @@ form {
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  font-size: 12px;;
 }
 
 .router {
   color: #ff1818;
-}
-
-.checkbox-label p {
-  font-size: 15px;
 }
 
 .form-container {
@@ -120,10 +117,17 @@ form {
 
 .error {
   color: #ff1818;
-  font-size: smaller;
+  font-size: x-small;
   transition: max-height 0.2s ease; /* Adicione uma transição suave para a altura */
 }
 
+label p {
+  font-size: 14px;
+}
+
+label input {
+  font-size: 14px;
+}
 @media (max-width: 1024px) {
   .form-container {
      width: 80%;

@@ -21,13 +21,13 @@
 }
 
 #airplane {
-  height: 7vh;
+  height: 6vh;
   max-width: 30%;
 }
 
 #header h1 {
   font-family: 'Ingrid Darling', cursive;
-  font-size: 46px;
+  font-size: 40px;
   color: #ff1818;
 }
 
@@ -35,7 +35,7 @@
   display: flex;
   height: 10vh;
   font-family: 'Ingrid Darling', cursive;
-  font-size: 46px;
+  font-size: 40px;
   align-items: start;
   justify-content: center;
   padding: 5px;

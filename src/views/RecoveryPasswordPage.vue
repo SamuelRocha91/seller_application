@@ -63,7 +63,7 @@ main {
   color: #ffffff;
   background-color: #ff1818;
   padding: 10px;
-  font-size: 18px;
+  font-size: 14px;
   border-radius: 5px;
 }
 
@@ -82,10 +82,13 @@ main {
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  font-size: 12px;
+
 }
 
 .router {
   color: #ff1818;
+  font-size: 12px;
 }
 
 .checkbox-label p {
@@ -122,11 +125,11 @@ main {
 }
 
 .content-recovery h2 {
-  font-size: 30px;
+  font-size: 24px;
 }
 
 .content-recovery p {
-  font-size: 23px;
+  font-size: 20px;
 }
 
 .btn-text {
@@ -134,6 +137,7 @@ main {
   flex-direction: column;
   align-items: center;
   gap: 25px;
+
 }
 
 .wrapper-content {

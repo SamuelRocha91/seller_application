@@ -25,15 +25,15 @@ class Auth {
   }
 
   failure(response: Response, onFailure: () => void) {
-    onFailure()
-    response.json().then((data) => {
+    response.json().then((json) => {
       Swal.fire({
-        title: `${data.message}`,
+        title: `${json.message || 'Erro no cadastro'}`,
         text: 'Por favor, verifique os dados inseridos',
         icon: 'error',
         confirmButtonText: 'Ok'
       })
     })
+    onFailure()
   }
 
   currentUser() {
@@ -69,8 +69,8 @@ class Auth {
     fetch(`${URL}/sign_in`, {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body)
     }).then((response) => {
@@ -98,10 +98,10 @@ class Auth {
       }
     }
 
-    fetch(`${URL}/new`, {
+    await fetch(`${URL}/new`, {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
+        'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
