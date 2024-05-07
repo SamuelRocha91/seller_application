@@ -1,8 +1,7 @@
 import Swal from 'sweetalert2'
 
 const URL = import.meta.env.VITE_BASE_URL
-const X_API_KEY = import.meta.env.VITE_APY_KEY 
-
+const X_API_KEY = import.meta.env.VITE_X_API_KEY
 import { createStorage, type SimpleStorage } from './storage'
 
 class Auth {
@@ -19,8 +18,12 @@ class Auth {
 
   success(response: Response, onSuccess: () => void) {
     response.json().then((json) => {
-      this.storage.store('token', json.token)
-      this.storage.store('email', json.email)
+      if (json.token) {
+        this.storage.store('token', json.token)
+      }
+      if (json.email) {
+        this.storage.store('email', json.email)
+      }
       onSuccess()
     })
   }
