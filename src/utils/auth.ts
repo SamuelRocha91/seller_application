@@ -1,6 +1,7 @@
 import Swal from 'sweetalert2'
 
 const URL = import.meta.env.VITE_BASE_URL
+const X_API_KEY = import.meta.env.VITE_APY_KEY 
 
 import { createStorage, type SimpleStorage } from './storage'
 
@@ -71,6 +72,7 @@ class Auth {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'X-API-KEY': X_API_KEY
       },
       body: JSON.stringify(body)
     }).then((response) => {
@@ -102,7 +104,8 @@ class Auth {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-API-KEY': X_API_KEY
       },
       body: JSON.stringify(body)
     }).then((response) => {
