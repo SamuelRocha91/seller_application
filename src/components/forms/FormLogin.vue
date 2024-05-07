@@ -31,6 +31,7 @@ function onSubmit() {
     password.value || '',
     () => {
       awaiting.value = false
+      console.log('aqui')
       router.push('/dashboard/perfil')
     },
     () => {

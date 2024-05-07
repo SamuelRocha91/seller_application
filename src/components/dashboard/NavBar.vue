@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
 </script>
 <template>
   <nav class="nav-links">
@@ -20,8 +24,9 @@ import { RouterLink } from 'vue-router';
       <li class="links-button">
         <img class="image-dimension" src="../../assets/navBar/Finance.png" alt="ícone de finanças" />
         <RouterLink class="links-style"  to="/dashboard/perfil">Finanças</RouterLink></li>
-      <li class="links-button">
-        <img class="image-dimension" src="../../assets/navBar/Settings.png" alt="Ícone de configurações">
+      <li class="links-button" :class="{ 'active': route.path === '/dashboard/perfil' }">
+        <img           :class="{ 'active': $route.path === '/dashboard/perfil' }"
+ class="image-dimension" src="../../assets/navBar/Settings.png" alt="Ícone de configurações">
         <RouterLink class="links-style"  to="/dashboard/perfil">Configurações</RouterLink></li>
       <li class="links-button">
         <img  class="image-dimension" src="../../assets/navBar/Logout.png" alt="Ícone de sair">
@@ -36,6 +41,10 @@ import { RouterLink } from 'vue-router';
   height: 100%;
   display: flex;
   background-color: #FFF8F8;
+}
+
+.active {
+  background-color: rgb(185, 250, 228);
 }
 
 ul {
