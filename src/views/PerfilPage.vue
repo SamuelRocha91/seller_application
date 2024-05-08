@@ -6,6 +6,11 @@ const BignavBar = ref(true)
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue'
 import PageInfo from '@/components/dashboard/PageInfo.vue'
 import UserCircle from '../assets/icons/UserCircle.png'
+import MenuPage from '@/components/dashboard/MenuPage.vue';
+const selected = ref(true);
+const handleSelect = () => {
+  selected.value = !selected.value
+}
 
 function handleClick() {
   BignavBar.value = !BignavBar.value
@@ -54,6 +59,7 @@ function handleClick() {
           title="Perfil"
           description="Gerencie aqui as informações de sua loja e permissões de acesso"
         />
+        <MenuPage buttonOne="Dados gerais" buttonTwo="Funcionamento" :handleSelect="handleSelect" :selected="selected"/>
       </main>
     </div>
   </div>
@@ -142,8 +148,11 @@ function handleClick() {
 main {
   background-color: gray;
   display: flex;
-  height: 80%;
+  height: fit-content;
   width: 100%;
+  align-items: center;
+  gap: 8px;
+  flex-direction: column;
 }
 
 @media (max-width: 860px) {
