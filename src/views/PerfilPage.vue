@@ -7,6 +7,7 @@ import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue'
 import PageInfo from '@/components/dashboard/PageInfo.vue'
 import UserCircle from '../assets/icons/UserCircle.png'
 import MenuPage from '@/components/dashboard/MenuPage.vue';
+import FormRegisterStore from '@/components/forms/FormRegisterStore.vue';
 const selected = ref(true);
 const handleSelect = () => {
   selected.value = !selected.value
@@ -60,6 +61,7 @@ function handleClick() {
           description="Gerencie aqui as informações de sua loja e permissões de acesso"
         />
         <MenuPage buttonOne="Dados gerais" buttonTwo="Funcionamento" :handleSelect="handleSelect" :selected="selected"/>
+        <FormRegisterStore />
       </main>
     </div>
   </div>
@@ -148,7 +150,7 @@ function handleClick() {
 main {
   background-color: gray;
   display: flex;
-  height: fit-content;
+  height: 83.4vh;
   width: 100%;
   align-items: center;
   gap: 8px;
