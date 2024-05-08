@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { categories, prices} from '@/utils/data';
 const imageUrl = ref('')
 const handleImageChange = (event: Event) => {
   const inputElement = event.target as HTMLInputElement
@@ -42,19 +43,17 @@ const handleImageChange = (event: Event) => {
         <div class="intermediate-content">
           <div >
             <p>Categoria</p>
-            <select name="" id="">
-              <option value=""></option>
-              <option value=""></option>
+            <select name="" id="" class="select-box">
+            <option v-for="(categoria, index) in categories" :key="index" :value="categoria">{{ categoria }}</option>
             </select>
           </div>
           <div>
             <p>Pedido Mínimo</p>
-            <select name="" id="">
-              <option value=""></option>
-              <option value=""></option>
+            <select name="" id="" class="select-box">
+              <option v-for="(price, index) in prices" :key="index" :value="price" class="content-option">{{ price }}</option>
             </select>
           </div>
-          <div>
+          <div class="input-phone">
             <p>Telefone</p>
             <input class="bg-input" type="text" name="" id="" />
           </div>
@@ -72,6 +71,17 @@ const handleImageChange = (event: Event) => {
 </template>
 
 <style scoped>
+
+.select-box {
+  width: 200px; /* Largura desejada */
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+}
+
 .custom-file-upload {
   cursor: pointer;
   color: #0000ff;
@@ -104,7 +114,7 @@ form {
   height: 100px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: #ccc; /* Cor de fundo padrão */
+  background-color: #ccc; 
 }
 
 #uploadedImage {
@@ -121,7 +131,6 @@ form {
   color: #ffffff;
   background-color: #ff1818;
   font-size: 16px;
-  border: 1px solid black;
   width: 70px;
   height: 50px;
   border-radius: 5px;
@@ -129,7 +138,10 @@ form {
 
 .bg-input {
   border: 1px solid #dedede;
-  background-color: rgb(161, 159, 159);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
   padding: 13px;
   width: 100%;
   height: 37px;
@@ -156,7 +168,6 @@ form {
   width: 100%;
   padding: 10px;
   justify-content: center;
-  border: 1px solid black;
 }
 
 .intermediate-content {
@@ -178,15 +189,18 @@ form {
 .text-description {
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 82%;
   justify-content: center;
 }
 
 textarea {
   width: 90%;
   height: 150px;
-   border: 1px solid #dedede;
-  background-color: rgb(161, 159, 159);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+  padding: 15px;
   }
 
 .btn-div {
@@ -195,4 +209,9 @@ textarea {
   align-items: center;
   height: 100%;
 }
+
+.input-phone {
+  width: 30%;
+}
+
 </style>
