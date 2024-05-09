@@ -35,6 +35,14 @@ const saveOperation = () => {
     storage.store('operation', JSON.stringify(arrayOperation))
     tableData.value = arrayOperation
 }
+
+const deleteOPeration = (index: number) => {
+  const data = storage.get('operation') || ''
+  const parse = data == '' ? [] : JSON.parse(data)
+  const dataFiltered = parse.filter((_array: Array<operation>, position: number) => index !== position)
+  storage.store('operation', JSON.stringify(dataFiltered))
+  tableData.value = dataFiltered
+}
 </script>
 <template>
   <div class="form-content">
@@ -59,7 +67,7 @@ const saveOperation = () => {
       </div>
       <button @click.prevent="saveOperation" class="save-form-btn">Adicionar</button>
     </form>
-    <TableOperation :data="tableData" />
+    <TableOperation :data="tableData" :handleClick="deleteOPeration"/>
   </div>
 </template>
 
