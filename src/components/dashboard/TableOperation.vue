@@ -1,9 +1,6 @@
 <script setup lang="ts">
-type operation = {
-  open: string,
-  closed: string,
-  day: string
-}
+import { type operation } from '../../types/OperationType'
+
 
 const { data, handleClick } = defineProps<{
   data: Array<operation>
@@ -14,7 +11,7 @@ const { data, handleClick } = defineProps<{
 <template>
   <table>
     <caption>
-      Agenda semanal de funcionamento do estabeleciomento
+      Agenda semanal de funcionamento do estabelecimento
     </caption>
     <thead>
       <tr>
