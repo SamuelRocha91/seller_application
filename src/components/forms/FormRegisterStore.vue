@@ -9,6 +9,14 @@ const handleImageChange = (event: Event) => {
     imageUrl.value = URL.createObjectURL(file)
   }
 }
+
+const name = defineModel('name', { default: '' })
+const address = defineModel('address', { default: '' })
+const description = defineModel('description', { default: '' })
+const category = defineModel('category', { default: '' })
+const minimumPrice = defineModel('minimumPrice', { default: '' })
+const phoneNumber = defineModel('phoneNumber', { default: '' })
+
 </script>
 
 <template>
@@ -31,11 +39,11 @@ const handleImageChange = (event: Event) => {
         <div class="inputs-init">
           <label>
             <p>Nome da loja</p>
-            <input class="bg-input" type="text" name="" id="" />
+            <input class="bg-input" type="text" v-model="name"/>
           </label>
           <label for="">
             <p>Endereço</p>
-            <input class="bg-input" type="text" />
+            <input class="bg-input" type="text" v-model="address" />
           </label>
         </div>
       </div>
@@ -43,26 +51,26 @@ const handleImageChange = (event: Event) => {
         <div class="intermediate-content">
           <div >
             <p>Categoria</p>
-            <select name="" id="" class="select-box">
+            <select class="select-box" v-model="category">
             <option v-for="(categoria, index) in categories" :key="index" :value="categoria">{{ categoria }}</option>
             </select>
           </div>
           <div>
             <p>Pedido Mínimo</p>
-            <select name="" id="" class="select-box">
+            <select class="select-box" v-model="minimumPrice">
               <option v-for="(price, index) in prices" :key="index" :value="price" class="content-option">{{ price }}</option>
             </select>
           </div>
           <div class="input-phone">
             <p>Telefone</p>
-            <input class="bg-input" type="text" name="" id="" />
+            <input class="bg-input" type="text" v-model="phoneNumber" />
           </div>
         </div>
       </div>
       <div class="section-finish">
         <div class="text-description">
           <p>Descrição</p>
-          <textarea name="" id="" cols="30" rows="10"></textarea>
+          <textarea cols="30" rows="10" v-model="description"></textarea>
         </div>
         <div class="btn-div"><button type="submit" class="save-form-btn">Salvar</button></div>
       </div>
