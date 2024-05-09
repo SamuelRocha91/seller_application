@@ -3,14 +3,8 @@ import { week, hours } from '@/utils/data'
 import TableOperation from '../dashboard/TableOperation.vue'
 import { onMounted, ref } from 'vue'
 import { createStorage } from '@/utils/storage'
+import { type operation } from '../../types/OperationType'
 const storage = createStorage(true)
-
-type operation = {
-  open: string,
-  closed: string,
-  day: string
-}
-
 const tableData = ref<Array<operation>>([])
 const open = defineModel('open')
 const closed = defineModel('closed')
