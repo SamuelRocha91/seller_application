@@ -19,7 +19,6 @@ defineProps<{
   background-color: white;  
   width: 90%;
   height: fit-content;
-  border: 1px solid red;
   display: flex;
   justify-content: flex-start;
   align-items: center;
