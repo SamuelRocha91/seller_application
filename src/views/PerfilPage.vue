@@ -8,6 +8,7 @@ import PageInfo from '@/components/dashboard/PageInfo.vue'
 import UserCircle from '../assets/icons/UserCircle.png'
 import MenuPage from '@/components/dashboard/MenuPage.vue';
 import FormRegisterStore from '@/components/forms/FormRegisterStore.vue';
+import FormRegisterOperation from '@/components/forms/FormRegisterOperation.vue';
 const selected = ref(true);
 const handleSelect = () => {
   selected.value = !selected.value
@@ -61,7 +62,8 @@ function handleClick() {
           description="Gerencie aqui as informações de sua loja e permissões de acesso"
         />
         <MenuPage buttonOne="Dados gerais" buttonTwo="Funcionamento" :handleSelect="handleSelect" :selected="selected"/>
-        <FormRegisterStore />
+        <FormRegisterStore v-show="selected"/>
+        <FormRegisterOperation v-show="!selected"/>
       </main>
     </div>
   </div>
