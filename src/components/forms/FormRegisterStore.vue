@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { categories, prices} from '@/utils/data';
+import { categories, prices } from '@/utils/data'
 const imageUrl = ref('')
 const handleImageChange = (event: Event) => {
   const inputElement = event.target as HTMLInputElement
@@ -15,7 +15,19 @@ const address = defineModel('address', { default: '' })
 const description = defineModel('description', { default: '' })
 const category = defineModel('category', { default: '' })
 const minimumPrice = defineModel('minimumPrice', { default: '' })
-const phoneNumber = defineModel('phoneNumber', { default: '' })
+const phoneNumber = ref('')
+
+const handlePhone = (event: Event) => {
+  const value = (event.target as HTMLInputElement).value
+  phoneNumber.value = phoneMask(value || '')
+}
+const phoneMask = (value: string) => {
+  if (!value) return ''
+  value = value.replace(/\D/g, '')
+  value = value.replace(/(\d{2})(\d)/, '($1) $2')
+  value = value.replace(/(\d)(\d{4})$/, '$1-$2')
+  return value
+}
 
 </script>
 
@@ -39,38 +51,64 @@ const phoneNumber = defineModel('phoneNumber', { default: '' })
         <div class="inputs-init">
           <label>
             <p>Nome da loja</p>
-            <input class="bg-input" type="text" v-model="name"/>
+            <input
+              placeholder="O nome precisa ter no mínimo 3 caracteres"
+              class="bg-input"
+              type="text"
+              v-model="name"
+            />
           </label>
           <label for="">
             <p>Endereço</p>
-            <input class="bg-input" type="text" v-model="address" />
+            <input
+              placeholder="Insira um endereço válido"
+              class="bg-input"
+              type="text"
+              v-model="address"
+            />
           </label>
         </div>
       </div>
       <div class="section-intermediate">
         <div class="intermediate-content">
-          <div >
+          <div>
             <p>Categoria</p>
             <select class="select-box" v-model="category">
-            <option v-for="(categoria, index) in categories" :key="index" :value="categoria">{{ categoria }}</option>
+              <option v-for="(categoria, index) in categories" :key="index" :value="categoria">
+                {{ categoria }}
+              </option>
             </select>
           </div>
           <div>
             <p>Pedido Mínimo</p>
             <select class="select-box" v-model="minimumPrice">
-              <option v-for="(price, index) in prices" :key="index" :value="price" class="content-option">{{ price }}</option>
+              <option
+                v-for="(price, index) in prices"
+                :key="index"
+                :value="price"
+                class="content-option"
+              >
+                {{ price }}
+              </option>
             </select>
           </div>
           <div class="input-phone">
             <p>Telefone</p>
-            <input class="bg-input" type="text" v-model="phoneNumber" />
+            <input @input="handlePhone" :value="phoneNumber" class="bg-input" type="text" placeholder="xx xxxxx-xxxx"
+/>
           </div>
         </div>
       </div>
       <div class="section-finish">
         <div class="text-description">
           <p>Descrição</p>
-          <textarea cols="30" rows="10" v-model="description"></textarea>
+          <textarea
+            placeholder="Máximo: 50 caracteres"
+            cols="30"
+            rows="10"
+            v-model="description"
+            maxlength="5"
+          ></textarea>
         </div>
         <div class="btn-div"><button type="submit" class="save-form-btn">Salvar</button></div>
       </div>
@@ -79,7 +117,6 @@ const phoneNumber = defineModel('phoneNumber', { default: '' })
 </template>
 
 <style scoped>
-
 .select-box {
   width: 200px;
   padding: 8px;
@@ -122,7 +159,7 @@ form {
   height: 100px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: #ccc; 
+  background-color: #ccc;
 }
 
 #uploadedImage {
@@ -144,6 +181,9 @@ form {
   border-radius: 5px;
 }
 
+.save-form-btn:hover {
+  cursor: pointer;
+}
 .bg-input {
   border: 1px solid #dedede;
   border: 1px solid #ccc;
@@ -191,7 +231,6 @@ form {
   height: 25vh;
   display: flex;
   justify-content: center;
-
 }
 
 .text-description {
@@ -209,7 +248,7 @@ textarea {
   background-color: #fff;
   outline: none;
   padding: 15px;
-  }
+}
 
 .btn-div {
   display: flex;
@@ -221,5 +260,4 @@ textarea {
 .input-phone {
   width: 30%;
 }
-
 </style>
