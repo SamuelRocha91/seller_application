@@ -73,7 +73,7 @@ const handleImageChange = (event: Event) => {
 <style scoped>
 
 .select-box {
-  width: 200px; /* Largura desejada */
+  width: 200px;
   padding: 8px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -119,7 +119,7 @@ form {
 
 #uploadedImage {
   width: 100%;
-  height: auto;
+  height: 100%;
   border-radius: 50%;
 }
 
