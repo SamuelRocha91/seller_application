@@ -5,8 +5,9 @@ type operation = {
   day: string
 }
 
-const { data } = defineProps<{
+const { data, handleClick } = defineProps<{
   data: Array<operation>
+  handleClick: (index: number) => void
 }>()
 
 </script>
@@ -28,7 +29,7 @@ const { data } = defineProps<{
         <td>{{ operation.day }}</td>
         <td>{{ operation.open }}</td>
         <td>{{ operation.closed }}</td>
-        <td class="btn-delete"><button>X</button></td>
+        <td class="btn-delete"><button @click.prevent="handleClick(index)">X</button></td>
       </tr>
     </tbody>
   </table>
