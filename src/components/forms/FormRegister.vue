@@ -1,83 +1,55 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
-import { useRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
-import { Auth } from '../../utils/auth'
-import { createStorage } from '../../utils/storage'
-import Swal from 'sweetalert2'
+import { RouterLink } from 'vue-router';
+import { onMounted, ref } from 'vue';
+import { Auth } from '../../utils/auth';
+import { createStorage } from '../../utils/storage';
+import { swalWithRedirect } from '@/utils/swal';
 
 defineProps<{
   sendEmail?: () => void
-}>()
+}>();
 
-const router = useRouter()
-const email = defineModel<string>('email', { default: '' })
-const password = defineModel<string>('password', { default: '' })
-const password_confirmation = defineModel<string>('password_confirmation')
-const awaiting = ref(false)
-const remember = defineModel<boolean>('remember', { default: true })
+const email = defineModel<string>('email', { default: '' });
+const password = defineModel<string>('password', { default: '' });
+const password_confirmation = defineModel<string>('password_confirmation');
+const awaiting = ref(false);
+const remember = defineModel<boolean>('remember', { default: true });
 
-const passwordConfirmationError = ref('')
-const passwordError = ref('')
+const passwordConfirmationError = ref('');
+const passwordError = ref('');
 
-function validatepasswordOnBlur() {
+const validatepasswordOnBlur = () => {
   password.value.length < 6
     ? (passwordError.value = 'A senha deve ter no mínimo 6 caracteres')
-    : (passwordError.value = '')
-}
+    : (passwordError.value = '');
+};
 
-function validatepasswordConfirmationOnBlur() {
+const validatepasswordConfirmationOnBlur = () => {
   password_confirmation.value === password.value
     ? (passwordConfirmationError.value = '')
-    : (passwordConfirmationError.value = 'Senhas não coincidem')
-}
+    : (passwordConfirmationError.value = 'Senhas não coincidem');
+};
 
-function onSubmit() {
-  const auth = new Auth(remember.value)
-  awaiting.value = true
-    auth.signUp(
-      email.value || '',
-      password.value || '',
-      password_confirmation.value || '',
-      () => {
-        awaiting.value = false
-        let timerInterval: NodeJS.Timeout | undefined
-        Swal.fire({
-          title: 'Cadastro efetuado com sucesso!',
-          text: 'Você será redirecionado para a página de login.',
-          icon: 'success',
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading()
-            const timer = Swal.getPopup()?.querySelector('b')
-            if (timer) {
-              timerInterval = setInterval(() => {
-                timer.textContent = `${Swal.getTimerLeft()}`
-              }, 100)
-            }
-          },
-          willClose: () => {
-            clearInterval(timerInterval)
-          }
-        }).then((result) => {
-          /* Read more about handling dismissals below */
-          if (result.dismiss === Swal.DismissReason.timer) {
-            console.log('I was closed by the timer')
-            router.push('/login')
-          }
-        })
-      },
-      () => {
-        awaiting.value = false
-        console.log('não foi dessa vez!')
-      })
-}
+const onSubmit = () => {
+  const auth = new Auth(remember.value);
+  awaiting.value = true;
+  auth.signUp(
+    email.value || '',
+    password.value || '',
+    password_confirmation.value || '',
+    () => {
+      awaiting.value = false;
+      swalWithRedirect();
+    },
+    () => {
+      awaiting.value = false;
+    });
+};
 
 onMounted(() => {
-  const storage = createStorage(false)
-  email.value = JSON.parse(storage.get('email') || '')
-})
+  const storage = createStorage(false);
+  email.value = JSON.parse(storage.get('email') || '');
+});
 </script>
 
 <template>
@@ -117,12 +89,22 @@ onMounted(() => {
         <input type="checkbox" id="agreement-terms" />
         <p>
           Eu aceito os
-          <RouterLink class="router" to="/termos-e-condicoes">Termos e condições</RouterLink>
+          <RouterLink
+          class="router"
+          to="/termos-e-condicoes"
+          >
+          Termos e condições
+        </RouterLink>
         </p>
       </label>
       <button id="register-form-btn">Registro</button>
       <div class="links-redirect">
-        <p>Já possui cadastro? <RouterLink class="router" to="/login">Fazer login</RouterLink></p>
+        <p>
+          Já possui cadastro?
+          <RouterLink class="router" to="/login">
+            Fazer login
+         </RouterLink>
+        </p>
       </div>
     </form>
   </div>
@@ -209,7 +191,7 @@ form {
 .error {
   color: #ff1818;
   font-size: x-small;
-  transition: max-height 0.2s ease; /* Adicione uma transição suave para a altura */
+  transition: max-height 0.2s ease;
 }
 
 label p {
