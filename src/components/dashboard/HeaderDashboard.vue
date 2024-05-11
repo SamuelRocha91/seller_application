@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Auth } from '../../utils/auth';
 const auth = new Auth();
-const user = auth.currentUser()
+const user = auth.currentUser();
 </script>
 <template>
   <header>

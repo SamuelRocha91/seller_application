@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { type operation } from '../../types/OperationType'
+import { type operation } from '../../types/OperationType';
 
 
 const { data, handleClick } = defineProps<{
   data: Array<operation>
   handleClick: (index: number) => void
-}>()
+}>();
 
 </script>
 <template>
@@ -26,7 +26,9 @@ const { data, handleClick } = defineProps<{
         <td>{{ operation.day }}</td>
         <td>{{ operation.open }}</td>
         <td>{{ operation.closed }}</td>
-        <td class="btn-delete"><button @click.prevent="handleClick(index)">X</button></td>
+        <td class="btn-delete">
+          <button @click.prevent="handleClick(index)">X</button>
+        </td>
       </tr>
     </tbody>
   </table>

@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 defineProps<{
-  sendEmail?: () => void
-}>()
+  sendEmail?: () => void;
+}>();
 
-const password = defineModel<string>('password', { default: '' })
-const password_confirmation = defineModel<string>('password_confirmation')
+const password = defineModel<string>('password', { default: '' });
+const password_confirmation = defineModel<string>('password_confirmation');
 
-const passwordConfirmationError = ref('')
-const passwordError = ref('')
+const passwordConfirmationError = ref('');
+const passwordError = ref('');
 
-function validatepasswordOnBlur() {
+const validatepasswordOnBlur = () => {
   password.value.length < 6
     ? (passwordError.value = 'A senha deve ter no mínimo 6 caracteres')
-    : (passwordError.value = '')
-}
+    : (passwordError.value = '');
+};
 
-function validatepasswordConfirmationOnBlur() {
+const validatepasswordConfirmationOnBlur = () => {
   password_confirmation.value === password.value
     ? (passwordConfirmationError.value = '')
-    : (passwordConfirmationError.value = 'Senhas não coincidem')
-}
+    : (passwordConfirmationError.value = 'Senhas não coincidem');
+};
 </script>
 <template>
   <div class="form-container">
@@ -51,7 +51,12 @@ function validatepasswordConfirmationOnBlur() {
         @blur="validatepasswordConfirmationOnBlur"
       />
       <div class="div-error">
-        <span v-if="passwordConfirmationError" class="error">{{ passwordConfirmationError }}</span>
+        <span 
+        v-if="passwordConfirmationError"
+         class="error"
+         >
+         {{ passwordConfirmationError }}
+        </span>
       </div>
     </label>
     <button id="register-form-btn">Mudar senha</button>
@@ -140,7 +145,7 @@ form {
 .error {
   color: #ff1818;
   font-size: smaller;
-  transition: max-height 0.2s ease; /* Adicione uma transição suave para a altura */
+  transition: max-height 0.2s ease;
 }
 
 label p {

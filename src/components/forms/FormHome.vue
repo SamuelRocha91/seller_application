@@ -1,88 +1,78 @@
 <script setup lang="ts">
-import { createStorage } from '../../utils/storage'
-import { ref } from 'vue'
-import Swal from 'sweetalert2'
-import { useRouter } from 'vue-router'
+import { createStorage } from '../../utils/storage';
+import { ref } from 'vue';
+import { swalSuccess } from '@/utils/swal';
+import { useRouter } from 'vue-router';
+import { cepMask, phoneMask } from '@/utils/formUtils';
 
-const router = useRouter()
+const router = useRouter();
 
-const email = defineModel<string>('email', { default: '' })
-const emailError = ref('')
-const phoneError = ref('')
-const cepError = ref('')
-const nameError = ref('')
+const email = defineModel<string>('email', { default: '' });
+const emailError = ref('');
+const phoneError = ref('');
+const cepError = ref('');
+const nameError = ref('');
 
-const phone = ref('')
-const cep = ref('')
-const name = ref('')
+const phone = ref('');
+const cep = ref('');
+const name = ref('');
 
 const handleName = (event: Event) => {
-  const value = (event.target as HTMLInputElement).value
-  name.value = value
+  const value = (event.target as HTMLInputElement).value;
+  name.value = value;
   name.value.split(' ').length >= 2
     ? (nameError.value = '')
-    : (nameError.value = 'Insira um nome válido')
-}
+    : (nameError.value = 'Insira um nome válido');
+};
 
 const handlePhone = (event: Event) => {
-  const value = (event.target as HTMLInputElement).value
-  phone.value = phoneMask(value || '')
-}
+  const value = (event.target as HTMLInputElement).value;
+  phone.value = phoneMask(value || '');
+};
 
 const handleCep = (event: Event) => {
-  const value = (event.target as HTMLInputElement).value
-  cep.value = cepMask(value || '')
-}
+  const value = (event.target as HTMLInputElement).value;
+  cep.value = cepMask(value || '');
+};
 
-const cepMask = (value: string) => {
-  if (!value) return ''
-  value = value.replace(/\D/g, '')
-  value = value.replace(/(\d)(\d{3})$/, '$1-$2')
-  return value
-}
-const phoneMask = (value: string) => {
-  if (!value) return ''
-  value = value.replace(/\D/g, '')
-  value = value.replace(/(\d{2})(\d)/, '($1) $2')
-  value = value.replace(/(\d)(\d{4})$/, '$1-$2')
-  return value
-}
-
-function handleClick() {
+const handleClick = () => {
   if (
     emailError.value.length > 0 ||
     cepError.value.length > 0 ||
     phoneError.value.length > 0 ||
     nameError.value.length > 0
   ) {
-    return Swal.fire('Por favor, preencha todos os campos corretamente')
+    return swalSuccess('Por favor, preencha todos os campos corretamente');
   }
 
-  if (email.value == '' || phone.value == '' || name.value == '' || cep.value == '') {
-    return Swal.fire('Por favor, não deixe campos vazios')
+  if (email.value == '' || phone.value == ''
+    || name.value == '' || cep.value == '') {
+    return swalSuccess('Por favor, não deixe campos vazios');
   }
 
-  const storage = createStorage(false)
-  storage.store('email', JSON.stringify(email.value))
-  router.push('/registro')
-}
+  const storage = createStorage(false);
+  storage.store('email', JSON.stringify(email.value));
+  router.push('/registro');
+};
 
-function validateEmailOnBlur() {
-  const re = /\S+@\S+\.\S+/
+const validateEmailOnBlur = () => {
+  const re = /\S+@\S+\.\S+/;
   re.test(email.value)
     ? (emailError.value = '')
-    : (emailError.value = 'Por favor, insira um email válido')
-}
+    : (emailError.value = 'Por favor, insira um email válido');
+};
 
-function validatePhoneOnBlur() {
+const validatePhoneOnBlur = () => {
   phone.value.length === 15
     ? (phoneError.value = '')
-    : (phoneError.value = 'Por favor, insira um número válido')
-}
+    : (phoneError.value = 'Por favor, insira um número válido');
+};
 
-function validateCepOnBlur() {
-  cep.value.length === 9 ? (cepError.value = '') : (cepError.value = 'Dado incompleto')
-}
+const validateCepOnBlur = () => {
+  cep.value.length === 9 ?
+    (cepError.value = '') :
+    (cepError.value = 'Dado incompleto');
+};
 </script>
 
 <template>
@@ -148,7 +138,12 @@ function validateCepOnBlur() {
         <span v-if="cepError" class="error">{{ cepError }}</span>
       </div>
     </label>
-    <button @click.prevent="handleClick" id="register-form-btn">Cadastrar agora</button>
+    <button
+    @click.prevent="handleClick"
+    id="register-form-btn"
+    >
+    Cadastrar agora
+  </button>
   </form>
 </template>
 
@@ -214,7 +209,7 @@ label input {
 .error {
   color: #ff1818;
   font-size: x-small;
-  transition: max-height 0.2s ease; /* Adicione uma transição suave para a altura */
+  transition: max-height 0.2s ease;
 }
 
 @media (max-width: 1290px) {

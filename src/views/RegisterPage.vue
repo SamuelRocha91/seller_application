@@ -2,7 +2,7 @@
 import HeaderAccess from '../components/access/HeaderAccess.vue';
 import ImageContainer from '../components/access/ImageContainer.vue';
 import FormRegister from '@/components/forms/FormRegister.vue';
-import Platter from '../assets/imageContainer/Platter.jpg'
+import Platter from '../assets/imageContainer/Platter.jpg';
 </script>
 
 <template>

@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 defineProps<{
   sendEmail?: () => void
-}>()
-const email = defineModel('email', { default: '' })
-const emailError = ref('')
-function validateEmailOnBlur() {
-  const re = /\S+@\S+\.\S+/
+}>();
+
+const email = defineModel('email', { default: '' });
+const emailError = ref('');
+
+const validateEmailOnBlur = () => {
+  const re = /\S+@\S+\.\S+/;
   re.test(email.value)
     ? (emailError.value = '')
-    : (emailError.value = 'Por favor, insira um email válido')
-}
+    : (emailError.value = 'Por favor, insira um email válido');
+};
 </script>
 
 <template>
@@ -118,9 +120,8 @@ form {
 .error {
   color: #ff1818;
   font-size: x-small;
-  transition: max-height 0.2s ease; /* Adicione uma transição suave para a altura */
+  transition: max-height 0.2s ease;
 }
-
 label p {
   font-size: 14px;
 }

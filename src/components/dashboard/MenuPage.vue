@@ -4,13 +4,23 @@ defineProps<{
   handleSelect: () => void
   buttonOne: string
   buttonTwo: string
-}>()
+}>();
 </script>
 <template>
   <nav class="link-form">
     <ul>
-      <button  @click="handleSelect" :class="[selected ? 'selected' : 'no-select' ]">{{ buttonOne }}</button>
-      <button @click="handleSelect" :class="[selected ? 'no-select' : 'selected' ]">{{ buttonTwo }}</button>
+      <button
+        @click="handleSelect"
+         :class="[selected ? 'selected' : 'no-select' ]"
+         >
+         {{ buttonOne }}
+        </button>
+      <button
+       @click="handleSelect"
+        :class="[selected ? 'no-select' : 'selected' ]"
+        >
+        {{ buttonTwo }}
+      </button>
     </ul>
   </nav>
 </template>
