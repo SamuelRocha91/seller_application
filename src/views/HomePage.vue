@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
-import FormHome from '@/components/forms/FormHome.vue'
+import { RouterLink } from 'vue-router';
+import FormHome from '@/components/forms/FormHome.vue';
 import { computed, onMounted, ref } from 'vue';
-import AppleOne from '../assets/imageContainer/Apples.jpg'
-import AppleTwo from '../assets/imageContainer/NewApples.jpg'
-import AppleThree from '../assets/imageContainer/NewApple2.jpg'
+import AppleOne from '../assets/imageContainer/Apples.jpg';
+import AppleTwo from '../assets/imageContainer/NewApples.jpg';
+import AppleThree from '../assets/imageContainer/NewApple2.jpg';
 
-const apples = [AppleOne, AppleTwo, AppleThree]
+const apples = [AppleOne, AppleTwo, AppleThree];
 const count = ref(0);
 
 const handleCount = () => {
@@ -15,13 +15,13 @@ const handleCount = () => {
   } else {
     count.value += 1;
   }
-}
+};
 
 onMounted(() => {
-    setInterval(handleCount, 8000)
-  }) 
+  setInterval(handleCount, 8000);
+});
 
- const backgroundImage = computed(() => ({
+const backgroundImage = computed(() => ({
   backgroundImage: `url(${apples[count.value]})` 
 }));
 </script>
@@ -29,7 +29,11 @@ onMounted(() => {
 <template>
   <header>
     <div id="logo">
-      <img src="../assets/Airplane.png" alt="imagem de um aviao" id="airplane" />
+      <img
+      src="../assets/Airplane.png"
+      alt="imagem de um aviao"
+      id="airplane"
+      />
       <h1>Delivery</h1>
     </div>
     <div id="links-auth">
@@ -41,7 +45,8 @@ onMounted(() => {
     <div class="welcome-text">
       <h1>Quer rapidez na entrega?</h1>
       <p>
-        Nosso delivery é o caminho certo para satisfazer seu desejo de forma rápida e eficiente!
+        Nosso delivery é o caminho certo para satisfazer
+        seu desejo de forma rápida e eficiente!
       </p>
     </div>
     <FormHome />

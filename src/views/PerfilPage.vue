@@ -1,22 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import NavBar from '../components/dashboard/NavBar.vue'
-import NavBarSmall from '../components/dashboard/NavBarSmall.vue'
-const BignavBar = ref(true)
-import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue'
-import PageInfo from '@/components/dashboard/PageInfo.vue'
-import UserCircle from '../assets/icons/UserCircle.png'
+import { ref } from 'vue';
+import NavBar from '../components/dashboard/NavBar.vue';
+import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
+const BignavBar = ref(true);
+import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
+import PageInfo from '@/components/dashboard/PageInfo.vue';
+import UserCircle from '../assets/icons/UserCircle.png';
 import MenuPage from '@/components/dashboard/MenuPage.vue';
 import FormRegisterStore from '@/components/forms/FormRegisterStore.vue';
-import FormRegisterOperation from '@/components/forms/FormRegisterOperation.vue';
+import
+FormRegisterOperation
+  from '@/components/forms/FormRegisterOperation.vue';
 const selected = ref(true);
 const handleSelect = () => {
-  selected.value = !selected.value
-}
+  selected.value = !selected.value;
+};
 
-function handleClick() {
-  BignavBar.value = !BignavBar.value
-}
+const handleClick = () => {
+  BignavBar.value = !BignavBar.value;
+};
 </script>
 
 <template>
@@ -59,9 +61,15 @@ function handleClick() {
           :src="UserCircle"
           alt="ícone de perfil"
           title="Perfil"
-          description="Gerencie aqui as informações de sua loja e permissões de acesso"
+          description="Gerencie aqui as informações de sua loja
+          e permissões de acesso"
         />
-        <MenuPage buttonOne="Dados gerais" buttonTwo="Funcionamento" :handleSelect="handleSelect" :selected="selected"/>
+        <MenuPage
+        buttonOne="Dados gerais"
+        buttonTwo="Funcionamento"
+        :handleSelect="handleSelect"
+        :selected="selected"
+        />
         <FormRegisterStore v-show="selected"/>
         <FormRegisterOperation v-show="!selected"/>
       </main>

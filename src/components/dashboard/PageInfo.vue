@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  defineProps<{
-    src: string
-    alt: string
-    title: string
-    description: string
-  }>()
+defineProps<{
+  src: string
+  alt: string
+  title: string
+  description: string
+}>();
 </script>
 <template>
   <section class="info-page">

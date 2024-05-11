@@ -2,7 +2,7 @@
 defineProps<{
   src: string
   alt: string
-}>()
+}>();
 </script>
 <template>
   <section class="picture-login">

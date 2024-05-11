@@ -2,7 +2,11 @@
 <template>
   <div>
     <div id="header">
-      <img src="../../assets/Airplane.png" alt="imagem de um aviao" id="airplane" />
+      <img
+      src="../../assets/Airplane.png"
+      alt="imagem de um aviao"
+      id="airplane"
+      />
       <h1>Delivery</h1>
     </div>
     <div id="title">

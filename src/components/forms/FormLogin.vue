@@ -1,52 +1,52 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
-import { useRouter } from 'vue-router'
-import { ref } from 'vue'
-import { Auth } from '../../utils/auth'
+import { RouterLink } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { Auth } from '../../utils/auth';
 
 defineProps<{
   sendEmail?: () => void
-}>()
+}>();
 
-const router = useRouter()
-const email = defineModel<string>('email', { default: '' })
-const password = defineModel<string>('password', { default: '' })
-const awaiting = ref(false)
-const remember = defineModel<boolean>('remember', { default: true })
-const emailError = ref('')
+const router = useRouter();
 
-const passwordError = ref('')
+const email = defineModel<string>('email', { default: '' });
+const password = defineModel<string>('password', { default: '' });
+const awaiting = ref(false);
+const remember = defineModel<boolean>('remember', { default: true });
 
-function validatepasswordOnBlur() {
+const emailError = ref('');
+const passwordError = ref('');
+
+const validatepasswordOnBlur = () => {
   password.value.length < 6
     ? (passwordError.value = 'A senha deve ter no mínimo 6 caracteres')
-    : (passwordError.value = '')
-}
+    : (passwordError.value = '');
+};
 
-function onSubmit() {
-  const auth = new Auth(remember.value)
-  awaiting.value = true
+const onSubmit = () => {
+  const auth = new Auth(remember.value);
+  awaiting.value = true;
   auth.signIn(
     email.value || '',
     password.value || '',
     () => {
-      awaiting.value = false
-      console.log('aqui')
-      router.push('/dashboard/perfil')
+      awaiting.value = false;
+      router.push('/dashboard/perfil');
     },
     () => {
-      awaiting.value = false
-      console.log('não foi dessa vez!')
+      awaiting.value = false;
+      console.log('não foi dessa vez!');
     }
-  )
-}
+  );
+};
 
-function validateEmailOnBlur() {
-  const re = /\S+@\S+\.\S+/
+const validateEmailOnBlur = () => {
+  const re = /\S+@\S+\.\S+/;
   re.test(email.value)
     ? (emailError.value = '')
-    : (emailError.value = 'Por favor, insira um email válido')
-}
+    : (emailError.value = 'Por favor, insira um email válido');
+};
 </script>
 <template>
   <div class="form-container">
@@ -86,9 +86,14 @@ function validateEmailOnBlur() {
       <button id="register-form-btn">Login</button>
       <div class="links-redirect">
         <p>
-          Ainda não tem cadastro? <RouterLink class="router" to="/">Cadastre sua loja</RouterLink>
+          Ainda não tem cadastro?
+          <RouterLink class="router" to="/">
+            Cadastre sua loja
+          </RouterLink>
         </p>
-        <RouterLink class="router" to="/recuperar-senha">Esqueceu a senha?</RouterLink>
+        <RouterLink class="router" to="/recuperar-senha">
+          Esqueceu a senha?
+        </RouterLink>
       </div>
     </form>
   </div>
@@ -175,7 +180,7 @@ form {
 .error {
   color: #ff1818;
   font-size: x-small;
-  transition: max-height 0.2s ease; /* Adicione uma transição suave para a altura */
+  transition: max-height 0.2s ease;
 }
 
 label p {

@@ -1,12 +1,12 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { Auth } from '../utils/auth' 
+import { createRouter, createWebHistory } from 'vue-router';
+import { Auth } from '../utils/auth'; 
 
-import HomePage from '../views/HomePage.vue'
-import LoginPage from '@/views/LoginPage.vue'
-import RegisterPage from '@/views/RegisterPage.vue'
-import RecoveryPasswordPage from '@/views/RecoveryPasswordPage.vue'
-import RecoveryPasswordEmailPage from '@/views/RecoveryPasswordEmailPage.vue'
-import PerfilPage from '@/views/PerfilPage.vue'
+import HomePage from '../views/HomePage.vue';
+import LoginPage from '@/views/LoginPage.vue';
+import RegisterPage from '@/views/RegisterPage.vue';
+import RecoveryPasswordPage from '@/views/RecoveryPasswordPage.vue';
+import RecoveryPasswordEmailPage from '@/views/RecoveryPasswordEmailPage.vue';
+import PerfilPage from '@/views/PerfilPage.vue';
 
 
 const router = createRouter({
@@ -44,25 +44,20 @@ const router = createRouter({
       component: PerfilPage
     }
   ]
-})
+});
 
 router.beforeEach((to, from, next) => {
   const auth = new Auth();
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // Esta rota requer autenticação
-      if (!auth.isLoggedIn()) {
-      // Se o usuário não estiver autenticado, redirecione-o para a página de login
-        next('/')
-      } else {
-        next()
-      }
-    } else if (auth.isLoggedIn()) {
-      // Se o usuário estiver autenticado e tentar acessar uma rota que não requer autenticação,
-      // redirecione-o para o perfil
-      next('/dashboard/perfil');
+    if (!auth.isLoggedIn()) {
+      next('/');
     } else {
-      // Se o usuário estiver autenticado, permita o acesso à rota
-      next()
+      next();
     }
-})
-export default router
+  } else if (auth.isLoggedIn()) {
+    next('/dashboard/perfil');
+  } else {
+    next();
+  }
+});
+export default router;
