@@ -36,7 +36,6 @@ const handleCep = (event: Event) => {
 
 const cepMask = (value: string) => {
   if (!value) return ''
-  console.log(cep)
   value = value.replace(/\D/g, '')
   value = value.replace(/(\d)(\d{3})$/, '$1-$2')
   return value

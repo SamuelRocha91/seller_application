@@ -4,6 +4,16 @@ import NavBar from '../components/dashboard/NavBar.vue'
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue'
 const BignavBar = ref(true)
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue'
+import PageInfo from '@/components/dashboard/PageInfo.vue'
+import UserCircle from '../assets/icons/UserCircle.png'
+import MenuPage from '@/components/dashboard/MenuPage.vue';
+import FormRegisterStore from '@/components/forms/FormRegisterStore.vue';
+import FormRegisterOperation from '@/components/forms/FormRegisterOperation.vue';
+const selected = ref(true);
+const handleSelect = () => {
+  selected.value = !selected.value
+}
+
 function handleClick() {
   BignavBar.value = !BignavBar.value
 }
@@ -45,6 +55,15 @@ function handleClick() {
         <HeaderDashboard />
       </div>
       <main>
+        <PageInfo
+          :src="UserCircle"
+          alt="ícone de perfil"
+          title="Perfil"
+          description="Gerencie aqui as informações de sua loja e permissões de acesso"
+        />
+        <MenuPage buttonOne="Dados gerais" buttonTwo="Funcionamento" :handleSelect="handleSelect" :selected="selected"/>
+        <FormRegisterStore v-show="selected"/>
+        <FormRegisterOperation v-show="!selected"/>
       </main>
     </div>
   </div>
@@ -133,8 +152,11 @@ function handleClick() {
 main {
   background-color: gray;
   display: flex;
-  height: 80%;
+  height: 83.4vh;
   width: 100%;
+  align-items: center;
+  gap: 8px;
+  flex-direction: column;
 }
 
 @media (max-width: 860px) {
@@ -150,9 +172,9 @@ main {
   }
 
   .header-nav-small {
-    width: 15vw;}
+    width: 15vw;
+  }
 }
-
 
 @media (max-width: 540px) {
   .header-nav {
@@ -166,9 +188,9 @@ main {
     width: 80px;
   }
 
-.header-nav {
- font-size: small;
-}
+  .header-nav {
+    font-size: small;
+  }
 }
 
 @media (max-width: 460px) {
@@ -183,8 +205,9 @@ main {
     width: 80px;
   }
 
-.header-nav-small {
-  width: 23vw;}
+  .header-nav-small {
+    width: 23vw;
+  }
 
   .filter .toogle {
     height: 50px;
