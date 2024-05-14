@@ -1,5 +1,5 @@
 import { createStorage, type SimpleStorage } from './storage';
-
+import { type storeCreateType } from '../types/storeType';
 const URL = import.meta.env.VITE_BASE_URL;
 
 class StoreService {
@@ -8,6 +8,104 @@ class StoreService {
   constructor() {
     const persistent: boolean = this.whatIsMyStorage();
     this.storage = createStorage(persistent);
+  }
+
+  getFallback(key: string): string | null {
+    return this.storage.get(key);
+  }
+
+
+  createStore(
+    dataStore: storeCreateType,
+    onSuccess: () => void,
+    onFailure: () => void
+  ) {
+    const formData = this.formData(dataStore);
+    formData.append('store[avatar]', dataStore.src);
+    const token = this.getFallback('token');
+    fetch(`${URL}/stores`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    }).then((response) => {
+      if (response.ok) {
+        this.success(response, onSuccess);
+      } else {
+        this.failure(response, onFailure);
+      }
+    });
+  }
+
+  updateStore(
+    id: number,dataStore: storeCreateType,
+    image: File | null,onSuccess: () => void,
+    onFailure: () => void
+  ) {
+    const formData = this.formData(dataStore);
+    if (image !== null) {
+      formData.append('store[avatar]', image);
+    }
+    const token = this.getFallback('token');
+    fetch(`${URL}/stores/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    }).then((response) => {
+      if (response.ok) {
+        this.success(response, onSuccess, "update");
+      } else {
+        this.failure(response, onFailure);
+      }
+    });
+  }
+
+  deleteStore(id: number, onSuccess: () => void, onFailure: () => void) {
+    const token = this.getFallback('token');
+  
+    fetch(`${URL}/stores/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    }).then((response) => {
+      if (response.ok) {
+        onSuccess();
+      } else {
+        this.failure(response, onFailure);
+      }
+    });
+  }
+
+  failure(response: Response, onFailure: () => void) {
+    onFailure();
+  }
+
+  success(
+    response: Response,
+    onSuccess: () => void,
+    type = "generate"
+  ) {
+    if (type == "generate") {
+      response.json().then((json) => {
+        this.generateStorage(json);
+        onSuccess();
+      });
+    } else if(type == "update") {
+      response.json().then(async (json) => {
+        this.updateStorage(json);
+        onSuccess();
+      });
+    } else {
+      onSuccess();
+    }
   }
 
   private whatIsMyStorage() {
@@ -19,96 +117,61 @@ class StoreService {
     }
   }
 
-  getFallback(key: string): string | null {
-    return this.storage.get(key);
-  }
-
-
-  createStore(
-    name: string,
-    image: File,
-    onSuccess: () => void, onFailure: () => void) {
+  private formData(dataStore: storeCreateType) {
     const formData = new FormData();
-    formData.append('store[avatar]', image);
-    formData.append('store[name]', name);
-    const token = this.getFallback('token');
-    fetch(`${URL}/stores`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: formData
-            
-    }).then((response) => {
-      console.log('Response status:', response.status);
-      console.log('Response headers:', response.headers);
-      console.log('Response body:', response.body);
-      console.log(response);
-      response.json().then((json) => console.log(json));
-      if (response.ok) {
-        this.success(response, onSuccess);
-      } else {
-        this.failure(response, onFailure);
-      }
-    });
-
+    // formData.append('store[avatar]', dataStore.src);
+    formData.append('store[name]', dataStore.name);
+    formData.append('store[category]', dataStore.category);
+    formData.append('store[price_minimum]', dataStore.price);
+    formData.append('store[description]', dataStore.description);
+    formData.append('store[address]', dataStore.address);
+    formData.append('store[phone_number]', dataStore.phoneNumber);
+    return formData;
   }
-  updateStore(id: number,
-    name: string,
-    onSuccess: () => void,
-    onFailure: () => void) {
-    const body = {
-      store: {
-        name: name
-      }
+
+  private generateObjectSeller(json: any) {
+    return {
+      id: json.id,
+      src: `${URL}${json.avatar_url}`,
+      name: json.name,
+      price: json.price_minimum,
+      description: json.description,
+      phoneNumber: json.phone_number,
+      category: json.category,
+      address: json.address,
     };
-    const token = this.getFallback('token');
-        
-    fetch(`${URL}/stores/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(body)
-    }).then((response) => {
-      if (response.ok) {
-        this.success(response, onSuccess);
-      } else {
-        this.failure(response, onFailure);
-      }
-    });
   }
 
-  deleteStore(id: number, onSuccess: () => void, onFailure: () => void) {
-    const token = this.getFallback('token');
-
-    fetch(`${URL}/stores/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-    }).then((response) => {
-      if (response.ok) {
-        this.success(response, onSuccess);
-      } else {
-        this.failure(response, onFailure);
-      }
-    });
+  private generateStorage(json: any) {
+    const storage = this.storage.get('stores') || '';
+    const storeSaved = this.generateObjectSeller(json);
+    if (storage != '') {
+      const store = JSON.parse(storage);
+      const data = [...store, {
+        ...storeSaved
+      }];
+      this.storage.store('stores', JSON.stringify(data));
+    } else {
+      this.storage.store('stores', JSON.stringify([{
+        ...storeSaved
+      }]));
+    }
   }
 
-  failure(response: Response, onFailure: () => void) {
-    onFailure();
+  private updateStorage(json: any) {
+    const storage = this.storage.get('stores') || '';
+    const storeSaved =  this.generateObjectSeller(json);
+    if (storage != '') {
+      const store = JSON.parse(storage);
+      const index = store
+        .findIndex((item: any) => item.id === storeSaved.id);
+
+      store[index] = storeSaved;
+
+      this.storage.store('stores', JSON.stringify(store));
+    } 
   }
 
-  success(response: Response, onSuccess: () => void) {
-    onSuccess();
-    response.json().then((json) => console.log(json));
-  }
 }
 
 export { StoreService };
