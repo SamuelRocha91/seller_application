@@ -54,8 +54,13 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
           class="toggle-checkbox"
           :checked="entity.active"
           @change="handleStatus(entity.id)" 
+          title="Clique para ativar/desativar"
           /> 
-          <label :for="'toggle-' + index" class="toggle-label"></label>
+          <label 
+          title="Clique para ativar/desativar"
+          :for="'toggle-' + index"
+           class="toggle-label">
+          </label>
         </td>
       </tr>
     </tbody>
