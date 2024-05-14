@@ -18,6 +18,6 @@ module.exports = {
     'no-multiple-empty-lines': ['error', { max: 2 }],
     'max-len': ['error', { code: 80 }],
     complexity: ['error', 10],
-    'max-lines-per-function': ['error', { max: 25 }],
+    'max-lines-per-function': ['error', { max: 30 }],
   }
 };

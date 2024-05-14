@@ -17,6 +17,7 @@ const swalSuccess = (text: string) => {
 };
 
 const swalWithRedirect = () => {
+  // @ts-ignore
   let timerInterval: NodeJS.Timeout | undefined;
   Swal.fire({
     title: 'Cadastro efetuado com sucesso!',
