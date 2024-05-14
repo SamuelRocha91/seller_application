@@ -1,7 +1,5 @@
 import Swal from "sweetalert2";
-import { useRouter } from 'vue-router';
 
-const router = useRouter();
 
 const swalError = (title: string, text: string) => {
   Swal.fire({
@@ -40,7 +38,6 @@ const swalWithRedirect = () => {
   }).then((result) => {
     if (result.dismiss === Swal.DismissReason.timer) {
       console.log('I was closed by the timer');
-      router.push('/login');
     }
   });
 };
