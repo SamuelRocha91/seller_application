@@ -29,6 +29,8 @@ defineProps<{
   align-items: center;
   gap: 5px;
   padding: 5px;
+  border-radius: 5px;
+
 }
 
 </style>
