@@ -50,7 +50,7 @@ const handleStatus = (id: number) => {
   data.value
     .map((entity: storeType) => {
       if (entity.id == id) {
-        entity.active = true;
+        entity.active = !entity.active ;
       } else {
         entity.active = false;
       }
@@ -539,7 +539,7 @@ h2 {
   color: #ffffff;
   background-color: #ff1818;
   font-size: 16px;
-  width: 50%;
+  width: 230px;
   height: 50px;
   border-radius: 5px;
 }
