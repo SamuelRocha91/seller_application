@@ -4,6 +4,9 @@ import { onMounted, ref } from 'vue';
 import { Auth } from '../../utils/auth';
 import { createStorage } from '../../utils/storage';
 import { swalWithRedirect } from '@/utils/swal';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 defineProps<{
   sendEmail?: () => void
@@ -40,6 +43,7 @@ const onSubmit = () => {
     () => {
       awaiting.value = false;
       swalWithRedirect();
+      router.push('/login');
     },
     () => {
       awaiting.value = false;
