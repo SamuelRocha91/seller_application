@@ -4,10 +4,12 @@ import { categories, prices } from '@/utils/data';
 import { swalError, swalSuccess } from '@/utils/swal';
 import { StoreService } from '../../utils/storeService';
 import { phoneMask } from '@/utils/formUtils';
+import TableList from '../dashboard/TableList.vue';
+import { type storeType, type storeCreateType } from '@/types/storeType';
 
-const imageUrl = ref('');
 let image: File;
-const storeId = defineModel('storeId', { default: 0 });
+
+const imageUrl = ref();
 const edit = ref(false);
 const name = defineModel('name', { default: '' });
 const address = defineModel('address', { default: '' });
@@ -16,7 +18,8 @@ const category = defineModel('category', { default: '' });
 const minimumPrice = defineModel('minimumPrice', { default: '' });
 const phoneNumber = ref('');
 const store = new StoreService();
-
+const editId = ref();
+const data = ref();
 
 const handleImageChange = (event: Event) => {
   const inputElement = event.target as HTMLInputElement;
@@ -26,16 +29,6 @@ const handleImageChange = (event: Event) => {
     imageUrl.value = URL.createObjectURL(file);
   }
 };
-
-
-onMounted(() => {
-  const sellerData = store.getFallback('seller') || '';
-  const seller = sellerData ? JSON.parse(sellerData) : null;
-  if (seller !== null) {
-    storeId.value = seller.id;
-    edit.value = true;
-  }
-});
 
 const handlePhone = (event: Event) => {
   const value = (event.target as HTMLInputElement).value;
@@ -53,23 +46,41 @@ const validateFields = () => {
   }
 };
 
-const handleClick = () => {
+const handleStatus = (id: number) => {
+  const storeUpdate = data.value
+    .map((entity: storeType) => {
+      if (entity.id == id) {
+        entity.active = true;
+      } else {
+        entity.active = false;
+      }
+    });
+  store.storage.store('stores', JSON.stringify(storeUpdate));
+};
+
+const handleClick = async () => {
   const validate = validateFields();
   if (!validate) {
     swalError('Erro ao salvar os dados',
       'Por favor, verifique os dados inseridos');
     return;
   }
-  store.createStore(name.value, image,
+  const storeData = objectForm();
+  if (editId.value) {
+    editStore(storeData);
+  } else {
+    createStore(storeData);
+  };
+};
+
+const createStore = (storeData: storeCreateType) => {
+  store.createStore(storeData,
     () => {
+      const stores = store.storage.get('stores');
+      data.value = JSON.parse(stores || '');
       swalSuccess('Dados salvos com sucesso!');
-      store.storage.store(
-        'sellerData', JSON.stringify({
-          image: imageUrl.value,
-          name: name.value
-        })
-      );
       edit.value = true;
+      editId.value = null;
     },
     () => {
       swalError('Erro ao salvar os dados',
@@ -79,9 +90,79 @@ const handleClick = () => {
   swalSuccess('Dados salvos com sucesso!');
 };
 
-const editForm = () => {
+const editStore = (storeData: storeCreateType) => {
+  const imageUpdate = storeData.src === image ? null : image;
+  store.updateStore(editId.value, storeData, imageUpdate, () => {
+    const stores = store.storage.get('stores');
+    data.value = JSON.parse(stores || '');
+    swalSuccess('Dados atualizados com sucesso!');
+    edit.value = true;
+  }, () => {
+    swalError('Erro ao salvar os dados',
+      'Por favor, verifique os dados inseridos');
+  });
+};
+
+const deleteForm = (id: number) => {
+  const storeFiltered: storeType[] = data.value
+    .filter((entity: storeType) => entity.id !== id);
+  if (storeFiltered.length === 0) {
+    store.storage.remove('stores');
+    address.value = '';
+    description.value = '';
+    category.value = '';
+    name.value = '';
+    minimumPrice.value = '';
+    phoneNumber.value = '';
+    imageUrl.value = '';
+    edit.value = false;
+  } else {
+    store.storage.store('stores', JSON.stringify(storeFiltered));
+  }
+  store.deleteStore(id, () => swalSuccess('Dados excluídos com sucesso'),
+    () => swalSuccess('Erro no processamento da exclusão'));
+  data.value = storeFiltered;
+};
+
+const editForm = async (id: number) => {
+  editId.value = id;
+  const storeFiltered: storeType[] = data.value
+    .filter((entity: storeType) => entity.id == id);
+
+  address.value = storeFiltered[0].address;
+  description.value = storeFiltered[0].description;
+  category.value = storeFiltered[0].category;
+  name.value = storeFiltered[0].name;
+  minimumPrice.value = storeFiltered[0].price;
+  phoneNumber.value = storeFiltered[0].phoneNumber;
+  imageUrl.value = storeFiltered[0].src;
+  image = storeFiltered[0].src;
   edit.value = false;
 };
+
+const objectForm = () => ({
+  src: image,
+  name: name.value,
+  price: minimumPrice.value,
+  description: description.value,
+  address: address.value,
+  category: category.value,
+  phoneNumber: phoneNumber.value
+});
+
+const startFormCreateStore = () => {
+  edit.value = false;
+  editId.value = null;
+};
+
+onMounted(() => {
+  const sellerData = store.getFallback('stores') || '';
+  const seller = sellerData ? JSON.parse(sellerData) : null;
+  if (seller !== null) {
+    data.value = seller;
+    edit.value = true;
+  }
+});
 </script>
 
 <template>
@@ -199,68 +280,22 @@ const editForm = () => {
   </template>
   <template v-else>
     <div class="form-container">
-      <form
-      id="uploadForm"
-      action="/upload"
-      method="post"
-      enctype="multipart/form-data"
+      <TableList
+      title="Lojas cadastradas"
+      tableOne="Loja"
+      tableTwo="Nome"
+      tableThree="Preço"
+      :handleEdit="editForm"
+      :handleClick="deleteForm"
+      :handleStatus="handleStatus"
+      :data="data"
+      />
+      <button 
+      @click.prevent="startFormCreateStore" 
+      class="register-form-btn"
       >
-        <div class="form-init">
-          <div class="image-form">
-            <div class="image-container">
-              <img id="uploadedImage" :src="imageUrl" alt="" />
-            </div>
-          </div>
-          <div class="inputs-two">
-            <label class="name-store">
-              <h2>Nome do estabelecimento</h2>
-              <p class="input-simulate">{{ name }}</p>
-            </label>
-            <label class="address">
-              <h2>Endereço</h2>
-              <p class="input-simulate">{{ address }}</p>
-            </label>
-          </div>
-        </div>
-        <div class="section-intermediate">
-          <div class="intermediate-content">
-            <div>
-              <h2>Categoria</h2>
-              <p class="input-simulate">{{ category }}</p>
-            </div>
-            <div>
-              <h2>Pedido Mínimo</h2>
-              <p class="input-simulate">{{ minimumPrice }}</p>
-            </div>
-            <div class="input-phone">
-              <h2>Telefone</h2>
-              <p class="input-simulate">{{ phoneNumber }}</p>
-            </div>
-          </div>
-        </div>
-        <div class="section-finish-two">
-          <div class="text-description">
-            <h2>Descrição</h2>
-            <p class="input-simulate">{{ description }}</p>
-          </div>
-          <div class="btn-div-two">
-            <button
-            type="submit"
-            @click.prevent="editForm"
-            class="edit-form-btn"
-            >
-            Editar
-            </button>
-            <button
-             type="submit"
-             @click.prevent="editForm"
-             class="delete-form-btn"
-             >
-             Deletar
-            </button>
-          </div>
-        </div>
-      </form>
+      Castrar nova loja
+      </button>
     </div>
   </template>
 </template>
@@ -299,9 +334,12 @@ form {
 .form-container {
   background-color: white;
   display: flex;
+  flex-direction: column;
   height: fit-content;
-  padding: 10px;
+  align-items: center;
+  padding: 20px;
   width: 90%;
+  height: 62vh;
 }
 .image-container {
   width: 100px;
@@ -485,6 +523,16 @@ h2 {
   background-color: #ff1818;
   font-size: 16px;
   width: 70px;
+  height: 50px;
+  border-radius: 5px;
+}
+
+
+.register-form-btn {
+  color: #ffffff;
+  background-color: #ff1818;
+  font-size: 16px;
+  width: 50%;
   height: 50px;
   border-radius: 5px;
 }
