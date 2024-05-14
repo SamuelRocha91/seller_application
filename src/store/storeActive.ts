@@ -10,7 +10,8 @@ export const useStoreActive = defineStore('store', () => {
     phoneNumber: '',
     price: '',
     src: '',
-    category: ''
+    category: '',
+    name: ''
   });
   function setStore(data: any) {
     storeActive.value.active = data.active;
