@@ -50,13 +50,13 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
         </td>
         <td scope="row" >
           <button 
-          v-if="entity.active"
+          v-if="!entity.active"
           @click.prevent="handleStatus(entity.id)" 
           class="btn-ativar"
           >
           V
           </button>
-          <p v-else class="store-status">Ativo</p>
+          <p v-else class="store-status">Ativa</p>
         </td>
       </tr>
     </tbody>
