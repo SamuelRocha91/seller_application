@@ -39,6 +39,8 @@ const deleteOPeration = (index: number) => {
   storage.store('operation', JSON.stringify(dataFiltered));
   tableData.value = dataFiltered;
 };
+
+
 </script>
 <template>
   <div class="form-content">
@@ -85,7 +87,10 @@ const deleteOPeration = (index: number) => {
       Adicionar
     </button>
     </form>
-    <TableOperation :data="tableData" :handleClick="deleteOPeration"/>
+    <TableOperation 
+    :data="tableData" 
+    :handleClick="deleteOPeration" 
+    />
   </div>
 </template>
 
