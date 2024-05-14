@@ -1,5 +1,5 @@
 export type storeType = {
-    src: File,
+    src: File
     name: string,
     price: string,
     active: boolean,

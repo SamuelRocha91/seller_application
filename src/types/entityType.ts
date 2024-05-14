@@ -3,5 +3,10 @@ export type entity = {
     name: string,
     price: string,
     active: boolean,
-    id: number
+    id: number,
+    description: string,
+    address: string,
+    category: string
+    phoneNumber: string,
+    image: File
 }
