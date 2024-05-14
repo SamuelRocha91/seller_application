@@ -139,6 +139,7 @@ class StoreService {
       phoneNumber: json.phone_number,
       category: json.category,
       address: json.address,
+      active: false
     };
   }
 
@@ -146,12 +147,14 @@ class StoreService {
     const storage = this.storage.get('stores') || '';
     const storeSaved = this.generateObjectSeller(json);
     if (storage != '') {
+      storeSaved.active = false;
       const store = JSON.parse(storage);
       const data = [...store, {
         ...storeSaved
       }];
       this.storage.store('stores', JSON.stringify(data));
     } else {
+      storeSaved.active = true;
       this.storage.store('stores', JSON.stringify([{
         ...storeSaved
       }]));
@@ -165,7 +168,7 @@ class StoreService {
       const store = JSON.parse(storage);
       const index = store
         .findIndex((item: any) => item.id === storeSaved.id);
-
+      storeSaved.active = store[index].active;
       store[index] = storeSaved;
 
       this.storage.store('stores', JSON.stringify(store));
