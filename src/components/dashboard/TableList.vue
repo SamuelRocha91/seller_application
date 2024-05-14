@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { type entity } from '../../types/entityType';
 
-
 const { data, handleClick, handleEdit, handleStatus } = defineProps<{
   data?: Array<entity>
   handleClick: (index: number) => void
@@ -49,14 +48,14 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
           </button>
         </td>
         <td scope="row" >
-          <button 
-          v-if="!entity.active"
-          @click.prevent="handleStatus(entity.id)" 
-          class="btn-ativar"
-          >
-          V
-          </button>
-          <p v-else class="store-status">Ativa</p>
+          <input 
+          type="checkbox"
+          :id="'toggle-' + index"
+          class="toggle-checkbox"
+          :checked="entity.active"
+          @change="handleStatus(entity.id)" 
+          /> 
+          <label :for="'toggle-' + index" class="toggle-label"></label>
         </td>
       </tr>
     </tbody>
@@ -100,6 +99,7 @@ tbody tr:last-child td {
 
 td {
   padding: 10px;
+  text-align: center;
 }
 
 .btn-delete,
@@ -162,6 +162,46 @@ td {
 
 .btns-crud {
   display: flex;
+  height: 100%;
+  align-self: center;
+  align-items: center;
+  align-content: center; 
   gap: 10px;
+}
+
+.toggle-checkbox {
+  display: none;
+}
+
+.toggle-label {
+  display: inline-block;
+  width: 60px; 
+  height: 30px;
+  background-color: #ccc; 
+  border-radius: 15px; 
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle-label::after {
+  content: '';
+  display: block;
+  width: 26px;
+  height: 26px; 
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px; 
+  transition: 0.3s;
+}
+
+.toggle-checkbox:not(:checked) + .toggle-label::after {
+  transform: translateX(0); 
+}
+
+.toggle-checkbox:checked + .toggle-label::after {
+  transform: translateX(30px);
+  background-color: #058810;
 }
 </style>
