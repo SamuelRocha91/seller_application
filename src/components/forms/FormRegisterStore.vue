@@ -47,7 +47,7 @@ const validateFields = () => {
 };
 
 const handleStatus = (id: number) => {
-  const storeUpdate = data.value
+  data.value
     .map((entity: storeType) => {
       if (entity.id == id) {
         entity.active = true;
@@ -55,7 +55,7 @@ const handleStatus = (id: number) => {
         entity.active = false;
       }
     });
-  store.storage.store('stores', JSON.stringify(storeUpdate));
+  store.storage.store('stores', JSON.stringify(data.value));
 };
 
 const handleClick = async () => {
@@ -151,6 +151,13 @@ const objectForm = () => ({
 });
 
 const startFormCreateStore = () => {
+  address.value = '';
+  description.value = '';
+  category.value = '';
+  name.value = '';
+  minimumPrice.value = '';
+  phoneNumber.value = '';
+  imageUrl.value = '';
   edit.value = false;
   editId.value = null;
 };
@@ -294,7 +301,7 @@ onMounted(() => {
       @click.prevent="startFormCreateStore" 
       class="register-form-btn"
       >
-      Castrar nova loja
+      Cadastrar nova loja
       </button>
     </div>
   </template>
