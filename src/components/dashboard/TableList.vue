@@ -99,7 +99,6 @@ tbody tr:last-child td {
 
 td {
   padding: 10px;
-  text-align: center;
 }
 
 .btn-delete,
@@ -163,9 +162,6 @@ td {
 .btns-crud {
   display: flex;
   height: 100%;
-  align-self: center;
-  align-items: center;
-  align-content: center; 
   gap: 10px;
 }
 
