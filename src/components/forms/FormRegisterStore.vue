@@ -6,9 +6,12 @@ import { StoreService } from '../../utils/storeService';
 import { phoneMask } from '@/utils/formUtils';
 import TableList from '../dashboard/TableList.vue';
 import { type storeType, type storeCreateType } from '@/types/storeType';
+import { useStoreActive } from '@/store/storeActive';
+
 
 let image: File;
 
+const storeActive = useStoreActive();
 const imageUrl = ref();
 const edit = ref(false);
 const name = defineModel('name', { default: '' });
@@ -20,6 +23,7 @@ const phoneNumber = ref('');
 const store = new StoreService();
 const editId = ref();
 const data = ref();
+
 
 const handleImageChange = (event: Event) => {
   const inputElement = event.target as HTMLInputElement;
@@ -55,6 +59,11 @@ const handleStatus = (id: number) => {
         entity.active = false;
       }
     });
+  const active = data.value.find((field: any) => field.active);
+  const objectActive = {
+    ...active
+  };
+  storeActive.setStore(objectActive);
   store.storage.store('stores', JSON.stringify(data.value));
 };
 
