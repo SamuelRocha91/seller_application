@@ -29,20 +29,95 @@ onMounted(() => {
     >
     Seja bem vindo(a), {{ user.email || '' }}
     </h1>
-    <div v-else>
-      <img :src="store.storeActive.src" alt="logo da loja">
-      <h1>{{ store.storeActive.name }}</h1>
+    <div v-else class="header-container">
+      <div class="store-perfil">
+        <div class="image-container " >
+          <img class="store-image"
+          :src="store.storeActive.src" alt="logo da loja" />
+        </div>
+        <h1>{{ store.storeActive.name }}</h1>
+      </div>
+      <a href="">Fechar agora</a>
+    </div>
+    <div class="store-status">
+      <img src="../../assets/icons/Subtract.png" alt="ícone de abertura">
+      <div>
+        <h2>Loja aberta</h2>
+        <p>Dentro do horário</p>
+      </div>
     </div>
   </header>
 </template>
 <style scoped>
   header {
     display: flex;
-    padding: 10px;
     justify-content: center;
     align-items: center;
     align-content: center;
     height: 100%;
     width: 100%;
   }
+
+.header-container {
+    width: 80%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    margin-left: 70px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+ .header-container h1 {
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.store-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.store-status {
+  width: 20%;
+}
+
+.store-perfil {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.store-status {
+  border-left: 1px solid rgb(212, 198, 198);
+  height: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 25px;
+}
+
+.header-container a {
+    font-size: 25px;
+    color: #FF1818;
+}
+
+.store-status h2 {
+  color: #3CB85F;
+}
 </style>
