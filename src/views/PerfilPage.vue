@@ -8,8 +8,7 @@ import PageInfo from '@/components/dashboard/PageInfo.vue';
 import UserCircle from '../assets/icons/UserCircle.png';
 import MenuPage from '@/components/dashboard/MenuPage.vue';
 import FormRegisterStore from '@/components/forms/FormRegisterStore.vue';
-import
-FormRegisterOperation
+import FormRegisterOperation
   from '@/components/forms/FormRegisterOperation.vue';
 import { useStoreActive } from '@/store/storeActive';
 
