@@ -96,6 +96,11 @@ const createStore = (storeData: storeCreateType) => {
         'Por favor, verifique os dados inseridos');
     }
   );
+  const active = data.value.find((field: any) => field.active);
+  const objectActive = {
+    ...active
+  };
+  storeActive.setStore(objectActive);
   swalSuccess('Dados salvos com sucesso!');
 };
 
@@ -305,7 +310,7 @@ onMounted(() => {
       title="Lojas cadastradas"
       tableOne="Loja"
       tableTwo="Nome"
-      tableThree="Preço"
+      tableThree="Pedido Mínimo"
       :handleEdit="editForm"
       :handleClick="deleteForm"
       :handleStatus="handleStatus"
