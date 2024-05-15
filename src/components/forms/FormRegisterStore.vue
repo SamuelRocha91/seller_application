@@ -59,11 +59,7 @@ const handleStatus = (id: number) => {
         entity.active = false;
       }
     });
-  const active = data.value.find((field: any) => field.active);
-  const objectActive = {
-    ...active
-  };
-  storeActive.setStore(objectActive);
+  updateGlobalState();
   store.storage.store('stores', JSON.stringify(data.value));
 };
 
@@ -88,6 +84,7 @@ const createStore = (storeData: storeCreateType) => {
       const stores = store.storage.get('stores');
       data.value = JSON.parse(stores || '');
       swalSuccess('Dados salvos com sucesso!');
+      updateGlobalState();
       edit.value = true;
       editId.value = null;
     },
@@ -96,12 +93,6 @@ const createStore = (storeData: storeCreateType) => {
         'Por favor, verifique os dados inseridos');
     }
   );
-  const active = data.value.find((field: any) => field.active);
-  const objectActive = {
-    ...active
-  };
-  storeActive.setStore(objectActive);
-  swalSuccess('Dados salvos com sucesso!');
 };
 
 const editStore = (storeData: storeCreateType) => {
@@ -122,25 +113,16 @@ const deleteForm = (id: number) => {
     .filter((entity: storeType) => entity.id !== id);
   if (storeFiltered.length === 0) {
     store.storage.remove('stores');
-    address.value = '';
-    description.value = '';
-    category.value = '';
-    name.value = '';
-    minimumPrice.value = '';
-    phoneNumber.value = '';
-    imageUrl.value = '';
-    edit.value = false;
+    startFormCreateStore();
   } else {
     store.storage.store('stores', JSON.stringify(storeFiltered));
   }
-  store.deleteStore(id, () => swalSuccess('Dados excluídos com sucesso'),
-    () => swalSuccess('Erro no processamento da exclusão'));
-  const active = storeFiltered.find((field: any) => field.active);
-  const objectActive = {
-    ...active
-  };
-  storeActive.setStore(objectActive);
+  store.deleteStore(id,
+    () => swalSuccess('Dados excluídos com sucesso'),
+    () => swalSuccess('Erro no processamento da exclusão')
+  );
   data.value = storeFiltered;
+  updateGlobalState();
 };
 
 const editForm = async (id: number) => {
@@ -157,6 +139,14 @@ const editForm = async (id: number) => {
   imageUrl.value = storeFiltered[0].src;
   image = storeFiltered[0].src;
   edit.value = false;
+};
+
+const updateGlobalState = () => {
+  const active = data.value.find((field: any) => field.active);
+  const objectActive = {
+    ...active
+  };
+  storeActive.setStore(objectActive);
 };
 
 const objectForm = () => ({
