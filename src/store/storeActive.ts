@@ -22,6 +22,7 @@ export const useStoreActive = defineStore('store', () => {
     storeActive.value.price = data.price;
     storeActive.value.src = data.src;
     storeActive.value.category = data.category;
+    storeActive.value.name = data.name;
   }
 
   return { setStore, storeActive };
