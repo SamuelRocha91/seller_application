@@ -42,8 +42,7 @@ const onSubmit = () => {
     password_confirmation.value || '',
     () => {
       awaiting.value = false;
-      swalWithRedirect();
-      router.push('/login');
+      swalWithRedirect(() => router.push('/login'));
     },
     () => {
       awaiting.value = false;
