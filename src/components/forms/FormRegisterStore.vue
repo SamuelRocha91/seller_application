@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { categories, prices } from '@/utils/data';
-import { swalError, swalSuccess } from '@/utils/swal';
+import { swalError, swalSuccess, swallWithDelete } from '@/utils/swal';
 import { StoreService } from '../../utils/storeService';
 import { phoneMask } from '@/utils/formUtils';
 import TableList from '../dashboard/TableList.vue';
@@ -23,6 +23,7 @@ const phoneNumber = ref('');
 const store = new StoreService();
 const editId = ref();
 const data = ref();
+const awaiting = ref(false);
 
 
 const handleImageChange = (event: Event) => {
@@ -72,8 +73,10 @@ const handleClick = async () => {
   }
   const storeData = objectForm();
   if (editId.value) {
+    awaiting.value = true;
     editStore(storeData);
   } else {
+    awaiting.value = true;
     createStore(storeData);
   };
 };
@@ -87,10 +90,13 @@ const createStore = (storeData: storeCreateType) => {
       updateGlobalState();
       edit.value = true;
       editId.value = null;
+      awaiting.value = false;
     },
     () => {
       swalError('Erro ao salvar os dados',
         'Por favor, verifique os dados inseridos');
+      awaiting.value = false;
+
     }
   );
 };
@@ -102,10 +108,17 @@ const editStore = (storeData: storeCreateType) => {
     data.value = JSON.parse(stores || '');
     swalSuccess('Dados atualizados com sucesso!');
     edit.value = true;
+    awaiting.value = false;
   }, () => {
     swalError('Erro ao salvar os dados',
       'Por favor, verifique os dados inseridos');
+    awaiting.value = false;
   });
+};
+
+
+const handleDelete = (id: number) => {
+  swallWithDelete(() => deleteForm(id));
 };
 
 const deleteForm = (id: number) => {
@@ -283,6 +296,7 @@ onMounted(() => {
           </div>
           <div class="btn-div">
             <button
+            :disabled="awaiting"
             type="submit"
             @click.prevent="handleClick"
             class="save-form-btn"
@@ -302,7 +316,7 @@ onMounted(() => {
       tableTwo="Nome"
       tableThree="Pedido Mínimo"
       :handleEdit="editForm"
-      :handleClick="deleteForm"
+      :handleClick="handleDelete"
       :handleStatus="handleStatus"
       :data="data"
       />
