@@ -5,11 +5,11 @@ import { swalError, swalSuccess, swallWithDelete } from '@/utils/swal';
 import { StoreService } from '../../api/storeService';
 import { phoneMask } from '@/utils/formUtils';
 import TableList from '../dashboard/TableList.vue';
-import { type storeType, type storeCreateType } from '@/types/storeType';
+import { type storeType } from '@/types/storeType';
 import { useStoreActive } from '@/store/storeActive';
 
 
-let image: File;
+let image: File | string;
 
 const storeActive = useStoreActive();
 const imageUrl = ref();
@@ -81,7 +81,7 @@ const handleClick = async () => {
   };
 };
 
-const createStore = (storeData: storeCreateType) => {
+const createStore = (storeData: storeType) => {
   store.createStore(storeData,
     () => {
       const stores = store.storage.get('stores');
@@ -101,7 +101,7 @@ const createStore = (storeData: storeCreateType) => {
   );
 };
 
-const editStore = (storeData: storeCreateType) => {
+const editStore = (storeData: storeType) => {
   const imageUpdate = storeData.src === image ? null : image;
   store.updateStore(editId.value, storeData, imageUpdate, () => {
     const stores = store.storage.get('stores');

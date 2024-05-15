@@ -1,5 +1,5 @@
 import { createStorage, type SimpleStorage } from '../utils/storage';
-import { type storeCreateType } from '../types/storeType';
+import { type storeType } from '../types/storeType';
 const URL = import.meta.env.VITE_BASE_URL;
 
 class StoreService {
@@ -16,7 +16,7 @@ class StoreService {
 
 
   createStore(
-    dataStore: storeCreateType,
+    dataStore: storeType,
     onSuccess: () => void,
     onFailure: () => void
   ) {
@@ -40,8 +40,10 @@ class StoreService {
   }
 
   updateStore(
-    id: number, dataStore: storeCreateType,
-    image: File | null, onSuccess: () => void,
+    id: number,
+    dataStore: storeType,
+    image: File | string | null,
+    onSuccess: () => void,
     onFailure: () => void
   ) {
     const formData = this.formData(dataStore);
@@ -117,7 +119,7 @@ class StoreService {
     }
   }
 
-  private formData(dataStore: storeCreateType) {
+  private formData(dataStore: storeType) {
     const formData = new FormData();
     // formData.append('store[avatar]', dataStore.src);
     formData.append('store[name]', dataStore.name);
@@ -143,7 +145,7 @@ class StoreService {
     };
   }
 
-  private generateStorage(json: any) {
+  private generateStorage(json: storeType) {
     const storage = this.storage.get('stores') || '';
     const storeSaved = this.generateObjectSeller(json);
     if (storage != '') {
@@ -161,7 +163,7 @@ class StoreService {
     }
   }
 
-  private updateStorage(json: any) {
+  private updateStorage(json: storeType) {
     const storage = this.storage.get('stores') || '';
     const storeSaved = this.generateObjectSeller(json);
     if (storage != '') {
