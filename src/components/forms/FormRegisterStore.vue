@@ -130,6 +130,11 @@ const deleteForm = (id: number) => {
   }
   store.deleteStore(id, () => swalSuccess('Dados excluídos com sucesso'),
     () => swalSuccess('Erro no processamento da exclusão'));
+  const active = storeFiltered.find((field: any) => field.active);
+  const objectActive = {
+    ...active
+  };
+  storeActive.setStore(objectActive);
   data.value = storeFiltered;
 };
 
