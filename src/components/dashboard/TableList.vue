@@ -93,7 +93,7 @@ tbody {
 }
 
 tbody tr {
-  border-bottom: 1px solid #201d1d;
+  border-bottom: 1px solid #d1cfcf;
   height: 60px; 
   width: 100%;
 }
@@ -158,8 +158,8 @@ td {
 }
 
 .uploadedImage {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 60px;
+  max-height: 60px;
   border-radius: 50%;
   object-fit: cover;
 }
