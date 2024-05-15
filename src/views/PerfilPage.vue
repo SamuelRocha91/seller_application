@@ -12,8 +12,12 @@ import
 FormRegisterOperation
   from '@/components/forms/FormRegisterOperation.vue';
 const selected = ref(true);
-const handleSelect = () => {
-  selected.value = !selected.value;
+const handleSelect = (id: number) => {
+  if (id == 1) {
+    selected.value = true;
+  } else {
+    selected.value = false;
+  }
 };
 
 const handleClick = () => {
