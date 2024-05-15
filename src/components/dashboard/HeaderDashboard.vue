@@ -2,7 +2,7 @@
 import { onMounted } from 'vue';
 import { Auth } from '../../utils/auth';
 import { useStoreActive } from '@/store/storeActive';
-import { StoreService } from '@/utils/storeService';
+import { StoreService } from '@/api/storeService';
 
 const auth = new Auth();
 const user = auth.currentUser();
@@ -129,4 +129,4 @@ onMounted(() => {
   align-items: center;
   margin-left: 90px;
 }
-</style>
+</style>@/api/storeService

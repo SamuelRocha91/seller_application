@@ -1,4 +1,4 @@
-import { createStorage, type SimpleStorage } from './storage';
+import { createStorage, type SimpleStorage } from '../utils/storage';
 import { type storeCreateType } from '../types/storeType';
 const URL = import.meta.env.VITE_BASE_URL;
 
@@ -40,8 +40,8 @@ class StoreService {
   }
 
   updateStore(
-    id: number,dataStore: storeCreateType,
-    image: File | null,onSuccess: () => void,
+    id: number, dataStore: storeCreateType,
+    image: File | null, onSuccess: () => void,
     onFailure: () => void
   ) {
     const formData = this.formData(dataStore);
@@ -67,7 +67,7 @@ class StoreService {
 
   deleteStore(id: number, onSuccess: () => void, onFailure: () => void) {
     const token = this.getFallback('token');
-  
+
     fetch(`${URL}/stores/${id}`, {
       method: 'DELETE',
       headers: {
@@ -98,7 +98,7 @@ class StoreService {
         this.generateStorage(json);
         onSuccess();
       });
-    } else if(type == "update") {
+    } else if (type == "update") {
       response.json().then(async (json) => {
         this.updateStorage(json);
         onSuccess();
@@ -163,7 +163,7 @@ class StoreService {
 
   private updateStorage(json: any) {
     const storage = this.storage.get('stores') || '';
-    const storeSaved =  this.generateObjectSeller(json);
+    const storeSaved = this.generateObjectSeller(json);
     if (storage != '') {
       const store = JSON.parse(storage);
       const index = store
@@ -172,7 +172,7 @@ class StoreService {
       store[index] = storeSaved;
 
       this.storage.store('stores', JSON.stringify(store));
-    } 
+    }
   }
 
 }

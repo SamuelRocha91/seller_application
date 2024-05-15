@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { categories, prices } from '@/utils/data';
 import { swalError, swalSuccess, swallWithDelete } from '@/utils/swal';
-import { StoreService } from '../../utils/storeService';
+import { StoreService } from '../../api/storeService';
 import { phoneMask } from '@/utils/formUtils';
 import TableList from '../dashboard/TableList.vue';
 import { type storeType, type storeCreateType } from '@/types/storeType';
@@ -577,3 +577,4 @@ h2 {
   gap: 5px;
 }
 </style>
+../../api/storeService
