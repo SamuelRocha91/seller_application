@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   selected: boolean
-  handleSelect: () => void
+  handleSelect: (id:number) => void
   buttonOne: string
   buttonTwo: string
 }>();
@@ -10,13 +10,13 @@ defineProps<{
   <nav class="link-form">
     <ul>
       <button
-        @click="handleSelect"
+        @click="handleSelect(1)"
          :class="[selected ? 'selected' : 'no-select' ]"
          >
          {{ buttonOne }}
         </button>
       <button
-       @click="handleSelect"
+       @click="handleSelect(2)"
         :class="[selected ? 'no-select' : 'selected' ]"
         >
         {{ buttonTwo }}
