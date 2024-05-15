@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type operation } from '../../types/OperationType';
+import { type operation } from '../../types/operationType';
 
 
 const { data, handleClick } = defineProps<{
@@ -78,3 +78,4 @@ button:hover {
 }
 
 </style>
+../../types/operationType
