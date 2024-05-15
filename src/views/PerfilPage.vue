@@ -11,12 +11,17 @@ import FormRegisterStore from '@/components/forms/FormRegisterStore.vue';
 import
 FormRegisterOperation
   from '@/components/forms/FormRegisterOperation.vue';
+import { useStoreActive } from '@/store/storeActive';
+
+const storeActive = useStoreActive();
 const selected = ref(true);
+
 const handleSelect = (id: number) => {
-  if (id == 1) {
-    selected.value = true;
-  } else {
+
+  if (id == 2 && storeActive.storeActive.active) {
     selected.value = false;
+  } else if (id == 1) {
+    selected.value = true;
   }
 };
 
