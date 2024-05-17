@@ -41,6 +41,20 @@ abstract class BaseService {
     });
     return response;
   }
+  
+  async update(id: number, path: string, data: any): Promise<Response> {
+    const token = this.getFallback('token');
+
+    const response = await fetch(`${this.apiUrl}/${path}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: data
+    });
+    return response;
+  }
     
   private whatIsMyStorage() {
     const transient = createStorage(false);
