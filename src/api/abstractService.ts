@@ -10,6 +10,10 @@ abstract class BaseService {
     this.storage = createStorage(persistent);
   }
     
+  getFallback(key: string): string | null {
+    return this.storage.get(key);
+  }
+    
   private whatIsMyStorage() {
     const transient = createStorage(false);
     if (transient.get('token') != undefined) {
