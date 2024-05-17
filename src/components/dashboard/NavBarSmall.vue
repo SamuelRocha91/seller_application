@@ -1,8 +1,19 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import { useRoute } from 'vue-router';
+import { useRouter,  useRoute } from 'vue-router';
+import { Auth } from '@/utils/auth';
+import { swalSuccess } from '@/utils/swal';
 
+const router = useRouter();
 const route = useRoute();
+const auth = new Auth();
+
+const logout = () => {
+  auth.signOut(
+    () => swalSuccess('Sessão encerrada com sucesso')
+  );
+  router.push('/');
+};
 
 </script>
 <template>
@@ -94,7 +105,7 @@ const route = useRoute();
         src="../../assets/navBar/Logout.png"
         alt="Ícone de sair" 
         />
-        <RouterLink class="links-style" to="/">Sair</RouterLink>
+        <button @click.prevent="logout()" class="links-style">Sair</button>
       </li>
     </ul>
   </nav>

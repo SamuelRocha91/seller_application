@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { categories, prices } from '@/utils/data';
-import { swalError, swalSuccess } from '@/utils/swal';
-import { StoreService } from '../../utils/storeService';
+import { swalError, swalSuccess, swallWithDelete } from '@/utils/swal';
+import { StoreService } from '../../api/storeService';
 import { phoneMask } from '@/utils/formUtils';
 import TableList from '../dashboard/TableList.vue';
-import { type storeType, type storeCreateType } from '@/types/storeType';
+import { type storeType } from '@/types/storeType';
+import { useStoreActive } from '@/store/storeActive';
 
-let image: File;
 
+let image: File | string;
+
+const storeActive = useStoreActive();
 const imageUrl = ref();
 const edit = ref(false);
 const name = defineModel('name', { default: '' });
@@ -20,6 +23,8 @@ const phoneNumber = ref('');
 const store = new StoreService();
 const editId = ref();
 const data = ref();
+const awaiting = ref(false);
+
 
 const handleImageChange = (event: Event) => {
   const inputElement = event.target as HTMLInputElement;
@@ -55,6 +60,7 @@ const handleStatus = (id: number) => {
         entity.active = false;
       }
     });
+  updateGlobalState();
   store.storage.store('stores', JSON.stringify(data.value));
 };
 
@@ -67,40 +73,52 @@ const handleClick = async () => {
   }
   const storeData = objectForm();
   if (editId.value) {
+    awaiting.value = true;
     editStore(storeData);
   } else {
+    awaiting.value = true;
     createStore(storeData);
   };
 };
 
-const createStore = (storeData: storeCreateType) => {
+const createStore = (storeData: storeType) => {
   store.createStore(storeData,
     () => {
       const stores = store.storage.get('stores');
       data.value = JSON.parse(stores || '');
       swalSuccess('Dados salvos com sucesso!');
+      updateGlobalState();
       edit.value = true;
       editId.value = null;
+      awaiting.value = false;
     },
     () => {
       swalError('Erro ao salvar os dados',
         'Por favor, verifique os dados inseridos');
+      awaiting.value = false;
+
     }
   );
-  swalSuccess('Dados salvos com sucesso!');
 };
 
-const editStore = (storeData: storeCreateType) => {
+const editStore = (storeData: storeType) => {
   const imageUpdate = storeData.src === image ? null : image;
   store.updateStore(editId.value, storeData, imageUpdate, () => {
     const stores = store.storage.get('stores');
     data.value = JSON.parse(stores || '');
     swalSuccess('Dados atualizados com sucesso!');
     edit.value = true;
+    awaiting.value = false;
   }, () => {
     swalError('Erro ao salvar os dados',
       'Por favor, verifique os dados inseridos');
+    awaiting.value = false;
   });
+};
+
+
+const handleDelete = (id: number) => {
+  swallWithDelete(() => deleteForm(id));
 };
 
 const deleteForm = (id: number) => {
@@ -108,20 +126,16 @@ const deleteForm = (id: number) => {
     .filter((entity: storeType) => entity.id !== id);
   if (storeFiltered.length === 0) {
     store.storage.remove('stores');
-    address.value = '';
-    description.value = '';
-    category.value = '';
-    name.value = '';
-    minimumPrice.value = '';
-    phoneNumber.value = '';
-    imageUrl.value = '';
-    edit.value = false;
+    startFormCreateStore();
   } else {
     store.storage.store('stores', JSON.stringify(storeFiltered));
   }
-  store.deleteStore(id, () => swalSuccess('Dados excluídos com sucesso'),
-    () => swalSuccess('Erro no processamento da exclusão'));
+  store.deleteStore(id,
+    () => swalSuccess('Dados excluídos com sucesso'),
+    () => swalSuccess('Erro no processamento da exclusão')
+  );
   data.value = storeFiltered;
+  updateGlobalState();
 };
 
 const editForm = async (id: number) => {
@@ -138,6 +152,14 @@ const editForm = async (id: number) => {
   imageUrl.value = storeFiltered[0].src;
   image = storeFiltered[0].src;
   edit.value = false;
+};
+
+const updateGlobalState = () => {
+  const active = data.value.find((field: any) => field.active);
+  const objectActive = {
+    ...active
+  };
+  storeActive.setStore(objectActive);
 };
 
 const objectForm = () => ({
@@ -274,6 +296,7 @@ onMounted(() => {
           </div>
           <div class="btn-div">
             <button
+            :disabled="awaiting"
             type="submit"
             @click.prevent="handleClick"
             class="save-form-btn"
@@ -291,9 +314,9 @@ onMounted(() => {
       title="Lojas cadastradas"
       tableOne="Loja"
       tableTwo="Nome"
-      tableThree="Preço"
+      tableThree="Pedido Mínimo"
       :handleEdit="editForm"
-      :handleClick="deleteForm"
+      :handleClick="handleDelete"
       :handleStatus="handleStatus"
       :data="data"
       />
@@ -554,3 +577,4 @@ h2 {
   gap: 5px;
 }
 </style>
+../../api/storeService

@@ -1,22 +1,20 @@
 export type storeType = {
-    src: File
+    id?: number,
+    src: File | string,
     name: string,
     price: string,
-    active: boolean,
-    id: number,
     description: string,
     address: string,
     category: string
     phoneNumber: string,
-    image: File
+    active?: boolean,
+    image?: File | string
 }
 
-export type storeCreateType = {
-    src: File,
+export type entity = {
+    id: number,
+    src: string,
+    active: boolean,
     name: string,
     price: string,
-    description: string,
-    address: string,
-    category: string,
-    phoneNumber: string
 }

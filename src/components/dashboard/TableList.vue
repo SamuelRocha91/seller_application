@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type entity } from '../../types/entityType';
+import { type entity } from '@/types/storeType';
 
 const { data, handleClick, handleEdit, handleStatus } = defineProps<{
   data?: Array<entity>

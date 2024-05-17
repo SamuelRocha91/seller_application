@@ -3,8 +3,10 @@ import { week, hours } from '@/utils/data';
 import TableOperation from '../dashboard/TableOperation.vue';
 import { onMounted, ref } from 'vue';
 import { createStorage } from '@/utils/storage';
-import { type operation } from '../../types/OperationType';
+import { type operation } from '../../types/operationType';
+import { useStoreActive } from '@/store/storeActive';
 
+const storeActive = useStoreActive().storeActive;
 const storage = createStorage(true);
 const tableData = ref<Array<operation>>([]);
 const open = defineModel('open');
@@ -22,13 +24,14 @@ const saveOperation = () => {
   const arrayOperation = [
     ...parse,
     {
+      id: storeActive.id,
       open: open.value,
       closed: closed.value,
       day: dayOfWeek.value
     }
   ];
   storage.store('operation', JSON.stringify(arrayOperation));
-  tableData.value = arrayOperation;
+  tableData.value = arrayOperation.filter((data) => data.id = storeActive.id);
 };
 
 const deleteOPeration = (index: number) => {
@@ -39,7 +42,6 @@ const deleteOPeration = (index: number) => {
   storage.store('operation', JSON.stringify(dataFiltered));
   tableData.value = dataFiltered;
 };
-
 
 </script>
 <template>

@@ -83,7 +83,8 @@ const validateEmailOnBlur = () => {
         <input v-model="remember" type="checkbox" id="remember-password" />
         <p>Lembrar senha</p>
       </label>
-      <button id="register-form-btn">Login</button>
+      <button :disabled="awaiting" id="register-form-btn">Login</button>
+      
       <div class="links-redirect">
         <p>
           Ainda não tem cadastro?

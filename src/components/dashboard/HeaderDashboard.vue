@@ -2,7 +2,7 @@
 import { onMounted } from 'vue';
 import { Auth } from '../../utils/auth';
 import { useStoreActive } from '@/store/storeActive';
-import { StoreService } from '@/utils/storeService';
+import { StoreService } from '@/api/storeService';
 
 const auth = new Auth();
 const user = auth.currentUser();
@@ -29,21 +29,23 @@ onMounted(() => {
     >
     Seja bem vindo(a), {{ user.email || '' }}
     </h1>
-    <div v-else class="header-container">
-      <div class="store-perfil">
-        <div class="image-container " >
-          <img class="store-image"
-          :src="store.storeActive.src" alt="logo da loja" />
+    <div class="header-container" v-else>
+      <div class="header-wrapper">
+        <div class="store-perfil">
+          <div class="image-container " >
+            <img class="store-image"
+            :src="store.storeActive.src" alt="logo da loja" />
+          </div>
+          <h1>{{ store.storeActive.name }}</h1>
         </div>
-        <h1>{{ store.storeActive.name }}</h1>
+        <a href="">Fechar agora</a>
       </div>
-      <a href="">Fechar agora</a>
-    </div>
-    <div class="store-status">
-      <img src="../../assets/icons/Subtract.png" alt="ícone de abertura">
-      <div>
-        <h2>Loja aberta</h2>
-        <p>Dentro do horário</p>
+      <div class="store-status">
+        <img src="../../assets/icons/Subtract.png" alt="ícone de abertura">
+        <div>
+          <h2>Loja aberta</h2>
+          <p>Dentro do horário</p>
+        </div>
       </div>
     </div>
   </header>
@@ -59,14 +61,13 @@ onMounted(() => {
   }
 
 .header-container {
-    width: 80%;
+    width: 100%;
     height: 100%;
-    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 40px;
-    margin-left: 70px;
+    border: 1px solid black;
 }
 
 .image-container {
@@ -120,4 +121,12 @@ onMounted(() => {
 .store-status h2 {
   color: #3CB85F;
 }
-</style>
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-left: 90px;
+}
+</style>@/api/storeService
