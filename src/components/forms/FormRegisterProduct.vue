@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { swalError } from '../../utils/swal';
+import { catergoriesProducts } from '@/utils/data';
 
 let image: File | string;
 
@@ -74,7 +75,7 @@ const handleClick = async () => {
               <p>Categoria</p>
               <select class="select-box" v-model="category">
                 <option
-                v-for="(categoria, index) in categories"
+                v-for="(categoria, index) in catergoriesProducts"
                 :key="index"
                 :value="categoria"
                 >

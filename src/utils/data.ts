@@ -8,3 +8,5 @@ export const hours: string[] = ["00:00", "01:00", "02:00",
   "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"];
 export const week: string[] = ["Segunda-feira", "Terça-feira",
   "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"];
+export const catergoriesProducts: string[] = ["Massas",
+  "Bebidas", "Hamburguer", "Salgados", "Sorvetes", "Doces"];
