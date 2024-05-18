@@ -8,8 +8,12 @@ import PageInfo from '../components/dashboard/PageInfo.vue';
 import FormRegisterProduct from '@/components/forms/FormRegisterProduct.vue';
 import ShoppingCart from '../assets/icons/ShoppingCart.png';
 import Menu from '../assets/icons/Menu.png';
+import { catergoriesProducts } from '@/utils/data';
 
 const menuPage = ref(false);
+const category = defineModel('category', {
+  default: ''
+});
 
 const handleClick = () => {
   BignavBar.value = !BignavBar.value;
@@ -69,7 +73,25 @@ const handleClick = () => {
             description="Gerencie os itens disponíveis em sua loja
             através do cardápio"
           />
-          <FormRegisterProduct />
+          <div class="filters-menu">
+            <label for="">
+              <input 
+              class="bg-input"
+               placeholder="Busque pelo nome do item" type="search">
+            </label>
+            <select class="select-box" v-model="category">
+                <option value="" disabled selected>
+                  Filtrar por categoria
+                </option>
+               <option
+                v-for="(categoria, index) in catergoriesProducts"
+                :key="index"
+                :value="categoria"
+                >
+                  {{ categoria }}
+                </option>
+              </select>
+          </div>
         </div>
       </main>
     </div>
@@ -167,6 +189,42 @@ main {
   flex-direction: column;
 }
 
+.filters-menu {
+  margin-top: 5px;
+  background-color: white;  
+  width: 90%;
+  height: 10vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.filters-menu label {
+  width: 50%;
+}
+
+.bg-input {
+  border: 1px solid #dedede;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+  padding: 13px;
+  width: 100%;
+  height: 37px;
+}
+
+.select-box {
+  width: 400px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+}
 .main-content{
   background-color: gray;
   display: flex;
