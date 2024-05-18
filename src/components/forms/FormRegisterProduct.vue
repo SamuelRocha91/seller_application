@@ -186,6 +186,7 @@ form {
   width: 90%;
   height: 62vh;
 }
+
 .image-container {
   width: 100px;
   height: 100px;
@@ -221,6 +222,7 @@ form {
 .save-form-btn:hover {
   cursor: pointer;
 }
+
 .bg-input {
   border: 1px solid #dedede;
   border: 1px solid #ccc;
@@ -233,7 +235,7 @@ form {
 }
 
 .category {
-  width: 90%;
+  width: 99%;
 }
 
 .inputs-init {
@@ -286,7 +288,7 @@ form {
   flex-direction: column;
   justify-content: center;
   padding: 20px;
-  width: 82%;
+  width: 87%;
   height: fit-content;
   justify-content: center;
 }
