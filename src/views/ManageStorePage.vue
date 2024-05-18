@@ -7,7 +7,9 @@ import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import PageInfo from '../components/dashboard/PageInfo.vue';
 import FormRegisterProduct from '@/components/forms/FormRegisterProduct.vue';
 import ShoppingCart from '../assets/icons/ShoppingCart.png';
+import Menu from '../assets/icons/Menu.png';
 
+const menuPage = ref(false);
 
 const handleClick = () => {
   BignavBar.value = !BignavBar.value;
@@ -50,13 +52,25 @@ const handleClick = () => {
         <HeaderDashboard />
       </div>
       <main>
-        <PageInfo
-          :src="ShoppingCart"
-          alt="ícone de carrinho"
-          title="Novo Item"
-          description="Adicione um novo produto"
-        />
-      <FormRegisterProduct />
+        <div class="main-content" v-if="menuPage">
+          <PageInfo
+            :src="ShoppingCart"
+            alt="ícone de carrinho"
+            title="Novo Item"
+            description="Adicione um novo produto"
+          />
+          <FormRegisterProduct />
+        </div>
+        <div class="main-content" v-else>
+          <PageInfo
+            :src="Menu"
+            alt="ícone de menu"
+            title="Cardápios"
+            description="Gerencie os itens disponíveis em sua loja
+            através do cardápio"
+          />
+          <FormRegisterProduct />
+        </div>
       </main>
     </div>
   </div>
@@ -142,10 +156,21 @@ const handleClick = () => {
   height: 17%;
   width: 100%;
 }
+
 main {
   background-color: gray;
   display: flex;
   height: 83.4vh;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  flex-direction: column;
+}
+
+.main-content{
+  background-color: gray;
+  display: flex;
+  height: 100%;
   width: 100%;
   align-items: center;
   gap: 8px;

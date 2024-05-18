@@ -30,7 +30,11 @@ defineProps<{
   gap: 5px;
   padding: 5px;
   border-radius: 5px;
+}
 
+h1 {
+  font-weight: bold;
+  font-size: x-large;
 }
 
 </style>
