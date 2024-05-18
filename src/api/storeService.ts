@@ -1,45 +1,40 @@
-import { createStorage, type SimpleStorage } from '../utils/storage';
 import { type storeType } from '../types/storeType';
-const URL = import.meta.env.VITE_BASE_URL;
+import { BaseService } from './abstractService';
 
-class StoreService {
-  storage: SimpleStorage;
+class StoreService extends BaseService{
 
   constructor() {
-    const persistent: boolean = this.whatIsMyStorage();
-    this.storage = createStorage(persistent);
+    super();
   }
 
-  getFallback(key: string): string | null {
-    return this.storage.get(key);
+  async getStores(
+    onSuccess: () => void,
+    onFailure: () => void
+  ) {
+    const response = await this.getAll('stores');
+    if (response.ok) {
+      this.success(response, onSuccess);
+    } else {
+      this.failure(response, onFailure);
+    }
   }
 
-
-  createStore(
+  async createStore(
     dataStore: storeType,
     onSuccess: () => void,
     onFailure: () => void
   ) {
     const formData = this.formData(dataStore);
     formData.append('store[avatar]', dataStore.src);
-    const token = this.getFallback('token');
-    fetch(`${URL}/stores`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: formData
-    }).then((response) => {
-      if (response.ok) {
-        this.success(response, onSuccess);
-      } else {
-        this.failure(response, onFailure);
-      }
-    });
+    const response = await this.create('stores', formData);
+    if (response.ok) {
+      this.success(response, onSuccess);
+    } else {
+      this.failure(response, onFailure);
+    }
   }
 
-  updateStore(
+  async updateStore(
     id: number,
     dataStore: storeType,
     image: File | string | null,
@@ -50,40 +45,21 @@ class StoreService {
     if (image !== null) {
       formData.append('store[avatar]', image);
     }
-    const token = this.getFallback('token');
-    fetch(`${URL}/stores/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: formData
-    }).then((response) => {
-      if (response.ok) {
-        this.success(response, onSuccess, "update");
-      } else {
-        this.failure(response, onFailure);
-      }
-    });
+    const response = await this.update(id, 'stores', formData);
+    if (response.ok) {
+      this.success(response, onSuccess, "update");
+    } else {
+      this.failure(response, onFailure);
+    }
   }
-
-  deleteStore(id: number, onSuccess: () => void, onFailure: () => void) {
-    const token = this.getFallback('token');
-
-    fetch(`${URL}/stores/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-    }).then((response) => {
-      if (response.ok) {
-        onSuccess();
-      } else {
-        this.failure(response, onFailure);
-      }
-    });
+  
+  async deleteStore(id: number, onSuccess: () => void, onFailure: () => void) {
+    const response = await this.delete(id, 'stores');
+    if (response.ok) {
+      onSuccess();
+    } else {
+      this.failure(response, onFailure);
+    }
   }
 
   failure(response: Response, onFailure: () => void) {
@@ -107,15 +83,6 @@ class StoreService {
       });
     } else {
       onSuccess();
-    }
-  }
-
-  private whatIsMyStorage() {
-    const transient = createStorage(false);
-    if (transient.get('token') != undefined) {
-      return false;
-    } else {
-      return true;
     }
   }
 
