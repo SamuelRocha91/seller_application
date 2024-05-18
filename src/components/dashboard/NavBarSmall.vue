@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import { useRouter,  useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { Auth } from '@/utils/auth';
 import { swalSuccess } from '@/utils/swal';
 
-const router = useRouter();
 const route = useRoute();
 const auth = new Auth();
 
@@ -12,7 +11,6 @@ const logout = () => {
   auth.signOut(
     () => swalSuccess('Sessão encerrada com sucesso')
   );
-  router.push('/');
 };
 
 </script>
@@ -47,13 +45,14 @@ const logout = () => {
       </li>
       <li class="links-button">
         <img
+        :class="{ 'active': $route.path === '/dashboard/perfil' }"
         class="image-dimension"
         src="../../assets/navBar/Store.png"
         alt="ícone de loja"
          />
         <RouterLink
          class="links-style"
-         to="/dashboard/loja"
+         to="/dashboard/gerenciar-loja"
          >
          Gerenciar loja
         </RouterLink>
@@ -105,7 +104,13 @@ const logout = () => {
         src="../../assets/navBar/Logout.png"
         alt="Ícone de sair" 
         />
-        <button @click.prevent="logout()" class="links-style">Sair</button>
+        <RouterLink 
+        @click.prevent="logout"
+         class="links-style"
+         to="/"
+         >
+         Sair
+        </RouterLink>
       </li>
     </ul>
   </nav>
