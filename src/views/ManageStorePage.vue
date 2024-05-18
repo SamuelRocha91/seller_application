@@ -4,16 +4,7 @@ import NavBar from '../components/dashboard/NavBar.vue';
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 const BignavBar = ref(true);
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
-import PageInfo from '../components/dashboard/PageInfo.vue';
 import FormRegisterProduct from '@/components/forms/FormRegisterProduct.vue';
-import ShoppingCart from '../assets/icons/ShoppingCart.png';
-import Menu from '../assets/icons/Menu.png';
-import { catergoriesProducts } from '@/utils/data';
-
-const menuPage = ref(false);
-const category = defineModel('category', {
-  default: ''
-});
 
 const handleClick = () => {
   BignavBar.value = !BignavBar.value;
@@ -56,43 +47,7 @@ const handleClick = () => {
         <HeaderDashboard />
       </div>
       <main>
-        <div class="main-content" v-if="menuPage">
-          <PageInfo
-            :src="ShoppingCart"
-            alt="ícone de carrinho"
-            title="Novo Item"
-            description="Adicione um novo produto"
-          />
           <FormRegisterProduct />
-        </div>
-        <div class="main-content" v-else>
-          <PageInfo
-            :src="Menu"
-            alt="ícone de menu"
-            title="Cardápios"
-            description="Gerencie os itens disponíveis em sua loja
-            através do cardápio"
-          />
-          <div class="filters-menu">
-            <label for="">
-              <input 
-              class="bg-input"
-               placeholder="Busque pelo nome do item" type="search">
-            </label>
-            <select class="select-box" v-model="category">
-                <option value="" disabled selected>
-                  Filtrar por categoria
-                </option>
-               <option
-                v-for="(categoria, index) in catergoriesProducts"
-                :key="index"
-                :value="categoria"
-                >
-                  {{ categoria }}
-                </option>
-              </select>
-          </div>
-        </div>
       </main>
     </div>
   </div>
@@ -189,17 +144,6 @@ main {
   flex-direction: column;
 }
 
-.filters-menu {
-  margin-top: 5px;
-  background-color: white;  
-  width: 90%;
-  height: 10vh;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 5px;
-  border-radius: 5px;
-}
 
 .filters-menu label {
   width: 50%;
@@ -225,15 +169,7 @@ main {
   background-color: #fff;
   outline: none;
 }
-.main-content{
-  background-color: gray;
-  display: flex;
-  height: 100%;
-  width: 100%;
-  align-items: center;
-  gap: 8px;
-  flex-direction: column;
-}
+
 
 @media (max-width: 860px) {
   .header-nav {
