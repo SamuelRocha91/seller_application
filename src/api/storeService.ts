@@ -2,7 +2,6 @@ import { type storeType } from '../types/storeType';
 import { BaseService } from './abstractService';
 
 class StoreService extends BaseService{
-
   constructor() {
     super();
   }
@@ -88,7 +87,6 @@ class StoreService extends BaseService{
 
   private formData(dataStore: storeType) {
     const formData = new FormData();
-    // formData.append('store[avatar]', dataStore.src);
     formData.append('store[name]', dataStore.name);
     formData.append('store[category]', dataStore.category);
     formData.append('store[price_minimum]', dataStore.price);
