@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { swalError } from '../../utils/swal';
 import { catergoriesProducts } from '@/utils/data';
+import { priceMask } from '@/utils/formUtils';
 
 let image: File | string;
 
@@ -20,6 +21,12 @@ const handleImageChange = (event: Event) => {
     image = file;
     imageUrl.value = URL.createObjectURL(file);
   }
+};
+
+const handlePrice = (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  const newPrice = priceMask(value || '');
+  price.value = newPrice;
 };
 
 const validateFields = () => {
@@ -54,7 +61,7 @@ const handleClick = async () => {
         <div class="form-init">
           <div class="image-form">
             <div class="image-container">
-              <img id="uploadedImage" :src="imageUrl" alt="imagem do produto" />
+              <img id="uploadedImage" :src="imageUrl" alt="" />
             </div>
             <label
             for="imageInput"
@@ -73,7 +80,7 @@ const handleClick = async () => {
           <div class="inputs-init">
              <div>
               <p>Categoria</p>
-              <select class="select-box" v-model="category">
+              <select class="select-box category" v-model="category">
                 <option
                 v-for="(categoria, index) in catergoriesProducts"
                 :key="index"
@@ -87,11 +94,11 @@ const handleClick = async () => {
         </div>
         <div class="section-intermediate">
           <div class="intermediate-content">
-            <label>
+            <label class="label-intermediate">
               <p>Nome do produto</p>
               <input
                 placeholder="O nome precisa ter no mínimo 3 caracteres"
-                class="bg-input"
+                class="bg-input intermediate"
                 type="text"
                 v-model="name"
               />
@@ -100,8 +107,8 @@ const handleClick = async () => {
               <p>Valor</p>
               <input
                 @input="handlePrice"
-                :value="price"
-                class="bg-input"
+                v-model="price"
+                class="bg-input intermediate"
                 type="text"
                 maxlength="15"
                 placeholder="0.00"
@@ -158,13 +165,16 @@ form {
   width: 100%;
   padding: 10px;
 }
+
 .form-init {
   background-color: white;
   display: flex;
+  align-items: center;
   height: fit-content;
   padding: 10px;
   width: 100%;
   gap: 10px;
+  border: 1px solid rgb(189, 187, 187);
 }
 .form-container {
   background-color: white;
@@ -203,6 +213,11 @@ form {
   border-radius: 5px;
 }
 
+.label-intermediate {
+  margin-left: 4%;
+  width: 90%;
+}
+
 .save-form-btn:hover {
   cursor: pointer;
 }
@@ -217,6 +232,10 @@ form {
   height: 37px;
 }
 
+.category {
+  width: 90%;
+}
+
 .inputs-init {
   width: 100%;
   display: flex;
@@ -224,6 +243,9 @@ form {
   gap: 20px;
 }
 
+.intermediate {
+  width: 100%;
+}
 .image-form {
   display: flex;
   width: 30%;
@@ -237,7 +259,10 @@ form {
   padding: 10px;
   width: 100%;
   padding: 10px;
-  justify-content: center;
+  justify-content: space-between;
+  border-right: 1px solid rgb(189, 187, 187);
+  border-left: 1px solid rgb(189, 187, 187);
+  align-items: center;
 }
 
 .intermediate-content {
@@ -245,20 +270,24 @@ form {
   width: 100%;
   gap: 40px;
   padding: 10px;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .section-finish {
   width: 100%;
-  height: 32.5vh;
+  height: 32.0vh;
   display: flex;
   justify-content: center;
+  border: 1px solid #ccc;
 }
 
 .text-description {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  padding: 20px;
   width: 82%;
+  height: fit-content;
   justify-content: center;
 }
 

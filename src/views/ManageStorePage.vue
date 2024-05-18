@@ -5,12 +5,9 @@ import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 const BignavBar = ref(true);
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import PageInfo from '../components/dashboard/PageInfo.vue';
-import FormRegisterStore from '../components/forms/FormRegisterStore.vue';
-import FormRegisterOperation
-  from '../components/forms/FormRegisterOperation.vue';
+import FormRegisterProduct from '@/components/forms/FormRegisterProduct.vue';
 import ShoppingCart from '../assets/icons/ShoppingCart.png';
 
-const selected = ref(true);
 
 const handleClick = () => {
   BignavBar.value = !BignavBar.value;
@@ -59,9 +56,7 @@ const handleClick = () => {
           title="Novo Item"
           description="Adicione um novo produto"
         />
-    
-        <FormRegisterStore v-show="selected"/>
-        <FormRegisterOperation v-show="!selected"/>
+      <FormRegisterProduct />
       </main>
     </div>
   </div>
