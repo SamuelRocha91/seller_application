@@ -18,14 +18,13 @@ class ProductService extends BaseService{
     }
   }
   
-
   async createProduct(
     id: number,
     dataProduct: any,
     onSuccess: () => void,
     onFailure: () => void
   ) {
-    const formData = new FormData();
+    const formData = this.formData(dataProduct);
     formData.append('product[image]', dataProduct.src);
     const response = await this.create(`stores/${id}/products`, formData);
     if (response.ok) {
@@ -76,6 +75,16 @@ class ProductService extends BaseService{
   failure(response: Response, onFailure: () => void) {
     onFailure();
   }  
+
+
+  private formData(dataProduct: any) {
+    const formData = new FormData();
+    formData.append('product[name]', dataProduct.name);
+    formData.append('product[category]', dataProduct.category);
+    formData.append('product[price]', dataProduct.price);
+    formData.append('product[description]', dataProduct.description);
+    return formData;
+  }
 }
 
 export { ProductService };
