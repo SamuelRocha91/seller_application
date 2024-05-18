@@ -99,7 +99,7 @@ class StoreService extends BaseService{
   private generateObjectSeller(json: any) {
     return {
       id: json.id,
-      src: `${URL}${json.avatar_url}`,
+      src: `${this.apiUrl}${json.avatar_url}`,
       name: json.name,
       price: json.price_minimum,
       description: json.description,

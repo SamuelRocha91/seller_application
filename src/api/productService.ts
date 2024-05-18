@@ -79,7 +79,7 @@ class ProductService extends BaseService{
 
   private formData(dataProduct: any) {
     const formData = new FormData();
-    formData.append('product[name]', dataProduct.name);
+    formData.append('product[title]', dataProduct.name);
     formData.append('product[category]', dataProduct.category);
     formData.append('product[price]', dataProduct.price);
     formData.append('product[description]', dataProduct.description);
