@@ -3,6 +3,13 @@ import { ref } from 'vue';
 import { swalError } from '../../utils/swal';
 import { catergoriesProducts } from '@/utils/data';
 import { priceMask } from '@/utils/formUtils';
+import ShoppingCart from './../../assets/icons/ShoppingCart.png';
+import Menu from '../../assets/icons/Menu.png';
+import TableList from '../dashboard/TableList.vue';
+import PageInfo from '../dashboard/PageInfo.vue';
+import { ProductService } from '@/api/productService';
+import { useStoreActive } from '@/store/storeActive';
+
 
 let image: File | string;
 
@@ -12,7 +19,10 @@ const name = defineModel('name', { default: '' });
 const price = ref('');
 const description = defineModel('description', { default: '' });
 const awaiting = ref(false);
-
+const menuPage = ref(false);
+const data = ref();
+const productService = new ProductService();
+const storeActive = useStoreActive().storeActive;
 
 const handleImageChange = (event: Event) => {
   const inputElement = event.target as HTMLInputElement;
@@ -47,41 +57,150 @@ const handleClick = async () => {
       'Por favor, verifique os dados inseridos');
     return;
   }
+  const productData = objectForm();
+  awaiting.value = true;
+  createProduct(productData);
 };
-</script>
 
+const createProduct = (dataProduct: any) => {
+  productService.createProduct(
+    storeActive.id,
+    dataProduct,
+    () => console.log('aê'),
+    () => console.log('aô')
+  );
+};
+
+const objectForm = () => ({
+  src: image,
+  name: name.value,
+  price: parseFloat(price.value),
+  description: description.value,
+  category: category.value,
+});
+
+</script>
 <template>
-    <div class="form-container">
-      <form
-      id="uploadForm"
-      action="/upload"
-      method="post"
-      enctype="multipart/form-data"
-      >
-        <div class="form-init">
-          <div class="image-form">
-            <div class="image-container">
-              <img id="uploadedImage" :src="imageUrl" alt="" />
-            </div>
-            <label
-            for="imageInput"
-            class="custom-file-upload"
-            >
-            Alterar Imagem do produto
-          </label>
-            <input
-              type="file"
-              name="image"
-              id="imageInput"
-              @change="handleImageChange"
-              style="display: none"
+  <template v-if="menuPage">
+    <div class="main-content" >
+        <PageInfo
+              :src="ShoppingCart"
+              alt="ícone de carrinho"
+              title="Dados do produto"
+              description="Adicione um novo produto"
             />
+      <div class="form-container">
+        <form
+        id="uploadForm"
+        action="/upload"
+        method="post"
+        enctype="multipart/form-data"
+        >
+          <div class="form-init">
+            <div class="image-form">
+              <div class="image-container">
+                <img id="uploadedImage" :src="imageUrl" alt="" />
+              </div>
+              <label
+              for="imageInput"
+              class="custom-file-upload"
+              >
+              Alterar Imagem do produto
+            </label>
+              <input
+                type="file"
+                name="image"
+                id="imageInput"
+                @change="handleImageChange"
+                style="display: none"
+              />
+            </div>
+            <div class="inputs-init">
+               <div>
+                <p>Categoria</p>
+                <select class="select-box category" v-model="category">
+                  <option
+                  v-for="(categoria, index) in catergoriesProducts"
+                  :key="index"
+                  :value="categoria"
+                  >
+                    {{ categoria }}
+                  </option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="inputs-init">
-             <div>
-              <p>Categoria</p>
-              <select class="select-box category" v-model="category">
-                <option
+          <div class="section-intermediate">
+            <div class="intermediate-content">
+              <label class="label-intermediate">
+                <p>Nome do produto</p>
+                <input
+                  placeholder="O nome precisa ter no mínimo 3 caracteres"
+                  class="bg-input intermediate"
+                  type="text"
+                  v-model="name"
+                />
+              </label>
+              <div class="input-phone">
+                <p>Valor</p>
+                <input
+                  @input="handlePrice"
+                  v-model="price"
+                  class="bg-input intermediate"
+                  type="text"
+                  maxlength="15"
+                  placeholder="0.00"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="section-finish">
+            <div class="text-description">
+              <p>Descrição</p>
+              <textarea
+                placeholder="Máximo: 50 caracteres"
+                cols="30"
+                rows="10"
+                v-model="description"
+                maxlength="50"
+              ></textarea>
+            </div>
+            <div class="btn-div">
+              <button
+              :disabled="awaiting"
+              type="submit"
+              @click.prevent="handleClick"
+              class="save-form-btn"
+              >
+              Salvar
+            </button>
+            </div>
+          </div>
+        </form>
+      </div>
+     </div>
+  </template>
+  <template v-else>
+    <div class="main-content" >
+        <PageInfo
+            :src="Menu"
+            alt="ícone de menu"
+            title="Cardápios"
+            description="Gerencie os itens disponíveis em sua loja
+            através do cardápio"
+          />
+          <div class="filters-menu">
+            <label for="">
+              <input 
+               class="bg-input-2"
+               placeholder="Busque pelo nome do item" 
+               type="search">
+            </label>
+            <select class="select-box-2" v-model="category">
+                <option value="" disabled selected>
+                  Filtrar por categoria
+                </option>
+               <option
                 v-for="(categoria, index) in catergoriesProducts"
                 :key="index"
                 :value="categoria"
@@ -89,60 +208,40 @@ const handleClick = async () => {
                   {{ categoria }}
                 </option>
               </select>
-            </div>
+          </div>
+          <div class="content-menu">
+            <TableList 
+            title="Produtos cadastrados"
+            tableOne="Produto"
+            tableTwo="Nome"
+            tableThree="Preço"
+            :handleEdit="editForm"
+            :handleClick="handleDelete"
+            :handleStatus="handleStatus"
+            :data="data"
+            />
           </div>
         </div>
-        <div class="section-intermediate">
-          <div class="intermediate-content">
-            <label class="label-intermediate">
-              <p>Nome do produto</p>
-              <input
-                placeholder="O nome precisa ter no mínimo 3 caracteres"
-                class="bg-input intermediate"
-                type="text"
-                v-model="name"
-              />
-            </label>
-            <div class="input-phone">
-              <p>Valor</p>
-              <input
-                @input="handlePrice"
-                v-model="price"
-                class="bg-input intermediate"
-                type="text"
-                maxlength="15"
-                placeholder="0.00"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="section-finish">
-          <div class="text-description">
-            <p>Descrição</p>
-            <textarea
-              placeholder="Máximo: 50 caracteres"
-              cols="30"
-              rows="10"
-              v-model="description"
-              maxlength="50"
-            ></textarea>
-          </div>
-          <div class="btn-div">
-            <button
-            :disabled="awaiting"
-            type="submit"
-            @click.prevent="handleClick"
-            class="save-form-btn"
-            >
-            Salvar
-          </button>
-          </div>
-        </div>
-      </form>
-    </div> 
+   </template>
 </template>
 
 <style scoped>
+
+.filters-menu label {
+  width: 50%;
+}
+
+.bg-input-2 {
+  border: 1px solid #dedede;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+  padding: 13px;
+  width: 100%;
+  height: 37px;
+}
+
 .select-box {
   width: 200px;
   padding: 8px;
@@ -151,6 +250,26 @@ const handleClick = async () => {
   border-radius: 4px;
   background-color: #fff;
   outline: none;
+}
+
+.select-box-2 {
+  width: 400px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+  height: 41px;
+}
+.main-content{
+  background-color: gray;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  flex-direction: column;
 }
 
 .custom-file-upload {
@@ -221,6 +340,25 @@ form {
 
 .save-form-btn:hover {
   cursor: pointer;
+}
+
+.filters-menu {
+  margin-top: 5px;
+  background-color: white;  
+  width: 90%;
+  height: 10vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.content-menu {
+  background-color: white;
+  padding: 20px;
+  width: 90%;
+  height: 100%;
 }
 
 .bg-input {
