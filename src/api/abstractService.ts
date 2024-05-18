@@ -56,6 +56,7 @@ abstract class BaseService {
     return response;
   }
     
+
   async delete(id: number, path: string): Promise<Response> {
     const token = this.getFallback('token');
     const response = await fetch(`${this.apiUrl}/${path}/${id}`, {
@@ -67,7 +68,7 @@ abstract class BaseService {
       }
     });
     return response;
-  }    
+  }
 
   private whatIsMyStorage() {
     const transient = createStorage(false);
