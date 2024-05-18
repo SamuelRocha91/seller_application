@@ -7,6 +7,7 @@ import RegisterPage from '@/views/RegisterPage.vue';
 import RecoveryPasswordPage from '@/views/RecoveryPasswordPage.vue';
 import RecoveryPasswordEmailPage from '@/views/RecoveryPasswordEmailPage.vue';
 import PerfilPage from '@/views/PerfilPage.vue';
+import ManageStorePage from '@/views/ManageStorePage.vue';
 
 
 const router = createRouter({
@@ -42,6 +43,12 @@ const router = createRouter({
       name: '/dashboard/perfil',
       meta: { requiresAuth: true },
       component: PerfilPage
+    },
+    {
+      path: '/dashboard/gerenciar-loja',
+      name: '/dashboard/gerenciar-loja',
+      meta: { requiresAuth: true },
+      component: ManageStorePage
     }
   ]
 });
