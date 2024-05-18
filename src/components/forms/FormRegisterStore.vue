@@ -577,4 +577,3 @@ h2 {
   gap: 5px;
 }
 </style>
-../../api/storeService
