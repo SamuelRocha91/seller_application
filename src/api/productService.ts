@@ -12,7 +12,7 @@ class ProductService extends BaseService{
   ) {
     const response = await this.getAll(`stores/${id}/products`);
     if (response.ok) {
-      this.success(response, onSuccess);
+      this.success(response, onSuccess, id);
     } else {
       this.failure(response, onFailure);
     }
@@ -28,7 +28,7 @@ class ProductService extends BaseService{
     formData.append('product[image]', dataProduct.src);
     const response = await this.create(`stores/${id}/products`, formData);
     if (response.ok) {
-      this.success(response, onSuccess);
+      this.success(response, onSuccess, id);
     } else {
       this.failure(response, onFailure);
     }
@@ -49,7 +49,7 @@ class ProductService extends BaseService{
       formData
     );
     if (response.ok) {
-      this.success(response, onSuccess);
+      this.success(response, onSuccess, id);
     } else {
       this.failure(response, onFailure);
     }
@@ -68,8 +68,18 @@ class ProductService extends BaseService{
     }
   }
 
-  success(response: Response, onSucess: () => void) {
-    onSucess();  
+  success(
+    response: Response,
+    onSuccess: () => void,
+    id: number,
+    type = "generate"
+  ) {
+    if (type == "generate") {
+      response.json().then((json) => {
+        this.generateStorage(json, id);
+        onSuccess();
+      });
+    } 
   }
   
   failure(response: Response, onFailure: () => void) {
@@ -84,6 +94,34 @@ class ProductService extends BaseService{
     formData.append('product[price]', dataProduct.price);
     formData.append('product[description]', dataProduct.description);
     return formData;
+  }
+
+  private generateObjectSeller(json: any) {
+    return {
+      id: json.id,
+      src: `${this.apiUrl}${json.image_url}`,
+      name: json.title,
+      price: json.price,
+      description: json.description,
+      category: json.category,
+      active: true
+    };
+  }
+
+  private generateStorage(json: any, id: number) {
+    const storage = this.storage.get('stores') || '';
+    const productSaved = this.generateObjectSeller(json);
+    if (storage != '') {
+      console.log(json);
+      const store = JSON.parse(storage);
+      console.log(store);
+      const index = store
+        .findIndex((field: any) => Number(field.id) === Number(id));
+      console.log(index, id);
+      store[index].products.push(productSaved);
+      console.log(store);
+      this.storage.store('stores', JSON.stringify(store));
+    } 
   }
 }
 

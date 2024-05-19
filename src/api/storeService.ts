@@ -106,7 +106,8 @@ class StoreService extends BaseService{
       phoneNumber: json.phone_number,
       category: json.category,
       address: json.address,
-      active: false
+      active: false,
+      products: []
     };
   }
 

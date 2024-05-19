@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { swalError } from '../../utils/swal';
+import { swalError, swalSuccess } from '../../utils/swal';
 import { catergoriesProducts } from '@/utils/data';
 import { priceMask } from '@/utils/formUtils';
 import ShoppingCart from './../../assets/icons/ShoppingCart.png';
@@ -9,6 +9,7 @@ import TableList from '../dashboard/TableList.vue';
 import PageInfo from '../dashboard/PageInfo.vue';
 import { ProductService } from '@/api/productService';
 import { useStoreActive } from '@/store/storeActive';
+import { useProductsStore } from '@/store/productsStore';
 
 
 let image: File | string;
@@ -23,6 +24,9 @@ const menuPage = ref(true);
 const data = ref();
 const productService = new ProductService();
 const storeActive = useStoreActive().storeActive;
+const productsStore = useProductsStore();
+const editId = ref();
+
 
 const handleImageChange = (event: Event) => {
   const inputElement = event.target as HTMLInputElement;
@@ -66,8 +70,27 @@ const createProduct = (dataProduct: any) => {
   productService.createProduct(
     storeActive.id,
     dataProduct,
-    () => console.log('aê'),
-    () => console.log('aô')
+    () => {
+      const establishment: any = productService.storage.get('stores') || [];
+      if (establishment !== null) {
+        console.log(establishment);
+        const parseEstablishment = JSON.parse(establishment);
+        const products = parseEstablishment
+          .find((fields: any) =>
+            Number(fields.id) == storeActive.id).products || '';
+        console.log(products);
+        data.value = products;
+        editId.value = null;
+        awaiting.value = false;
+        menuPage.value = false;
+      }
+      swalSuccess('Dados salvos com sucesso!');
+    },
+    () => {
+      swalError('Erro ao salvar os dados',
+        'Por favor, verifique os dados inseridos');
+      awaiting.value = false;
+    }
   );
 };
 
