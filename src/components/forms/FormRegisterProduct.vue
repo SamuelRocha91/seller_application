@@ -9,7 +9,6 @@ import TableList from '../dashboard/TableList.vue';
 import PageInfo from '../dashboard/PageInfo.vue';
 import { ProductService } from '@/api/productService';
 import { useStoreActive } from '@/store/storeActive';
-import { useProductsStore } from '@/store/productsStore';
 
 
 let image: File | string;
@@ -24,7 +23,6 @@ const menuPage = ref(true);
 const data = ref();
 const productService = new ProductService();
 const storeActive = useStoreActive().storeActive;
-const productsStore = useProductsStore();
 const editId = ref();
 
 
@@ -62,8 +60,13 @@ const handleClick = async () => {
     return;
   }
   const productData = objectForm();
-  awaiting.value = true;
-  createProduct(productData);
+  if (editId.value) {
+    awaiting.value = true;
+    editProduct(productData);
+  } else {
+    awaiting.value = true;
+    createProduct(productData);
+  }
 };
 
 const createProduct = (dataProduct: any) => {
@@ -73,12 +76,10 @@ const createProduct = (dataProduct: any) => {
     () => {
       const establishment: any = productService.storage.get('stores') || [];
       if (establishment !== null) {
-        console.log(establishment);
         const parseEstablishment = JSON.parse(establishment);
         const products = parseEstablishment
           .find((fields: any) =>
             Number(fields.id) == storeActive.id).products || '';
-        console.log(products);
         data.value = products;
         editId.value = null;
         awaiting.value = false;
@@ -92,6 +93,42 @@ const createProduct = (dataProduct: any) => {
       awaiting.value = false;
     }
   );
+};
+
+
+const editProduct = (productData: any) => {
+  const imageUpdate = productData.src === image ? null : image;
+  productService.updateProduct(
+    storeActive.id,
+    editId.value,
+    productData,
+    imageUpdate, () => {
+      const establishment = productService.storage.get('stores') || '';
+      const parseEstablishment = JSON.parse(establishment);
+      const products = parseEstablishment
+        .find((fields: any) =>
+          Number(fields.id) == storeActive.id).products || '';
+      data.value = products;
+      swalSuccess('Dados atualizados com sucesso!');
+      awaiting.value = false;
+    }, () => {
+      swalError('Erro ao salvar os dados',
+        'Por favor, verifique os dados inseridos');
+      awaiting.value = false;
+    });
+};
+
+const editForm = async (id: number) => {
+  editId.value = id;
+  const productFiltered: any[] = data.value
+    .filter((entity: any) => entity.id == id);
+
+  description.value = productFiltered[0].description;
+  category.value = productFiltered[0].category;
+  name.value = productFiltered[0].name;
+  imageUrl.value = productFiltered[0].src;
+  price.value = productFiltered[0].price;
+  image = productFiltered[0].src;
 };
 
 const objectForm = () => ({

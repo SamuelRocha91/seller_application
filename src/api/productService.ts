@@ -38,18 +38,21 @@ class ProductService extends BaseService{
     id: number,
     idProduct: number,
     dataProduct: any,
+    image: File | string | null,
     onSuccess: () => void,
     onFailure: () => void,
   ) {
-    const formData = new FormData();
-    formData.append('product[image]', dataProduct.src);
+    const formData = this.formData(dataProduct);
+    if (image !== null) {
+      formData.append('product[image]', image);
+    }
     const response = await this.update(
       idProduct,
       `stores/${id}/products`,
       formData
     );
     if (response.ok) {
-      this.success(response, onSuccess, id);
+      this.success(response, onSuccess, id, "update");
     } else {
       this.failure(response, onFailure);
     }
@@ -79,7 +82,12 @@ class ProductService extends BaseService{
         this.generateStorage(json, id);
         onSuccess();
       });
-    } 
+    } else if (type == "update") {
+      response.json().then(async (json) => {
+        this.updateStorage(json, id);
+        onSuccess();
+      });
+    }
   }
   
   failure(response: Response, onFailure: () => void) {
@@ -112,16 +120,27 @@ class ProductService extends BaseService{
     const storage = this.storage.get('stores') || '';
     const productSaved = this.generateObjectSeller(json);
     if (storage != '') {
-      console.log(json);
       const store = JSON.parse(storage);
-      console.log(store);
       const index = store
         .findIndex((field: any) => Number(field.id) === Number(id));
-      console.log(index, id);
       store[index].products.push(productSaved);
-      console.log(store);
       this.storage.store('stores', JSON.stringify(store));
     } 
+  }
+
+  private updateStorage(json: any, id: number) {
+    const storage = this.storage.get('stores') || '';
+    const productSaved = this.generateObjectSeller(json);
+    if (storage != '') {
+      const store = JSON.parse(storage);
+      const index = store
+        .find((field: any) => Number(field.id) === Number(id)).products
+        .findIndex((product: any) => Number(product.id) == Number(json.id));
+      store[index].products.push(productSaved);
+      store.find((field: any) => Number(field.id) === Number(id))
+        .products[index] = productSaved;
+      this.storage.store('stores', JSON.stringify(store));
+    }
   }
 }
 
