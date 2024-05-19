@@ -25,7 +25,9 @@ class ProductService extends BaseService{
     onFailure: () => void
   ) {
     const formData = this.formData(dataProduct);
-    formData.append('product[image]', dataProduct.src);
+    if (dataProduct.src) {
+      formData.append('product[image]', dataProduct.src);
+    }
     const response = await this.create(`stores/${id}/products`, formData);
     if (response.ok) {
       this.success(response, onSuccess, id);
@@ -93,6 +95,7 @@ class ProductService extends BaseService{
   }
   
   failure(response: Response, onFailure: () => void) {
+    response.json().then((json) => console.log(json));
     onFailure();
   }  
 
