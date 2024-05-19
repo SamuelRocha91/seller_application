@@ -7,7 +7,7 @@ import { phoneMask } from '@/utils/formUtils';
 import TableList from '../dashboard/TableList.vue';
 import { type storeType } from '@/types/storeType';
 import { useStoreActive } from '@/store/storeActive';
-
+import '../../assets/global.css';
 
 let image: File | string;
 
@@ -24,7 +24,6 @@ const store = new StoreService();
 const editId = ref();
 const data = ref();
 const awaiting = ref(false);
-
 
 const handleImageChange = (event: Event) => {
   const inputElement = event.target as HTMLInputElement;
@@ -331,94 +330,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.select-box {
-  width: 200px;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-}
-
-.custom-file-upload {
-  cursor: pointer;
-  color: #0000ff;
-  text-decoration: underline;
-  padding: 10px 20px;
-  border-radius: 5px;
-}
-
-form {
-  width: 100%;
-  padding: 10px;
-}
-.form-init {
-  background-color: white;
-  display: flex;
-  height: fit-content;
-  padding: 10px;
-  width: 100%;
-  gap: 10px;
-}
-.form-container {
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  height: fit-content;
-  align-items: center;
-  padding: 20px;
-  width: 90%;
-  height: 62vh;
-}
-.image-container {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: #ccc;
-}
-
-#uploadedImage {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-}
-
-.form-init {
-  display: flex;
-}
-
-.save-form-btn {
-  color: #ffffff;
-  background-color: #14bb1d;
-  font-size: 16px;
-  width: 70px;
-  height: 50px;
-  border-radius: 5px;
-}
-
-.save-form-btn:hover {
-  cursor: pointer;
-}
-.bg-input {
-  border: 1px solid #dedede;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  padding: 13px;
-  width: 100%;
-  height: 37px;
-}
-
-.inputs-init {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
 .image-form {
   display: flex;
   width: 30%;
@@ -427,27 +338,16 @@ form {
   align-items: center;
 }
 
-.section-intermediate {
-  display: flex;
-  padding: 10px;
-  width: 100%;
-  padding: 10px;
-  justify-content: center;
-}
-
 .intermediate-content {
-  display: flex;
-  width: 100%;
-  gap: 40px;
-  padding: 10px;
   justify-content: space-around;
 }
 
-.section-finish {
-  width: 100%;
-  height: 32.5vh;
-  display: flex;
+.section-intermediate {
   justify-content: center;
+}
+
+.section-finish {
+  height: 32.5vh;
 }
 
 .text-description {
@@ -457,123 +357,4 @@ form {
   justify-content: center;
 }
 
-textarea {
-  width: 90%;
-  height: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  padding: 15px;
-}
-
-.btn-div {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: 100%;
-}
-
-.input-phone {
-  width: 30%;
-}
-
-h2 {
-  font-weight: bold;
-  font-size: 20px;
-}
-
-.inputs-two {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-}
-
-.input-simulate {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  padding: 13px;
-  width: 100%;
-  height: 37px;
-}
-
-.section-finish-two {
-  width: 100%;
-  height: 35vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-content: space-between;
-  padding: 30px;
-  margin-left: 21px;
-  gap: 10px;
-}
-
-.section-finish-two .text-description {
-  height: 100%;
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 10px;
-}
-
-.text-description .input-simulate {
-  height: 80%;
-}
-.address {
-  width: 100%;
-}
-.address .input-simulate {
-  width: 91%;
-}
-.name-store {
-  width: 100%;
-}
-.name-store .input-simulate {
-  width: 91%;
-}
-
-.inputs-two .name {
-  width: 50%;
-}
-
-.edit-form-btn {
-  color: #ffffff;
-  background-color: #3f07c0;
-  font-size: 16px;
-  width: 70px;
-  height: 50px;
-  border-radius: 5px;
-}
-
-.delete-form-btn {
-  color: #ffffff;
-  background-color: #ff1818;
-  font-size: 16px;
-  width: 70px;
-  height: 50px;
-  border-radius: 5px;
-}
-
-
-.register-form-btn {
-  color: #ffffff;
-  background-color: #ff1818;
-  font-size: 16px;
-  width: 230px;
-  height: 50px;
-  border-radius: 5px;
-}
-
-.edit-form-btn:hover,
-.delete-form-btn:hover {
-  cursor: pointer;
-}
-.btn-div-two {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
 </style>
