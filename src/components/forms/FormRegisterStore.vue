@@ -11,57 +11,19 @@ import '../../assets/global.css';
 
 let image: File | string;
 
-const storeActive = useStoreActive();
-const imageUrl = ref();
-const edit = ref(false);
-const name = defineModel('name', { default: '' });
 const address = defineModel('address', { default: '' });
-const description = defineModel('description', { default: '' });
+const awaiting = ref(false);
 const category = defineModel('category', { default: '' });
+const data = ref();
+const description = defineModel('description', { default: '' });
+const edit = ref(false);
+const editId = ref();
+const imageUrl = ref();
+const name = defineModel('name', { default: '' });
 const minimumPrice = defineModel('minimumPrice', { default: '' });
 const phoneNumber = ref('');
 const store = new StoreService();
-const editId = ref();
-const data = ref();
-const awaiting = ref(false);
-
-const handleImageChange = (event: Event) => {
-  const inputElement = event.target as HTMLInputElement;
-  const file = inputElement.files ? inputElement.files[0] : null;
-  if (file) {
-    image = file;
-    imageUrl.value = URL.createObjectURL(file);
-  }
-};
-
-const handlePhone = (event: Event) => {
-  const value = (event.target as HTMLInputElement).value;
-  phoneNumber.value = phoneMask(value || '');
-};
-
-const validateFields = () => {
-  const fields = [name, address, description, category, minimumPrice];
-  if (fields.some((field) => field.value.length < 3)) {
-    return false;
-  } else if (phoneNumber.value.length < 11) {
-    return false;
-  } else {
-    return true;
-  }
-};
-
-const handleStatus = (id: number) => {
-  data.value
-    .map((entity: storeType) => {
-      if (entity.id == id) {
-        entity.active = !entity.active ;
-      } else {
-        entity.active = false;
-      }
-    });
-  updateGlobalState();
-  store.storage.store('stores', JSON.stringify(data.value));
-};
+const storeActive = useStoreActive();
 
 const handleClick = async () => {
   const validate = validateFields();
@@ -78,6 +40,48 @@ const handleClick = async () => {
     awaiting.value = true;
     createStore(storeData);
   };
+};
+
+const handleDelete = (id: number) => {
+  swallWithDelete(() => deleteForm(id));
+};
+
+const handleImageChange = (event: Event) => {
+  const inputElement = event.target as HTMLInputElement;
+  const file = inputElement.files ? inputElement.files[0] : null;
+  if (file) {
+    image = file;
+    imageUrl.value = URL.createObjectURL(file);
+  }
+};
+
+const handlePhone = (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  phoneNumber.value = phoneMask(value || '');
+};
+
+const handleStatus = (id: number) => {
+  data.value
+    .map((entity: storeType) => {
+      if (entity.id == id) {
+        entity.active = !entity.active ;
+      } else {
+        entity.active = false;
+      }
+    });
+  updateGlobalState();
+  store.storage.store('stores', JSON.stringify(data.value));
+};
+
+const validateFields = () => {
+  const fields = [name, address, description, category, minimumPrice];
+  if (fields.some((field) => field.value.length < 3)) {
+    return false;
+  } else if (phoneNumber.value.length < 11) {
+    return false;
+  } else {
+    return true;
+  }
 };
 
 const createStore = (storeData: storeType) => {
@@ -115,11 +119,6 @@ const editStore = (storeData: storeType) => {
   });
 };
 
-
-const handleDelete = (id: number) => {
-  swallWithDelete(() => deleteForm(id));
-};
-
 const deleteForm = (id: number) => {
   const storeFiltered: storeType[] = data.value
     .filter((entity: storeType) => entity.id !== id);
@@ -141,7 +140,6 @@ const editForm = async (id: number) => {
   editId.value = id;
   const storeFiltered: storeType[] = data.value
     .filter((entity: storeType) => entity.id == id);
-
   address.value = storeFiltered[0].address;
   description.value = storeFiltered[0].description;
   category.value = storeFiltered[0].category;

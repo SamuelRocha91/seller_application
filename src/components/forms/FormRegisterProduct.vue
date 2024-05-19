@@ -13,18 +13,38 @@ import '../../assets/global.css';
 
 let image: File | string;
 
-const imageUrl = ref();
+const awaiting = ref(false);
 const category = defineModel('category', { default: '' });
+const data = ref();
+const description = defineModel('description', { default: '' });
+const editId = ref();
+const imageUrl = ref();
+const menuPage = ref(true);
 const name = defineModel('name', { default: '' });
 const price = ref('');
-const description = defineModel('description', { default: '' });
-const awaiting = ref(false);
-const menuPage = ref(true);
-const data = ref();
 const productService = new ProductService();
 const storeActive = useStoreActive().storeActive;
-const editId = ref();
 
+const handleClick = async () => {
+  const validate = validateFields();
+  if (!validate) {
+    swalError('Erro ao salvar os dados',
+      'Por favor, verifique os dados inseridos');
+    return;
+  }
+  const productData = objectForm();
+  if (editId.value) {
+    awaiting.value = true;
+    editProduct(productData);
+  } else {
+    awaiting.value = true;
+    createProduct(productData);
+  }
+};
+
+const handleDelete = (id: number) => {
+  swallWithDelete(() => deleteForm(id));
+};
 
 const handleImageChange = (event: Event) => {
   const inputElement = event.target as HTMLInputElement;
@@ -67,26 +87,6 @@ const validateFields = () => {
   }
 };
 
-const handleClick = async () => {
-  const validate = validateFields();
-  if (!validate) {
-    swalError('Erro ao salvar os dados',
-      'Por favor, verifique os dados inseridos');
-    return;
-  }
-  const productData = objectForm();
-  if (editId.value) {
-    awaiting.value = true;
-    editProduct(productData);
-  } else {
-    awaiting.value = true;
-    createProduct(productData);
-  }
-};
-
-const handleDelete = (id: number) => {
-  swallWithDelete(() => deleteForm(id));
-};
 
 const deleteForm = (id: number) => {
   const productFiltered: any[] = data.value
