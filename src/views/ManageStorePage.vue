@@ -2,9 +2,10 @@
 import { ref } from 'vue';
 import NavBar from '../components/dashboard/NavBar.vue';
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
-const BignavBar = ref(true);
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import FormRegisterProduct from '@/components/forms/FormRegisterProduct.vue';
+
+const BignavBar = ref(true);
 
 const handleClick = () => {
   BignavBar.value = !BignavBar.value;
@@ -19,7 +20,7 @@ const handleClick = () => {
           <div class="filter">
             <img
               class="toogle"
-              @click="handleClick"
+              @click.prevent="handleClick"
               src="../assets/navBar/ToggleNav.png"
               alt="Botão para reduzir navbar"
             />
@@ -33,7 +34,7 @@ const handleClick = () => {
         <div class="nav-links-phone">
           <div class="filter-small">
             <img
-              @click="handleClick"
+              @click.prevent="handleClick"
               src="../assets/navBar/ToggleNav.png"
               alt="Botão para aumentar navbar"
             />

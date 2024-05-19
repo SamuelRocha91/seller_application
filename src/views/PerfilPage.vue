@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import NavBar from '../components/dashboard/NavBar.vue';
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
-const BignavBar = ref(true);
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import PageInfo from '@/components/dashboard/PageInfo.vue';
 import UserCircle from '../assets/icons/UserCircle.png';
@@ -12,6 +11,7 @@ import FormRegisterOperation
   from '@/components/forms/FormRegisterOperation.vue';
 import { useStoreActive } from '@/store/storeActive';
 
+const BignavBar = ref(true);
 const storeActive = useStoreActive();
 const selected = ref(true);
 
