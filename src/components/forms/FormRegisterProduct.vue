@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { swalError, swalSuccess, swallWithDelete } from '../../utils/swal';
 import { catergoriesProducts } from '@/utils/data';
 import { priceMask } from '@/utils/formUtils';
@@ -147,6 +147,7 @@ const editProduct = (productData: any) => {
       data.value = products;
       swalSuccess('Dados atualizados com sucesso!');
       awaiting.value = false;
+      menuPage.value = false;
     }, () => {
       swalError('Erro ao salvar os dados',
         'Por favor, verifique os dados inseridos');
@@ -165,6 +166,7 @@ const editForm = async (id: number) => {
   imageUrl.value = productFiltered[0].src;
   price.value = productFiltered[0].price;
   image = productFiltered[0].src;
+  menuPage.value = true;
 };
 
 const startFormCreateStore = () => {
@@ -184,6 +186,18 @@ const objectForm = () => ({
   category: category.value,
 });
 
+onMounted(() => {
+  const sellerData = productService.getFallback('stores') || '';
+  const seller = sellerData ? JSON.parse(sellerData) : null;
+  if (seller !== null) {
+    console.log(storeActive);
+    console.log(seller);
+    data.value = seller
+      .find((cart: any) => Number(cart.id) == Number(storeActive.id)).products;
+    console.log(data.value);
+    menuPage.value = false;
+  }
+});
 </script>
 <template>
   <template v-if="menuPage">

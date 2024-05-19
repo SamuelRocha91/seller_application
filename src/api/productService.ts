@@ -134,14 +134,15 @@ class ProductService extends BaseService{
     const storage = this.storage.get('stores') || '';
     const productSaved = this.generateObjectSeller(json);
     if (storage != '') {
-      const store = JSON.parse(storage);
-      const index = store
-        .find((field: any) => Number(field.id) === Number(id)).products
-        .findIndex((product: any) => Number(product.id) == Number(json.id));
-      store[index].products.push(productSaved);
-      store.find((field: any) => Number(field.id) === Number(id))
-        .products[index] = productSaved;
-      this.storage.store('stores', JSON.stringify(store));
+      const stores = JSON.parse(storage);
+      const store = stores
+        .find((field: any) => Number(field.id) === Number(id));
+      if (store) {
+        const productIndex = store.products
+          .findIndex((product: any) => Number(product.id) === Number(json.id));
+        store.products[productIndex] = productSaved;
+        this.storage.store('stores', JSON.stringify(stores));
+      }
     }
   }
 }
