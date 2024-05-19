@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { swalError, swalSuccess } from '../../utils/swal';
+import { swalError, swalSuccess, swallWithDelete } from '../../utils/swal';
 import { catergoriesProducts } from '@/utils/data';
 import { priceMask } from '@/utils/formUtils';
 import ShoppingCart from './../../assets/icons/ShoppingCart.png';
@@ -35,6 +35,21 @@ const handleImageChange = (event: Event) => {
   }
 };
 
+const handleStatus = (id: number) => {
+  data.value
+    .map((entity: any) => {
+      if (entity.id == id) {
+        entity.active = !entity.active ;
+      } 
+    });
+  const storage = productService.storage.get('stores') || '';
+  const store = JSON.parse(storage);
+  const index = store
+    .findIndex((field: any) => Number(field.id) === Number(storeActive.id));
+  store[index].products = data.value;
+  productService.storage.store('stores', JSON.stringify(store));
+};
+
 const handlePrice = (event: Event) => {
   const value = (event.target as HTMLInputElement).value;
   const newPrice = priceMask(value || '');
@@ -67,6 +82,27 @@ const handleClick = async () => {
     awaiting.value = true;
     createProduct(productData);
   }
+};
+
+const handleDelete = (id: number) => {
+  swallWithDelete(() => deleteForm(id));
+};
+
+const deleteForm = (id: number) => {
+  const productFiltered: any[] = data.value
+    .filter((entity: any) => entity.id !== id);
+  startFormCreateStore();
+  const storage = productService.storage.get('stores') || '';
+  const store = JSON.parse(storage);
+  const index = store
+    .findIndex((field: any) => Number(field.id) === Number(storeActive.id));
+  store[index].products = productFiltered;
+  productService.storage.store('stores', JSON.stringify(store));
+  productService.deleteProduct(storeActive.id, id,
+    () => swalSuccess('Dados excluídos com sucesso'),
+    () => swalSuccess('Erro no processamento da exclusão')
+  );
+  data.value = productFiltered;
 };
 
 const createProduct = (dataProduct: any) => {
@@ -129,6 +165,15 @@ const editForm = async (id: number) => {
   imageUrl.value = productFiltered[0].src;
   price.value = productFiltered[0].price;
   image = productFiltered[0].src;
+};
+
+const startFormCreateStore = () => {
+  description.value = '';
+  category.value = '';
+  name.value = '';
+  price.value = '';
+  imageUrl.value = '';
+  editId.value = null;
 };
 
 const objectForm = () => ({

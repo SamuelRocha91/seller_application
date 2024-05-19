@@ -87,6 +87,8 @@ class ProductService extends BaseService{
         this.updateStorage(json, id);
         onSuccess();
       });
+    } else {
+      onSuccess();
     }
   }
   
