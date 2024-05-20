@@ -14,7 +14,7 @@ abstract class BaseService {
     return this.storage.get(key);
   }
    
-  async getAll(path: string): Promise<Response> {
+  protected async getAll(path: string): Promise<Response> {
     const token = this.getFallback('token');
     const response = await fetch(`${this.apiUrl}/${path}`,
       {
@@ -29,7 +29,7 @@ abstract class BaseService {
     return response;
   }
     
-  async create(path: string, data: any): Promise<Response> {
+  protected async create(path: string, data: any): Promise<Response> {
     const token = this.getFallback('token');
     const response = await fetch(`${this.apiUrl}/${path}`, {
       method: 'POST',
@@ -42,7 +42,11 @@ abstract class BaseService {
     return response;
   }
   
-  async update(id: number, path: string, data: any): Promise<Response> {
+  protected async update(
+    id: number,
+    path: string,
+    data: any
+  ): Promise<Response> {
     const token = this.getFallback('token');
 
     const response = await fetch(`${this.apiUrl}/${path}/${id}`, {
@@ -57,7 +61,7 @@ abstract class BaseService {
   }
     
 
-  async delete(id: number, path: string): Promise<Response> {
+  protected async delete(id: number, path: string): Promise<Response> {
     const token = this.getFallback('token');
     const response = await fetch(`${this.apiUrl}/${path}/${id}`, {
       method: 'DELETE',

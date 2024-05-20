@@ -8,61 +8,21 @@ import TableList from '../dashboard/TableList.vue';
 import { type storeType } from '@/types/storeType';
 import { useStoreActive } from '@/store/storeActive';
 
-
 let image: File | string;
 
-const storeActive = useStoreActive();
-const imageUrl = ref();
-const edit = ref(false);
-const name = defineModel('name', { default: '' });
 const address = defineModel('address', { default: '' });
-const description = defineModel('description', { default: '' });
+const awaiting = ref(false);
 const category = defineModel('category', { default: '' });
+const data = ref();
+const description = defineModel('description', { default: '' });
+const edit = ref(false);
+const editId = ref();
+const imageUrl = ref();
+const name = defineModel('name', { default: '' });
 const minimumPrice = defineModel('minimumPrice', { default: '' });
 const phoneNumber = ref('');
 const store = new StoreService();
-const editId = ref();
-const data = ref();
-const awaiting = ref(false);
-
-
-const handleImageChange = (event: Event) => {
-  const inputElement = event.target as HTMLInputElement;
-  const file = inputElement.files ? inputElement.files[0] : null;
-  if (file) {
-    image = file;
-    imageUrl.value = URL.createObjectURL(file);
-  }
-};
-
-const handlePhone = (event: Event) => {
-  const value = (event.target as HTMLInputElement).value;
-  phoneNumber.value = phoneMask(value || '');
-};
-
-const validateFields = () => {
-  const fields = [name, address, description, category, minimumPrice];
-  if (fields.some((field) => field.value.length < 3)) {
-    return false;
-  } else if (phoneNumber.value.length < 11) {
-    return false;
-  } else {
-    return true;
-  }
-};
-
-const handleStatus = (id: number) => {
-  data.value
-    .map((entity: storeType) => {
-      if (entity.id == id) {
-        entity.active = !entity.active ;
-      } else {
-        entity.active = false;
-      }
-    });
-  updateGlobalState();
-  store.storage.store('stores', JSON.stringify(data.value));
-};
+const storeActive = useStoreActive();
 
 const handleClick = async () => {
   const validate = validateFields();
@@ -79,6 +39,48 @@ const handleClick = async () => {
     awaiting.value = true;
     createStore(storeData);
   };
+};
+
+const handleDelete = (id: number) => {
+  swallWithDelete(() => deleteForm(id));
+};
+
+const handleImageChange = (event: Event) => {
+  const inputElement = event.target as HTMLInputElement;
+  const file = inputElement.files ? inputElement.files[0] : null;
+  if (file) {
+    image = file;
+    imageUrl.value = URL.createObjectURL(file);
+  }
+};
+
+const handlePhone = (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  phoneNumber.value = phoneMask(value || '');
+};
+
+const handleStatus = (id: number) => {
+  data.value
+    .map((entity: storeType) => {
+      if (entity.id == id) {
+        entity.active = !entity.active ;
+      } else {
+        entity.active = false;
+      }
+    });
+  updateGlobalState();
+  store.storage.store('stores', JSON.stringify(data.value));
+};
+
+const validateFields = () => {
+  const fields = [name, address, description, category, minimumPrice];
+  if (fields.some((field) => field.value.length < 3)) {
+    return false;
+  } else if (phoneNumber.value.length < 11) {
+    return false;
+  } else {
+    return true;
+  }
 };
 
 const createStore = (storeData: storeType) => {
@@ -116,11 +118,6 @@ const editStore = (storeData: storeType) => {
   });
 };
 
-
-const handleDelete = (id: number) => {
-  swallWithDelete(() => deleteForm(id));
-};
-
 const deleteForm = (id: number) => {
   const storeFiltered: storeType[] = data.value
     .filter((entity: storeType) => entity.id !== id);
@@ -142,7 +139,6 @@ const editForm = async (id: number) => {
   editId.value = id;
   const storeFiltered: storeType[] = data.value
     .filter((entity: storeType) => entity.id == id);
-
   address.value = storeFiltered[0].address;
   description.value = storeFiltered[0].description;
   category.value = storeFiltered[0].category;
@@ -331,6 +327,19 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.filters-menu label {
+  width: 50%;
+}
+.bg-input-2 {
+  border: 1px solid #dedede;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+  padding: 13px;
+  width: 100%;
+  height: 37px;
+}
 .select-box {
   width: 200px;
   padding: 8px;
@@ -340,7 +349,25 @@ onMounted(() => {
   background-color: #fff;
   outline: none;
 }
-
+.select-box-2 {
+  width: 400px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+  height: 41px;
+}
+.main-content{
+  background-color: gray;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  flex-direction: column;
+}
 .custom-file-upload {
   cursor: pointer;
   color: #0000ff;
@@ -348,7 +375,6 @@ onMounted(() => {
   padding: 10px 20px;
   border-radius: 5px;
 }
-
 form {
   width: 100%;
   padding: 10px;
@@ -356,10 +382,12 @@ form {
 .form-init {
   background-color: white;
   display: flex;
+  align-items: center;
   height: fit-content;
   padding: 10px;
   width: 100%;
   gap: 10px;
+  border: 1px solid rgb(189, 187, 187);
 }
 .form-container {
   background-color: white;
@@ -378,17 +406,14 @@ form {
   overflow: hidden;
   background-color: #ccc;
 }
-
 #uploadedImage {
   width: 100%;
   height: 100%;
   border-radius: 50%;
 }
-
 .form-init {
   display: flex;
 }
-
 .save-form-btn {
   color: #ffffff;
   background-color: #14bb1d;
@@ -397,9 +422,29 @@ form {
   height: 50px;
   border-radius: 5px;
 }
-
+.label-intermediate {
+  margin-left: 4%;
+  width: 90%;
+}
 .save-form-btn:hover {
   cursor: pointer;
+}
+.filters-menu {
+  margin-top: 5px;
+  background-color: white;  
+  width: 90%;
+  height: 10vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 5px;
+  border-radius: 5px;
+}
+.content-menu {
+  background-color: white;
+  padding: 20px;
+  width: 90%;
+  height: 100%;
 }
 .bg-input {
   border: 1px solid #dedede;
@@ -411,52 +456,58 @@ form {
   width: 100%;
   height: 37px;
 }
-
+.category {
+  width: 99%;
+}
 .inputs-init {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-
+.intermediate {
+  width: 100%;
+}
 .image-form {
   display: flex;
   width: 30%;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center;  
   align-items: center;
 }
-
 .section-intermediate {
   display: flex;
   padding: 10px;
   width: 100%;
   padding: 10px;
-  justify-content: center;
+  justify-content: space-between;
+  border-right: 1px solid rgb(189, 187, 187);
+  border-left: 1px solid rgb(189, 187, 187);
+  align-items: center;
 }
-
 .intermediate-content {
   display: flex;
   width: 100%;
   gap: 40px;
   padding: 10px;
-  justify-content: space-around;
+  justify-content: space-between;
 }
-
 .section-finish {
   width: 100%;
-  height: 32.5vh;
+  height: 32.0vh;
   display: flex;
   justify-content: center;
+  border: 1px solid #ccc;
 }
-
 .text-description {
   display: flex;
   flex-direction: column;
-  width: 82%;
+  justify-content: center;
+  padding: 20px;
+  width: 87%;
+  height: fit-content;
   justify-content: center;
 }
-
 textarea {
   width: 90%;
   height: 100%;
@@ -466,30 +517,25 @@ textarea {
   outline: none;
   padding: 15px;
 }
-
 .btn-div {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   height: 100%;
 }
-
 .input-phone {
   width: 30%;
 }
-
 h2 {
   font-weight: bold;
   font-size: 20px;
 }
-
 .inputs-two {
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
 }
-
 .input-simulate {
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -499,7 +545,6 @@ h2 {
   width: 100%;
   height: 37px;
 }
-
 .section-finish-two {
   width: 100%;
   height: 35vh;
@@ -511,14 +556,12 @@ h2 {
   margin-left: 21px;
   gap: 10px;
 }
-
 .section-finish-two .text-description {
   height: 100%;
   display: flex;
   justify-content: flex-start;
   margin-top: 10px;
 }
-
 .text-description .input-simulate {
   height: 80%;
 }
@@ -534,11 +577,9 @@ h2 {
 .name-store .input-simulate {
   width: 91%;
 }
-
 .inputs-two .name {
   width: 50%;
 }
-
 .edit-form-btn {
   color: #ffffff;
   background-color: #3f07c0;
@@ -547,7 +588,6 @@ h2 {
   height: 50px;
   border-radius: 5px;
 }
-
 .delete-form-btn {
   color: #ffffff;
   background-color: #ff1818;
@@ -556,8 +596,6 @@ h2 {
   height: 50px;
   border-radius: 5px;
 }
-
-
 .register-form-btn {
   color: #ffffff;
   background-color: #ff1818;
@@ -566,7 +604,6 @@ h2 {
   height: 50px;
   border-radius: 5px;
 }
-
 .edit-form-btn:hover,
 .delete-form-btn:hover {
   cursor: pointer;
@@ -576,5 +613,5 @@ h2 {
   flex-direction: column;
   gap: 5px;
 }
+
 </style>
-../../api/storeService

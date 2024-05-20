@@ -3,26 +3,9 @@ import { ref } from 'vue';
 import NavBar from '../components/dashboard/NavBar.vue';
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
-import PageInfo from '@/components/dashboard/PageInfo.vue';
-import UserCircle from '../assets/icons/UserCircle.png';
-import MenuPage from '@/components/dashboard/MenuPage.vue';
-import FormRegisterStore from '@/components/forms/FormRegisterStore.vue';
-import FormRegisterOperation
-  from '@/components/forms/FormRegisterOperation.vue';
-import { useStoreActive } from '@/store/storeActive';
+import FormRegisterProduct from '@/components/forms/FormRegisterProduct.vue';
 
 const BignavBar = ref(true);
-const storeActive = useStoreActive();
-const selected = ref(true);
-
-const handleSelect = (id: number) => {
-
-  if (id == 2 && storeActive.storeActive.active) {
-    selected.value = false;
-  } else if (id == 1) {
-    selected.value = true;
-  }
-};
 
 const handleClick = () => {
   BignavBar.value = !BignavBar.value;
@@ -37,7 +20,7 @@ const handleClick = () => {
           <div class="filter">
             <img
               class="toogle"
-              @click="handleClick"
+              @click.prevent="handleClick"
               src="../assets/navBar/ToggleNav.png"
               alt="Botão para reduzir navbar"
             />
@@ -51,7 +34,7 @@ const handleClick = () => {
         <div class="nav-links-phone">
           <div class="filter-small">
             <img
-              @click="handleClick"
+              @click.prevent="handleClick"
               src="../assets/navBar/ToggleNav.png"
               alt="Botão para aumentar navbar"
             />
@@ -65,21 +48,7 @@ const handleClick = () => {
         <HeaderDashboard />
       </div>
       <main>
-        <PageInfo
-          :src="UserCircle"
-          alt="ícone de perfil"
-          title="Perfil"
-          description="Gerencie aqui as informações de sua loja
-          e permissões de acesso"
-        />
-        <MenuPage
-        buttonOne="Dados gerais"
-        buttonTwo="Funcionamento"
-        :handleSelect="handleSelect"
-        :selected="selected"
-        />
-        <FormRegisterStore v-show="selected"/>
-        <FormRegisterOperation v-show="!selected"/>
+          <FormRegisterProduct />
       </main>
     </div>
   </div>
@@ -165,6 +134,7 @@ const handleClick = () => {
   height: 17%;
   width: 100%;
 }
+
 main {
   background-color: gray;
   display: flex;
@@ -174,6 +144,33 @@ main {
   gap: 8px;
   flex-direction: column;
 }
+
+
+.filters-menu label {
+  width: 50%;
+}
+
+.bg-input {
+  border: 1px solid #dedede;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+  padding: 13px;
+  width: 100%;
+  height: 37px;
+}
+
+.select-box {
+  width: 400px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+}
+
 
 @media (max-width: 860px) {
   .header-nav {

@@ -13,3 +13,15 @@ export function phoneMask(value: string): string {
   return value;
 }
 
+export function priceMask(value: string): string {
+  if (!value) return '';
+  value = value.replace(/\D/gi, '');
+  const arrayValue = value.split('');
+  if (arrayValue.length <= 2) {
+    return value;
+  } else {
+    const length = arrayValue.length - 2;
+    arrayValue.splice(length, 0, '.');
+    return arrayValue.join('');
+  }
+}

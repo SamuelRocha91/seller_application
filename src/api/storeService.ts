@@ -2,7 +2,6 @@ import { type storeType } from '../types/storeType';
 import { BaseService } from './abstractService';
 
 class StoreService extends BaseService{
-
   constructor() {
     super();
   }
@@ -88,7 +87,6 @@ class StoreService extends BaseService{
 
   private formData(dataStore: storeType) {
     const formData = new FormData();
-    // formData.append('store[avatar]', dataStore.src);
     formData.append('store[name]', dataStore.name);
     formData.append('store[category]', dataStore.category);
     formData.append('store[price_minimum]', dataStore.price);
@@ -101,14 +99,15 @@ class StoreService extends BaseService{
   private generateObjectSeller(json: any) {
     return {
       id: json.id,
-      src: `${URL}${json.avatar_url}`,
+      src: `${this.apiUrl}${json.avatar_url}`,
       name: json.name,
       price: json.price_minimum,
       description: json.description,
       phoneNumber: json.phone_number,
       category: json.category,
       address: json.address,
-      active: false
+      active: false,
+      products: []
     };
   }
 
