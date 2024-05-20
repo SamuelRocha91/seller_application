@@ -92,7 +92,7 @@ const validateFields = () => {
 const deleteForm = (id: number) => {
   const productFiltered: any[] = data.value
     .filter((entity: any) => entity.id !== id);
-  startFormCreateStore();
+  startFormCreateProduct();
   const storage = productService.storage.get('stores') || '';
   const store = JSON.parse(storage);
   const index = store
@@ -105,6 +105,11 @@ const deleteForm = (id: number) => {
   );
   data.value = productFiltered;
   productsStore.productActive = productFiltered;
+};
+
+const goToFormCreate = () => {
+  menuPage.value = true;
+  startFormCreateProduct();
 };
 
 const createProduct = (dataProduct: any) => {
@@ -178,22 +183,18 @@ const filterData = () => {
   const inputName = filterName.value;
   const products = productsStore.productActive;
   data.value = products.filter((product) => {
-    if (inputName && categoryFilter) {
+    if (inputName && categoryFilter && categoryFilter !== "Todos") {
       return product.category == categoryFilter
         && product.name.includes(inputName);
-    } else if (categoryFilter) {
-      return product.category == categoryFilter;
+    } else if (categoryFilter !== "Todos") {
+      return  product.category == categoryFilter;
     } else {
-      console.log(product.name);
-      console.log(product.category);
-
       return product.name.toLowerCase().includes(inputName);
     }
   });
-  console.log(data.value);
 };
 
-const startFormCreateStore = () => {
+const startFormCreateProduct = () => {
   description.value = '';
   category.value = '';
   name.value = '';
@@ -332,6 +333,8 @@ onMounted(() => {
             title="Cardápios"
             description="Gerencie os itens disponíveis em sua loja
             através do cardápio"
+            :display="true"
+            :handleClick="goToFormCreate"
           />
           <div class="filters-menu">
             <label for="">

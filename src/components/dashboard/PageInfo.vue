@@ -4,21 +4,47 @@ defineProps<{
   alt: string
   title: string
   description: string
+  display?: boolean
+  handleClick?: () => void
 }>();
 </script>
 <template>
-  <section class="info-page">
-    <div class="info-img">
-        <img :src="src" :alt="alt">
+  <section class="info-page" >
+    <div class="info-image">
+      <div class="info-img">
+          <img :src="src" :alt="alt">
+      </div>
+      <div class="info-text">
+          <h1>{{ title }}</h1>
+          <p>{{ description }}</p>
+      </div>
     </div>
-    <div class="info-text">
-        <h1>{{ title }}</h1>
-        <p>{{ description }}</p>
-    </div>
+    <button 
+    @click="handleClick"
+     v-show="display || false"
+      id="enter"
+      >
+      Adicionar produto
+    </button>
   </section>
 </template>
 
 <style scoped>
+#enter {
+  color: #ff1818;
+  border: 1px solid #ff1818;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+#enter:hover {
+  cursor: pointer;
+  background-color: rgb(255, 255, 255);
+  transition: 3s;
+}
+
 .info-page {
   margin-top: 5px;
   background-color: white;  
@@ -32,6 +58,18 @@ defineProps<{
   border-radius: 5px;
 }
 
+.info-image {
+   margin-top: 5px;
+  background-color: white;  
+  width: 85%;
+  height: fit-content;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 5px;
+}
 h1 {
   font-weight: bold;
   font-size: x-large;

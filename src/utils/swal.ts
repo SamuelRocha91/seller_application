@@ -45,12 +45,12 @@ const swalWithRedirect = (action: () => void) => {
 const swallWithDelete = (handleDelete: () => void) => {
   Swal.fire({
     title: "Deseja continuar?",
-    text: "Deletar essa loja acarretará numa exclusão irreversível",
+    text: "Ao deletar esse dado a ação será irreversível",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Sim, delete ela pai!",
+    confirmButtonText: "Sim, pode deletar painho!",
     cancelButtonText: "Não!! Tá doido uai???"
   }).then((result) => {
     if (result.isConfirmed) {
