@@ -8,6 +8,7 @@ import RecoveryPasswordPage from '@/views/RecoveryPasswordPage.vue';
 import RecoveryPasswordEmailPage from '@/views/RecoveryPasswordEmailPage.vue';
 import PerfilPage from '@/views/PerfilPage.vue';
 import ManageStorePage from '@/views/ManageStorePage.vue';
+import ChatPage from '@/views/ChatPage.vue';
 
 
 const router = createRouter({
@@ -49,7 +50,12 @@ const router = createRouter({
       name: '/dashboard/gerenciar-loja',
       meta: { requiresAuth: true },
       component: ManageStorePage
-    }
+    },
+    {
+      path: '/chat',
+      name: '/chat',
+      component: ChatPage
+    },
   ]
 });
 
