@@ -72,12 +72,6 @@ const handleClick = () => {
           description="Gerencie aqui as informações de sua loja
           e permissões de acesso"
         />
-        <MenuPage
-        buttonOne="Dados gerais"
-        buttonTwo="Funcionamento"
-        :handleSelect="handleSelect"
-        :selected="selected"
-        />
         <FormRegisterStore v-show="selected"/>
         <FormRegisterOperation v-show="!selected"/>
       </main>

@@ -139,7 +139,6 @@ const createProduct = (dataProduct: any) => {
   );
 };
 
-
 const editProduct = (productData: any) => {
   const imageUpdate = productData.src === image ? null : image;
   productService.updateProduct(
@@ -228,12 +227,12 @@ onMounted(() => {
 <template>
   <template v-if="menuPage">
     <div class="main-content" >
-        <PageInfo
-              :src="ShoppingCart"
-              alt="ícone de carrinho"
-              title="Dados do produto"
-              description="Adicione um novo produto"
-            />
+      <PageInfo
+        :src="ShoppingCart"
+        alt="ícone de carrinho"
+        title="Dados do produto"
+        description="Adicione um novo produto"
+      />
       <div class="form-container">
         <form
         id="uploadForm"
@@ -448,8 +447,8 @@ form {
   height: fit-content;
   align-items: center;
   padding: 20px;
-  width: 90%;
-  height: 62vh;
+  width: 72%;
+  height: 67vh;
 }
 .image-container {
   width: 100px;
@@ -560,9 +559,9 @@ form {
   height: fit-content;
   justify-content: center;
 }
-textarea {
+.text-description textarea {
   width: 90%;
-  height: 100%;
+  height: 200px;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #fff;

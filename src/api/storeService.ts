@@ -7,8 +7,8 @@ class StoreService extends BaseService{
   }
 
   async getStores(
-    onSuccess: () => void,
-    onFailure: () => void
+    onSuccess: (data?: any) => void,
+    onFailure: (data: any) => void
   ) {
     const response = await this.getAll('stores');
     if (response.ok) {
@@ -61,19 +61,22 @@ class StoreService extends BaseService{
     }
   }
 
-  failure(response: Response, onFailure: () => void) {
-    onFailure();
+  failure(response: Response, onFailure: (data: any) => void) {
+    response.json().then((json) => {
+      this.generateStorage(json);
+      onFailure(json);
+    });
   }
 
   success(
     response: Response,
-    onSuccess: () => void,
+    onSuccess: (data?: any) => void,
     type = "generate"
   ) {
     if (type == "generate") {
       response.json().then((json) => {
         this.generateStorage(json);
-        onSuccess();
+        onSuccess(json);
       });
     } else if (type == "update") {
       response.json().then(async (json) => {

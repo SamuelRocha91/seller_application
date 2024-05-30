@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { categories, prices } from '@/utils/data';
+import { categories } from '@/utils/data';
 import { swalError, swalSuccess, swallWithDelete } from '@/utils/swal';
 import { StoreService } from '../../api/storeService';
 import { phoneMask } from '@/utils/formUtils';
-import TableList from '../dashboard/TableList.vue';
 import { type storeType } from '@/types/storeType';
 import { useStoreActive } from '@/store/storeActive';
+import Swal from 'sweetalert2';
 
 let image: File | string;
 
@@ -63,7 +63,7 @@ const handleStatus = (id: number) => {
   data.value
     .map((entity: storeType) => {
       if (entity.id == id) {
-        entity.active = !entity.active ;
+        entity.active = !entity.active;
       } else {
         entity.active = false;
       }
@@ -181,437 +181,159 @@ const startFormCreateStore = () => {
 };
 
 onMounted(() => {
-  const sellerData = store.getFallback('stores') || '';
-  const seller = sellerData ? JSON.parse(sellerData) : null;
-  if (seller !== null) {
-    data.value = seller;
-    edit.value = true;
-  }
+  store.getStores((data: any) => {
+    console.log(data);
+  },
+    (erro: any) => {
+      console.error('Request failed:', erro);
+      Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
+    });
+
 });
 </script>
 
 <template>
-  <template v-if="!edit">
-    <div class="form-container">
-      <form
-      id="uploadForm"
-      action="/upload"
-      method="post"
-      enctype="multipart/form-data"
+  <div 
+  class="container mt-4 p-4 bg-white w-90" 
+  style="max-height: 100vh;
+   overflow-y: auto;">
+    <form 
+    id="uploadForm" 
+    action="/upload"
+     method="post"
+      enctype="multipart/form-data">
+      <div 
+      class=
+      "form-group d-flex flex-column 
+      text-center justify-content-center align-items-center"
       >
-        <div class="form-init">
-          <div class="image-form">
-            <div class="image-container">
-              <img id="uploadedImage" :src="imageUrl" alt="" />
-            </div>
-            <label
-            for="imageInput"
-            class="custom-file-upload"
-            >
-            Alterar foto de perfil
-          </label>
-            <input
-              type="file"
-              name="image"
-              id="imageInput"
-              @change="handleImageChange"
-              style="display: none"
-            />
-          </div>
-          <div class="inputs-init">
-            <label>
-              <p>Nome da loja</p>
-              <input
-                placeholder="O nome precisa ter no mínimo 3 caracteres"
-                class="bg-input"
-                type="text"
-                v-model="name"
-              />
-            </label>
-            <label for="">
-              <p>Endereço</p>
-              <input
-                placeholder="Insira um endereço válido"
-                class="bg-input"
-                type="text"
-                v-model="address"
-              />
-            </label>
-          </div>
+        <div 
+        class="mb-3 bg-secondary p-3 
+        rounded-circle d-flex justify-content-center align-items-center" 
+        style="width: 150px; height: 150px;">
+          <img id="uploadedImage" 
+          :src="imageUrl" alt=""
+           class="rounded-circle" 
+           style="width: 100px; height: 100px;" />
         </div>
-        <div class="section-intermediate">
-          <div class="intermediate-content">
-            <div>
-              <p>Categoria</p>
-              <select class="select-box" v-model="category">
-                <option
-                v-for="(categoria, index) in categories"
-                :key="index"
-                :value="categoria"
-                >
-                  {{ categoria }}
-                </option>
-              </select>
-            </div>
-            <div>
-              <p>Pedido Mínimo</p>
-              <select class="select-box" v-model="minimumPrice">
-                <option
-                  v-for="(price, index) in prices"
-                  :key="index"
-                  :value="price"
-                  class="content-option"
-                >
-                  {{ price }}
-                </option>
-              </select>
-            </div>
-            <div class="input-phone">
-              <p>Telefone</p>
-              <input
-                @input="handlePhone"
-                :value="phoneNumber"
-                class="bg-input"
-                type="text"
-                maxlength="15"
-                placeholder="xx xxxxx-xxxx"
-              />
+        <label for="imageInput" class="btn btn-primary">
+          Alterar foto de perfil
+        </label>
+        <input 
+        type="file" 
+        name="image" 
+        id="imageInput"
+         @change="handleImageChange"
+          class="d-none" />
+      </div>
+
+      <div class="form-group">
+        <label for="storeName">Nome da loja</label>
+        <input 
+        type="text"
+         id="storeName" 
+         class="form-control"
+          placeholder="O nome precisa ter no mínimo 3 caracteres" 
+          v-model="name" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="category">Categoria</label>
+          <select id="category" class="form-control" v-model="category">
+            <option 
+            v-for="(categoria, index)
+             in categories" :key="index" 
+             :value="categoria">{{ categoria }}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="cep">CEP</label>
+          <div class="input-group">
+            <input 
+            type="text" id="cep" class="form-control" 
+            placeholder="Digite o CEP"
+             @blur="validateCepOnBlur"
+              @input="handleCep" :value="cep" />
+            <div class="input-group-append">
+              <button
+               class="btn btn-outline-secondary" 
+               @click.prevent="searchCep">
+                <i class="fa fa-search"></i>
+              </button>
             </div>
           </div>
         </div>
-        <div class="section-finish">
-          <div class="text-description">
-            <p>Descrição</p>
-            <textarea
-              placeholder="Máximo: 50 caracteres"
-              cols="30"
-              rows="10"
-              v-model="description"
-              maxlength="50"
-            ></textarea>
-          </div>
-          <div class="btn-div">
-            <button
-            :disabled="awaiting"
-            type="submit"
-            @click.prevent="handleClick"
-            class="save-form-btn"
-            >
-            Salvar
-          </button>
-          </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="bairro">Estado</label>
+          <input 
+          type="text"
+           id="bairro"
+          class="form-control"
+          :value="state" 
+          readonly 
+          />
         </div>
-      </form>
-    </div>
-  </template>
-  <template v-else>
-    <div class="form-container">
-      <TableList
-      title="Lojas cadastradas"
-      tableOne="Loja"
-      tableTwo="Nome"
-      tableThree="Pedido Mínimo"
-      :handleEdit="editForm"
-      :handleClick="handleDelete"
-      :handleStatus="handleStatus"
-      :data="data"
-      />
-      <button 
-      @click.prevent="startFormCreateStore" 
-      class="register-form-btn"
-      >
-      Cadastrar nova loja
+        <div class="form-group col-md-6">
+          <label for="rua">Cidade</label>
+          <input
+           type="text" 
+           id="rua"
+            class="form-control" 
+            :value="city" readonly />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="cidade">Bairro</label>
+          <input 
+           type="text"
+           id="cidade" 
+           class="form-control"
+          :value="neighborhood"
+          readonly 
+          />
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="numero">Número</label>
+          <input
+          type="text"
+          id="numero" 
+          class="form-control" 
+          :value="numberAddress"  />
+        </div>
+
+        <div class="form-group w-100">
+          <label for="estado">Endereço</label>
+          <input
+           type="text" 
+           id="estado" class="form-control" 
+           :value="address" readonly />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descrição</label>
+        <textarea 
+        id="description" 
+        class="form-control" 
+        rows="3" placeholder="Máximo: 50 caracteres"
+         v-model="description" maxlength="50"></textarea>
+      </div>
+      <button
+       type="submit" class="btn btn-success btn-block"
+        @click.prevent="handleClick" :disabled="awaiting">
+        Salvar
       </button>
-    </div>
-  </template>
+    </form>
+  </div>
 </template>
 
 <style scoped>
-.filters-menu label {
-  width: 50%;
+.bg-secondary {
+  background-color: #ccc !important;
 }
-.bg-input-2 {
-  border: 1px solid #dedede;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  padding: 13px;
-  width: 100%;
-  height: 37px;
-}
-.select-box {
-  width: 200px;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-}
-.select-box-2 {
-  width: 400px;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  height: 41px;
-}
-.main-content{
-  background-color: gray;
-  display: flex;
-  height: 100%;
-  width: 100%;
-  align-items: center;
-  gap: 8px;
-  flex-direction: column;
-}
-.custom-file-upload {
-  cursor: pointer;
-  color: #0000ff;
-  text-decoration: underline;
-  padding: 10px 20px;
-  border-radius: 5px;
-}
-form {
-  width: 100%;
-  padding: 10px;
-}
-.form-init {
-  background-color: white;
-  display: flex;
-  align-items: center;
-  height: fit-content;
-  padding: 10px;
-  width: 100%;
-  gap: 10px;
-  border: 1px solid rgb(189, 187, 187);
-}
-.form-container {
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  height: fit-content;
-  align-items: center;
-  padding: 20px;
-  width: 90%;
-  height: 62vh;
-}
-.image-container {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: #ccc;
-}
-#uploadedImage {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-}
-.form-init {
-  display: flex;
-}
-.save-form-btn {
-  color: #ffffff;
-  background-color: #14bb1d;
-  font-size: 16px;
-  width: 70px;
-  height: 50px;
-  border-radius: 5px;
-}
-.label-intermediate {
-  margin-left: 4%;
-  width: 90%;
-}
-.save-form-btn:hover {
-  cursor: pointer;
-}
-.filters-menu {
-  margin-top: 5px;
-  background-color: white;  
-  width: 90%;
-  height: 10vh;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 5px;
-  border-radius: 5px;
-}
-.content-menu {
-  background-color: white;
-  padding: 20px;
-  width: 90%;
-  height: 100%;
-}
-.bg-input {
-  border: 1px solid #dedede;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  padding: 13px;
-  width: 100%;
-  height: 37px;
-}
-.category {
-  width: 99%;
-}
-.inputs-init {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.intermediate {
-  width: 100%;
-}
-.image-form {
-  display: flex;
-  width: 30%;
-  flex-direction: column;
-  justify-content: center;  
-  align-items: center;
-}
-.section-intermediate {
-  display: flex;
-  padding: 10px;
-  width: 100%;
-  padding: 10px;
-  justify-content: space-between;
-  border-right: 1px solid rgb(189, 187, 187);
-  border-left: 1px solid rgb(189, 187, 187);
-  align-items: center;
-}
-.intermediate-content {
-  display: flex;
-  width: 100%;
-  gap: 40px;
-  padding: 10px;
-  justify-content: space-between;
-}
-.section-finish {
-  width: 100%;
-  height: 32.0vh;
-  display: flex;
-  justify-content: center;
-  border: 1px solid #ccc;
-}
-.text-description {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 20px;
-  width: 87%;
-  height: fit-content;
-  justify-content: center;
-}
-textarea {
-  width: 90%;
-  height: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  padding: 15px;
-}
-.btn-div {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: 100%;
-}
-.input-phone {
-  width: 30%;
-}
-h2 {
-  font-weight: bold;
-  font-size: 20px;
-}
-.inputs-two {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-}
-.input-simulate {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  padding: 13px;
-  width: 100%;
-  height: 37px;
-}
-.section-finish-two {
-  width: 100%;
-  height: 35vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-content: space-between;
-  padding: 30px;
-  margin-left: 21px;
-  gap: 10px;
-}
-.section-finish-two .text-description {
-  height: 100%;
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 10px;
-}
-.text-description .input-simulate {
-  height: 80%;
-}
-.address {
-  width: 100%;
-}
-.address .input-simulate {
-  width: 91%;
-}
-.name-store {
-  width: 100%;
-}
-.name-store .input-simulate {
-  width: 91%;
-}
-.inputs-two .name {
-  width: 50%;
-}
-.edit-form-btn {
-  color: #ffffff;
-  background-color: #3f07c0;
-  font-size: 16px;
-  width: 70px;
-  height: 50px;
-  border-radius: 5px;
-}
-.delete-form-btn {
-  color: #ffffff;
-  background-color: #ff1818;
-  font-size: 16px;
-  width: 70px;
-  height: 50px;
-  border-radius: 5px;
-}
-.register-form-btn {
-  color: #ffffff;
-  background-color: #ff1818;
-  font-size: 16px;
-  width: 230px;
-  height: 50px;
-  border-radius: 5px;
-}
-.edit-form-btn:hover,
-.delete-form-btn:hover {
-  cursor: pointer;
-}
-.btn-div-two {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
 </style>
