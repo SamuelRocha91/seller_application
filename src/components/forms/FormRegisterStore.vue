@@ -51,7 +51,7 @@ const handleClick = async () => {
       'Por favor, verifique os dados inseridos');
     return;
   }
-  
+
   const storeData = objectForm();
   if (editId.value) {
     awaiting.value = true;
@@ -205,6 +205,12 @@ const objectForm = () => ({
   description: description.value,
   address: address.value,
   category: category.value,
+  neighborhood: neighborhood.value,
+  numberAddress: numberAddress.value,
+  state: state.value,
+  city: city.value,
+  cnpj: cnpj.value,
+  cep: cep.value
 });
 
 const startFormCreateStore = () => {
