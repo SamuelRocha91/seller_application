@@ -20,5 +20,6 @@ export type entity = {
     src: string,
     active: boolean,
     name: string,
-    price: string,
+    price?: string,
+    category?: string
 }

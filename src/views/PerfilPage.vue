@@ -5,7 +5,6 @@ import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import PageInfo from '@/components/dashboard/PageInfo.vue';
 import UserCircle from '../assets/icons/UserCircle.png';
-import MenuPage from '@/components/dashboard/MenuPage.vue';
 import FormRegisterStore from '@/components/forms/FormRegisterStore.vue';
 import FormRegisterOperation
   from '@/components/forms/FormRegisterOperation.vue';

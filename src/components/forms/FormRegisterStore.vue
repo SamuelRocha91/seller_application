@@ -6,9 +6,11 @@ import { StoreService } from '../../api/storeService';
 import { type storeType } from '@/types/storeType';
 import { useStoreActive } from '@/store/storeActive';
 import Swal from 'sweetalert2';
+import TableList from '../dashboard/TableList.vue';
 
 let image: File | string;
 
+const URL_HOST = import.meta.env.VITE_BASE_URL;
 const address = defineModel('address', { default: '' });
 const awaiting = ref(false);
 const category = defineModel('category', { default: '' });
@@ -204,7 +206,7 @@ const objectForm = () => ({
   name: name.value,
   description: description.value,
   address: address.value,
-  category: category.value,
+  category: category.value.toLowerCase(),
   neighborhood: neighborhood.value,
   numberAddress: numberAddress.value,
   state: state.value,
@@ -219,13 +221,26 @@ const startFormCreateStore = () => {
   category.value = '';
   name.value = '';
   imageUrl.value = '';
+  cep.value = '';
+  numberAddress.value = '';
+  state.value = '';
+  city.value = '';
+  cnpj.value = '';
+  neighborhood.value = '';
   edit.value = false;
   editId.value = null;
 };
 
 onMounted(() => {
-  store.getStores((data: any) => {
-    console.log(data);
+  store.getStores((info: any) => {
+    data.value = info.result.stores.map((stor: any) => ({
+      id: stor.id,
+      category: stor.id || '',
+      src: `${URL_HOST}${stor.avatar_url}` || '',
+      name: stor.name,
+      active: false
+    }));
+    edit.value = true;
   },
   (erro: any) => {
     console.error('Request failed:', erro);
@@ -387,13 +402,13 @@ onMounted(() => {
       </form>
     </div>
   </template>
-  <template v-else>
+  <template v-else >
       <div class="form-container">
         <TableList
         title="Lojas cadastradas"
         tableOne="Loja"
         tableTwo="Nome"
-        tableThree="Pedido Mínimo"
+        tableThree="Categoria"
         :handleEdit="editForm"
         :handleClick="handleDelete"
         :handleStatus="handleStatus"
@@ -412,5 +427,29 @@ onMounted(() => {
 <style scoped>
 .bg-secondary {
   background-color: #ccc !important;
+}
+
+.form-container {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  align-items: center;
+  padding: 20px;
+  width: 72%;
+  height: 62vh;
+}
+
+.register-form-btn {
+  color: #ffffff;
+  background-color: #ff1818;
+  font-size: 16px;
+  width: 230px;
+  height: 50px;
+  border-radius: 5px;
+}
+
+.register-form-btn {
+  cursor: pointer;
 }
 </style>

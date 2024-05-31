@@ -11,7 +11,7 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
   tableTwo: string
   tableThree: string
 }>();
-
+console.log(data);
 </script>
 <template>
   <table>
@@ -32,7 +32,7 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
         <td scope="row"  class="image-container"><img :src="entity.src" 
           alt="logo da loja" class="uploadedImage "></td>
         <td scope="row" >{{ entity.name }}</td>
-        <td scope="row" >{{ entity.price }}</td>
+        <td scope="row" >{{ entity.category }}</td>
         <td scope="row" class="btns-crud">
           <button 
           class="btn-edit" 
@@ -79,6 +79,8 @@ caption {
   font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 10px;
+  text-align: center;
+  caption-side: top
 }
 
 thead th {

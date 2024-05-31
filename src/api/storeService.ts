@@ -33,6 +33,22 @@ class StoreService extends BaseService{
     }
   }
 
+  async openStore(
+    id: number,
+    active: boolean,
+    onSuccess: () => void,
+    onFailure: () => void
+  ) {
+    const formData = new FormData();
+    formData.append('store[is_open]', active ? "true" : "false");
+    const response = await this.update(id, 'stores', formData);
+    if (response.ok) {
+      this.success(response, onSuccess);
+    } else {
+      this.failure(response, onFailure);
+    }
+  }
+
   async updateStore(
     id: number,
     dataStore: storeType,
