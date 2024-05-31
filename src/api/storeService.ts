@@ -92,10 +92,14 @@ class StoreService extends BaseService{
     const formData = new FormData();
     formData.append('store[name]', dataStore.name);
     formData.append('store[category]', dataStore.category);
-    formData.append('store[price_minimum]', dataStore.price);
+    formData.append('store[cep]', dataStore.cep);
     formData.append('store[description]', dataStore.description);
     formData.append('store[address]', dataStore.address);
-    formData.append('store[phone_number]', dataStore.phoneNumber);
+    formData.append('store[cnpj]', dataStore.cnpj);
+    formData.append('store[city]', dataStore.city);
+    formData.append('store[state]', dataStore.state);
+    formData.append('store[number_address]', dataStore.numberAddress);
+    formData.append('store[neighborhood]', dataStore.neighborhood);
     return formData;
   }
 

@@ -13,7 +13,7 @@ const address = defineModel('address', { default: '' });
 const awaiting = ref(false);
 const category = defineModel('category', { default: '' });
 const cep = ref('');
-const city = ref('');
+const city = defineModel('city', {default: ''});
 const cnpj = ref('');
 const data = ref();
 const description = defineModel('description', { default: '' });
@@ -21,9 +21,9 @@ const edit = ref(false);
 const editId = ref();
 const imageUrl = ref();
 const name = defineModel('name', { default: '' });
-const neighborhood = ref('');
+const neighborhood = defineModel('neighborhood', {default: ''});
 const numberAddress = ref('');
-const state = ref('');
+const state = defineModel('state', {default: ''});
 const store = new StoreService();
 const storeActive = useStoreActive();
 
@@ -36,7 +36,6 @@ const cepMask = (value: string) => {
 
 const cnpjMask = (value: string) => {
   if (!value) return '';
-
   value = value.replace(/\D/g, '');
   value = value.replace(/^(\d{2})(\d)/, '$1.$2');
   value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
@@ -52,6 +51,7 @@ const handleClick = async () => {
       'Por favor, verifique os dados inseridos');
     return;
   }
+  
   const storeData = objectForm();
   if (editId.value) {
     awaiting.value = true;
@@ -70,6 +70,12 @@ const handleCep = (event: Event) => {
 const handleCnpj = (event: Event) => {
   const value = (event.target as HTMLInputElement).value;
   cnpj.value = cnpjMask(value || '');
+};
+
+const handleNumberAddress = (event: Event) => {
+  let value = (event.target as HTMLInputElement).value;
+  value = value.replace(/\D/g, '');
+  numberAddress.value = value;
 };
 
 const handleDelete = (id: number) => {
@@ -113,7 +119,7 @@ const validateFields = () => {
   const fields = [name, address, description, category];
   if (fields.some((field) => field.value.length < 3)) {
     return false;
-  } else if (phoneNumber.value.length < 11) {
+  } else if (cnpj.value.length < 18) {
     return false;
   } else {
     return true;
@@ -224,153 +230,177 @@ onMounted(() => {
 </script>
 
 <template>
-  <div 
-  class="container mt-4 p-4 bg-white w-90" 
-  style="max-height: 100vh;
-   overflow-y: auto;">
-    <form 
-      id="uploadForm" 
-      action="/upload"
-      method="post"
-      enctype="multipart/form-data">
-      <div 
-        class=
-        "form-group d-flex flex-column 
-        text-center justify-content-center align-items-center"
-        >
-        <div 
-          class="mb-3 bg-secondary p-3 
-          rounded-circle d-flex justify-content-center align-items-center" 
-          style="width: 150px; height: 150px;">
-            <img id="uploadedImage" 
-            :src="imageUrl" alt=""
-             class="rounded-circle" 
-             style="width: 100px; height: 100px;" />
+  <template v-if="!edit">
+    <div
+    class="container mt-4 p-4 bg-white w-90"
+    style="max-height: 100vh;
+     overflow-y: auto;">
+      <form
+        id="uploadForm"
+        action="/upload"
+        method="post"
+        enctype="multipart/form-data">
+        <div
+          class=
+          "form-group d-flex flex-column
+          text-center justify-content-center align-items-center"
+          >
+          <div
+            class="mb-3 bg-secondary p-3
+            rounded-circle d-flex justify-content-center align-items-center"
+            style="width: 150px; height: 150px;">
+              <img id="uploadedImage"
+              :src="imageUrl" alt=""
+               class="rounded-circle"
+               style="width: 100px; height: 100px;" />
+          </div>
+          <label for="imageInput" class="btn btn-primary">
+            Alterar foto de perfil
+          </label>
+          <input
+            type="file"
+            name="image"
+            id="imageInput"
+            @change="handleImageChange"
+            class="d-none" />
         </div>
-        <label for="imageInput" class="btn btn-primary">
-          Alterar foto de perfil
-        </label>
-        <input 
-          type="file" 
-          name="image" 
-          id="imageInput"
-          @change="handleImageChange"
-          class="d-none" />
-      </div>
-      <div class="form-group">
-        <label for="storeName">Nome da loja</label>
-        <input 
-        type="text"
-         id="storeName" 
-         class="form-control"
-          placeholder="O nome precisa ter no mínimo 3 caracteres" 
-          v-model="name" />
-      </div>
-      <div class="form-group">
-        <label for="cnpj">CNPJ</label>
-        <input 
+        <div class="form-group">
+          <label for="storeName">Nome da loja</label>
+          <input
           type="text"
-          id="cnpj" 
-          class="form-control"
-          maxlength="18"
-          placeholder="XX.XXX.XXX/0001-XX" 
-          @input="handleCnpj"
-          v-model="cnpj" />
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="category">Categoria</label>
-          <select id="category" class="form-control" v-model="category">
-            <option 
-              v-for="(categoria, index)
-               in categories" :key="index" 
-               :value="categoria">{{ categoria }}</option>
-          </select>
+           id="storeName"
+           class="form-control"
+            placeholder="O nome precisa ter no mínimo 3 caracteres"
+            v-model="name" />
         </div>
-        <div class="form-group col-md-6">
-          <label for="cep">CEP</label>
-          <div class="input-group">
-            <input 
-              type="text" 
-              id="cep" class="form-control" 
-              placeholder="Digite o CEP"
-              @input="handleCep" 
-              :value="cep" />
-            <div class="input-group-append">
-              <button
-                class="btn btn-outline-secondary" 
-                @click.prevent="searchCep">
-                <i class="fa fa-search"></i>
-              </button>
+        <div class="form-group">
+          <label for="cnpj">CNPJ</label>
+          <input
+            type="text"
+            id="cnpj"
+            class="form-control"
+            maxlength="18"
+            placeholder="XX.XXX.XXX/0001-XX"
+            @input="handleCnpj"
+            v-model="cnpj" />
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="category">Categoria</label>
+            <select id="category" class="form-control" v-model="category">
+              <option
+                v-for="(categoria, index)
+                 in categories" :key="index"
+                 :value="categoria">{{ categoria }}</option>
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="cep">CEP</label>
+            <div class="input-group">
+              <input
+                type="text"
+                id="cep" class="form-control"
+                placeholder="Digite o CEP"
+                @input="handleCep"
+                :value="cep" />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary"
+                  @click.prevent="searchCep">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="bairro">Estado</label>
+            <input
+            type="text"
+             id="bairro"
+            class="form-control"
+            :value="state"
+            readonly
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="rua">Cidade</label>
+            <input
+             type="text"
+             id="rua"
+             class="form-control"
+             v-model="city"
+              readonly />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="bairro">Bairro</label>
+            <input
+             type="text"
+             id="bairro"
+             class="form-control"
+            v-model="neighborhood"
+             readonly
+            />
+          </div>
+  
+          <div class="form-group col-md-6">
+            <label for="numero">Número</label>
+            <input
+            type="text"
+            id="numero"
+            class="form-control"
+            @input="handleNumberAddress"
+            :value="numberAddress"  />
+          </div>
+  
+          <div class="form-group w-100">
+            <label for="endereço">Endereço</label>
+            <input
+             type="text"
+             id="endereço" class="form-control"
+             v-model="address"
+             readonly />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="description">Descrição</label>
+          <textarea
+            id="description"
+            class="form-control"
+            rows="3" placeholder="Máximo: 50 caracteres"
+            v-model="description" maxlength="50"></textarea>
+        </div>
+        <button
+          type="submit" class="btn btn-success btn-block"
+          @click.prevent="handleClick" :disabled="awaiting">
+          Salvar
+        </button>
+      </form>
+    </div>
+  </template>
+  <template v-else>
+      <div class="form-container">
+        <TableList
+        title="Lojas cadastradas"
+        tableOne="Loja"
+        tableTwo="Nome"
+        tableThree="Pedido Mínimo"
+        :handleEdit="editForm"
+        :handleClick="handleDelete"
+        :handleStatus="handleStatus"
+        :data="data"
+        />
+        <button
+        @click.prevent="startFormCreateStore"
+        class="register-form-btn"
+        >
+        Cadastrar nova loja
+        </button>
       </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="bairro">Estado</label>
-          <input 
-          type="text"
-           id="bairro"
-          class="form-control"
-          :value="state" 
-          readonly 
-          />
-        </div>
-        <div class="form-group col-md-6">
-          <label for="rua">Cidade</label>
-          <input
-           type="text" 
-           id="rua"
-            class="form-control" 
-            :value="city" readonly />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="cidade">Bairro</label>
-          <input 
-           type="text"
-           id="cidade" 
-           class="form-control"
-          :value="neighborhood"
-          readonly 
-          />
-        </div>
-
-        <div class="form-group col-md-6">
-          <label for="numero">Número</label>
-          <input
-          type="text"
-          id="numero" 
-          class="form-control" 
-          :value="numberAddress"  />
-        </div>
-
-        <div class="form-group w-100">
-          <label for="estado">Endereço</label>
-          <input
-           type="text" 
-           id="estado" class="form-control" 
-           :value="address" readonly />
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="description">Descrição</label>
-        <textarea 
-        id="description" 
-        class="form-control" 
-        rows="3" placeholder="Máximo: 50 caracteres"
-         v-model="description" maxlength="50"></textarea>
-      </div>
-      <button
-       type="submit" class="btn btn-success btn-block"
-        @click.prevent="handleClick" :disabled="awaiting">
-        Salvar
-      </button>
-    </form>
-  </div>
+  </template>
 </template>
 
 <style scoped>
