@@ -46,7 +46,7 @@ class StoreService extends BaseService{
     }
     const response = await this.update(id, 'stores', formData);
     if (response.ok) {
-      this.success(response, onSuccess, "update");
+      this.success(response, onSuccess);
     } else {
       this.failure(response, onFailure);
     }
@@ -63,7 +63,6 @@ class StoreService extends BaseService{
 
   failure(response: Response, onFailure: (data: any) => void) {
     response.json().then((json) => {
-      this.generateStorage(json);
       onFailure(json);
     });
   }
@@ -71,21 +70,10 @@ class StoreService extends BaseService{
   success(
     response: Response,
     onSuccess: (data?: any) => void,
-    type = "generate"
   ) {
-    if (type == "generate") {
-      response.json().then((json) => {
-        this.generateStorage(json);
-        onSuccess(json);
-      });
-    } else if (type == "update") {
-      response.json().then(async (json) => {
-        this.updateStorage(json);
-        onSuccess();
-      });
-    } else {
-      onSuccess();
-    }
+    response.json().then((json) => {
+      onSuccess(json);
+    });
   }
 
   private formData(dataStore: storeType) {
@@ -102,54 +90,6 @@ class StoreService extends BaseService{
     formData.append('store[neighborhood]', dataStore.neighborhood);
     return formData;
   }
-
-  private generateObjectSeller(json: any) {
-    return {
-      id: json.id,
-      src: `${this.apiUrl}${json.avatar_url}`,
-      name: json.name,
-      price: json.price_minimum,
-      description: json.description,
-      phoneNumber: json.phone_number,
-      category: json.category,
-      address: json.address,
-      active: false,
-      products: []
-    };
-  }
-
-  private generateStorage(json: storeType) {
-    const storage = this.storage.get('stores') || '';
-    const storeSaved = this.generateObjectSeller(json);
-    if (storage != '') {
-      storeSaved.active = false;
-      const store = JSON.parse(storage);
-      const data = [...store, {
-        ...storeSaved
-      }];
-      this.storage.store('stores', JSON.stringify(data));
-    } else {
-      storeSaved.active = true;
-      this.storage.store('stores', JSON.stringify([{
-        ...storeSaved
-      }]));
-    }
-  }
-
-  private updateStorage(json: storeType) {
-    const storage = this.storage.get('stores') || '';
-    const storeSaved = this.generateObjectSeller(json);
-    if (storage != '') {
-      const store = JSON.parse(storage);
-      const index = store
-        .findIndex((item: any) => item.id === storeSaved.id);
-      storeSaved.active = store[index].active;
-      store[index] = storeSaved;
-
-      this.storage.store('stores', JSON.stringify(store));
-    }
-  }
-
 }
 
 export { StoreService };
