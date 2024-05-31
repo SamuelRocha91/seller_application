@@ -3,7 +3,6 @@ import { onMounted, ref } from 'vue';
 import { categories } from '@/utils/data';
 import { swalError, swalSuccess, swallWithDelete } from '@/utils/swal';
 import { StoreService } from '../../api/storeService';
-import { phoneMask } from '@/utils/formUtils';
 import { type storeType } from '@/types/storeType';
 import { useStoreActive } from '@/store/storeActive';
 import Swal from 'sweetalert2';
@@ -13,16 +12,38 @@ let image: File | string;
 const address = defineModel('address', { default: '' });
 const awaiting = ref(false);
 const category = defineModel('category', { default: '' });
+const cep = ref('');
+const city = ref('');
+const cnpj = ref('');
 const data = ref();
 const description = defineModel('description', { default: '' });
 const edit = ref(false);
 const editId = ref();
 const imageUrl = ref();
 const name = defineModel('name', { default: '' });
-const minimumPrice = defineModel('minimumPrice', { default: '' });
-const phoneNumber = ref('');
+const neighborhood = ref('');
+const numberAddress = ref('');
+const state = ref('');
 const store = new StoreService();
 const storeActive = useStoreActive();
+
+const cepMask = (value: string) => {
+  if (!value) return '';
+  value = value.replace(/\D/g, '');
+  value = value.replace(/(\d)(\d{3})$/, '$1-$2');
+  return value;
+};
+
+const cnpjMask = (value: string) => {
+  if (!value) return '';
+
+  value = value.replace(/\D/g, '');
+  value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+  value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+  value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+  value = value.replace(/(\d{4})(\d)/, '$1-$2');
+  return value;
+};
 
 const handleClick = async () => {
   const validate = validateFields();
@@ -41,6 +62,16 @@ const handleClick = async () => {
   };
 };
 
+const handleCep = (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  cep.value = cepMask(value || '');
+};
+
+const handleCnpj = (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  cnpj.value = cnpjMask(value || '');
+};
+
 const handleDelete = (id: number) => {
   swallWithDelete(() => deleteForm(id));
 };
@@ -52,11 +83,6 @@ const handleImageChange = (event: Event) => {
     image = file;
     imageUrl.value = URL.createObjectURL(file);
   }
-};
-
-const handlePhone = (event: Event) => {
-  const value = (event.target as HTMLInputElement).value;
-  phoneNumber.value = phoneMask(value || '');
 };
 
 const handleStatus = (id: number) => {
@@ -72,8 +98,19 @@ const handleStatus = (id: number) => {
   store.storage.store('stores', JSON.stringify(data.value));
 };
 
+const searchCep = () => {
+  const formatedCep = cep.value.replace('-', '');
+  fetch(`https://viacep.com.br/ws/${formatedCep}/json/`)
+    .then((data) => data.json().then((json) => {
+      address.value = json.logradouro;
+      state.value = json.uf;
+      city.value = json.localidade;
+      neighborhood.value = json.bairro;
+    })).catch(() => Swal.fire("Cep inválido"));
+};
+
 const validateFields = () => {
-  const fields = [name, address, description, category, minimumPrice];
+  const fields = [name, address, description, category];
   if (fields.some((field) => field.value.length < 3)) {
     return false;
   } else if (phoneNumber.value.length < 11) {
@@ -143,8 +180,6 @@ const editForm = async (id: number) => {
   description.value = storeFiltered[0].description;
   category.value = storeFiltered[0].category;
   name.value = storeFiltered[0].name;
-  minimumPrice.value = storeFiltered[0].price;
-  phoneNumber.value = storeFiltered[0].phoneNumber;
   imageUrl.value = storeFiltered[0].src;
   image = storeFiltered[0].src;
   edit.value = false;
@@ -161,11 +196,9 @@ const updateGlobalState = () => {
 const objectForm = () => ({
   src: image,
   name: name.value,
-  price: minimumPrice.value,
   description: description.value,
   address: address.value,
   category: category.value,
-  phoneNumber: phoneNumber.value
 });
 
 const startFormCreateStore = () => {
@@ -173,8 +206,6 @@ const startFormCreateStore = () => {
   description.value = '';
   category.value = '';
   name.value = '';
-  minimumPrice.value = '';
-  phoneNumber.value = '';
   imageUrl.value = '';
   edit.value = false;
   editId.value = null;
@@ -184,10 +215,10 @@ onMounted(() => {
   store.getStores((data: any) => {
     console.log(data);
   },
-    (erro: any) => {
-      console.error('Request failed:', erro);
-      Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
-    });
+  (erro: any) => {
+    console.error('Request failed:', erro);
+    Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
+  });
 
 });
 </script>
@@ -198,35 +229,34 @@ onMounted(() => {
   style="max-height: 100vh;
    overflow-y: auto;">
     <form 
-    id="uploadForm" 
-    action="/upload"
-     method="post"
+      id="uploadForm" 
+      action="/upload"
+      method="post"
       enctype="multipart/form-data">
       <div 
-      class=
-      "form-group d-flex flex-column 
-      text-center justify-content-center align-items-center"
-      >
+        class=
+        "form-group d-flex flex-column 
+        text-center justify-content-center align-items-center"
+        >
         <div 
-        class="mb-3 bg-secondary p-3 
-        rounded-circle d-flex justify-content-center align-items-center" 
-        style="width: 150px; height: 150px;">
-          <img id="uploadedImage" 
-          :src="imageUrl" alt=""
-           class="rounded-circle" 
-           style="width: 100px; height: 100px;" />
+          class="mb-3 bg-secondary p-3 
+          rounded-circle d-flex justify-content-center align-items-center" 
+          style="width: 150px; height: 150px;">
+            <img id="uploadedImage" 
+            :src="imageUrl" alt=""
+             class="rounded-circle" 
+             style="width: 100px; height: 100px;" />
         </div>
         <label for="imageInput" class="btn btn-primary">
           Alterar foto de perfil
         </label>
         <input 
-        type="file" 
-        name="image" 
-        id="imageInput"
-         @change="handleImageChange"
+          type="file" 
+          name="image" 
+          id="imageInput"
+          @change="handleImageChange"
           class="d-none" />
       </div>
-
       <div class="form-group">
         <label for="storeName">Nome da loja</label>
         <input 
@@ -236,29 +266,40 @@ onMounted(() => {
           placeholder="O nome precisa ter no mínimo 3 caracteres" 
           v-model="name" />
       </div>
-
+      <div class="form-group">
+        <label for="cnpj">CNPJ</label>
+        <input 
+          type="text"
+          id="cnpj" 
+          class="form-control"
+          maxlength="18"
+          placeholder="XX.XXX.XXX/0001-XX" 
+          @input="handleCnpj"
+          v-model="cnpj" />
+      </div>
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="category">Categoria</label>
           <select id="category" class="form-control" v-model="category">
             <option 
-            v-for="(categoria, index)
-             in categories" :key="index" 
-             :value="categoria">{{ categoria }}</option>
+              v-for="(categoria, index)
+               in categories" :key="index" 
+               :value="categoria">{{ categoria }}</option>
           </select>
         </div>
         <div class="form-group col-md-6">
           <label for="cep">CEP</label>
           <div class="input-group">
             <input 
-            type="text" id="cep" class="form-control" 
-            placeholder="Digite o CEP"
-             @blur="validateCepOnBlur"
-              @input="handleCep" :value="cep" />
+              type="text" 
+              id="cep" class="form-control" 
+              placeholder="Digite o CEP"
+              @input="handleCep" 
+              :value="cep" />
             <div class="input-group-append">
               <button
-               class="btn btn-outline-secondary" 
-               @click.prevent="searchCep">
+                class="btn btn-outline-secondary" 
+                @click.prevent="searchCep">
                 <i class="fa fa-search"></i>
               </button>
             </div>
