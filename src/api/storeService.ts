@@ -20,7 +20,7 @@ class StoreService extends BaseService{
 
   async createStore(
     dataStore: storeType,
-    onSuccess: () => void,
+    onSuccess: (data?: any) => void,
     onFailure: () => void
   ) {
     const formData = this.formData(dataStore);
@@ -53,7 +53,7 @@ class StoreService extends BaseService{
     id: number,
     dataStore: storeType,
     image: File | string | null,
-    onSuccess: () => void,
+    onSuccess: (data?: any) => void,
     onFailure: () => void
   ) {
     const formData = this.formData(dataStore);
@@ -104,6 +104,7 @@ class StoreService extends BaseService{
     formData.append('store[state]', dataStore.state);
     formData.append('store[number_address]', dataStore.numberAddress);
     formData.append('store[neighborhood]', dataStore.neighborhood);
+    formData.append('store[color_theme]', dataStore.colorTheme);
     formData.append('store[is_open]',"false");
     return formData;
   }

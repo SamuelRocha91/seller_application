@@ -14,6 +14,7 @@ export type storeType = {
     numberAddress: string,
     neighborhood: string,
     isOpen?: boolean,
+    colorTheme: string
 }
 
 export type entity = {

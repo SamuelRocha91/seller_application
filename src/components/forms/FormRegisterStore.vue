@@ -148,9 +148,19 @@ const validateFields = () => {
 
 const createStore = (storeData: storeType) => {
   store.createStore(storeData,
-    () => {
-      const stores = store.storage.get('stores');
-      data.value = JSON.parse(stores || '');
+    (data: any) => {
+      const stores = store.storage.get('stores') || '[]';
+      const parse = JSON.parse(stores);
+      parse.push({
+        id: data.id,
+        category: category.value || '',
+        src: `${URL_HOST}${data.avatar_url}` || '',
+        name: name.value,
+        active: false,
+        isOpen: data.is_open ? data.is_open : false,
+        colorTheme: navBarColor.value || ''
+      });
+      data.value = parse;
       swalSuccess('Dados salvos com sucesso!');
       updateGlobalState();
       edit.value = true;
@@ -168,9 +178,21 @@ const createStore = (storeData: storeType) => {
 
 const editStore = (storeData: storeType) => {
   const imageUpdate = storeData.src === image ? null : image;
-  store.updateStore(editId.value, storeData, imageUpdate, () => {
-    const stores = store.storage.get('stores');
-    data.value = JSON.parse(stores || '');
+  store.updateStore(editId.value, storeData, imageUpdate, (data: any) => {
+    const stores = store.storage.get('stores') || '[]';
+    const parse = JSON.parse(stores);
+    const index = parse
+      .findIndex((establish: any) => establish.id == data.id);
+    parse[index] = {
+      id: parse[index.id],
+      category: category.value || '',
+      src: `${URL_HOST}${data.avatar_url}` || '',
+      name: name.value,
+      active: parse[index.active],
+      isOpen: data.is_open ? data.is_open : false,
+      colorTheme: navBarColor.value || ''
+    };
+    data.value = parse;
     swalSuccess('Dados atualizados com sucesso!');
     edit.value = true;
     awaiting.value = false;
@@ -184,17 +206,19 @@ const editStore = (storeData: storeType) => {
 const deleteForm = (id: number) => {
   const storeFiltered: storeType[] = data.value
     .filter((entity: storeType) => entity.id !== id);
-  if (storeFiltered.length === 0) {
-    store.storage.remove('stores');
-    startFormCreateStore();
-  } else {
-    store.storage.store('stores', JSON.stringify(storeFiltered));
-  }
   store.deleteStore(id,
-    () => swalSuccess('Dados excluídos com sucesso'),
+    () => {
+      data.value = storeFiltered;   
+      swalSuccess('Dados excluídos com sucesso');
+      if (storeFiltered.length === 0) {
+        store.storage.remove('stores');
+        startFormCreateStore();
+      } else {
+        store.storage.store('stores', JSON.stringify(storeFiltered));
+      }
+    },
     () => swalSuccess('Erro no processamento da exclusão')
   );
-  data.value = storeFiltered;
   updateGlobalState();
 };
 
@@ -230,7 +254,8 @@ const objectForm = () => ({
   state: state.value,
   city: city.value,
   cnpj: cnpj.value,
-  cep: cep.value
+  cep: cep.value,
+  colorTheme: navBarColor.value
 });
 
 const startFormCreateStore = () => {
@@ -251,17 +276,17 @@ const startFormCreateStore = () => {
 
 onMounted(() => {
   store.getStores((info: any) => {
-    console.log(info);
     data.value = info.result.stores.map((stor: any) => ({
       id: stor.id,
       category: stor.category || '',
       src: `${URL_HOST}${stor.avatar_url}` || '',
       name: stor.name,
       active: false,
-      isOpen: stor.is_open ? stor.is_open : false
+      isOpen: stor.is_open ? stor.is_open : false,
+      colorTheme: stor.color_theme || ''
     }));
     edit.value = true;
-    console.log(info);
+    store.storage.store('store', JSON.stringify(data.value));
   },
   (erro: any) => {
     console.error('Request failed:', erro);
