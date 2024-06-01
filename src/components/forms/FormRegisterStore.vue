@@ -11,6 +11,7 @@ import TableList from '../dashboard/TableList.vue';
 let image: File | string;
 
 const URL_HOST = import.meta.env.VITE_BASE_URL;
+
 const address = defineModel('address', { default: '' });
 const awaiting = ref(false);
 const category = defineModel('category', { default: '' });
@@ -23,7 +24,8 @@ const edit = ref(false);
 const editId = ref();
 const imageUrl = ref();
 const name = defineModel('name', { default: '' });
-const neighborhood = defineModel('neighborhood', {default: ''});
+const navBarColor = defineModel('navColor', { default: '' });
+const neighborhood = defineModel('neighborhood', { default: '' });
 const numberAddress = ref('');
 const state = defineModel('state', {default: ''});
 const store = new StoreService();
@@ -97,9 +99,12 @@ const openStore = (id: number) => {
   data.value
     .map((entity: storeType) => {
       if (entity.id == id) {
-        entity.isOpen = !entity.isOpen;
-        store.openStore(id, entity.isOpen,
-          () => swalSuccess("abertura/fechamento feito com sucesso"),
+        const newValue = !entity.isOpen;
+        store.openStore(id, newValue,
+          () => {
+            swalSuccess("abertura/fechamento feito com sucesso");
+            entity.isOpen = !entity.isOpen;
+          },
           () => swalSuccess("Erro ao abrir/fechar loja"));
 
       }
@@ -246,13 +251,14 @@ const startFormCreateStore = () => {
 
 onMounted(() => {
   store.getStores((info: any) => {
+    console.log(info);
     data.value = info.result.stores.map((stor: any) => ({
       id: stor.id,
       category: stor.category || '',
       src: `${URL_HOST}${stor.avatar_url}` || '',
       name: stor.name,
       active: false,
-      isOpen: stor.is_open
+      isOpen: stor.is_open ? stor.is_open : false
     }));
     edit.value = true;
     console.log(info);
@@ -319,6 +325,14 @@ onMounted(() => {
             placeholder="XX.XXX.XXX/0001-XX"
             @input="handleCnpj"
             v-model="cnpj" />
+        </div>
+        <div class="form-group d-flex align-items-center align-center">
+             <label class="mt-2" for="navbar-color">
+              Escolha uma cor para a Navbar:</label>
+             <input type="color" 
+             id="navbar-color" 
+             name="navbar-color" 
+             v-model="navBarColor">
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">

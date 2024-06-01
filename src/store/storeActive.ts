@@ -11,7 +11,8 @@ export const useStoreActive = defineStore('store', () => {
     price: '',
     src: '',
     category: '',
-    name: ''
+    name: '', 
+    isOpen: false
   });
   function setStore(data: any) {
     storeActive.value.active = data.active;
