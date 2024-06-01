@@ -97,8 +97,8 @@ const openStore = (id: number) => {
   data.value
     .map((entity: storeType) => {
       if (entity.id == id) {
-        entity.active = !entity.active;
-        store.openStore(id, entity.active,
+        entity.isOpen = !entity.isOpen;
+        store.openStore(id, entity.isOpen,
           () => swalSuccess("abertura/fechamento feito com sucesso"),
           () => swalSuccess("Erro ao abrir/fechar loja"));
 
@@ -251,7 +251,8 @@ onMounted(() => {
       category: stor.category || '',
       src: `${URL_HOST}${stor.avatar_url}` || '',
       name: stor.name,
-      active: false
+      active: false,
+      isOpen: stor.is_open
     }));
     edit.value = true;
     console.log(info);
@@ -426,6 +427,7 @@ onMounted(() => {
         :handleEdit="editForm"
         :handleClick="handleDelete"
         :handleStatus="handleStatus"
+        :handleActive="openStore"
         :data="data"
         />
         <button

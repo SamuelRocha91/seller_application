@@ -12,7 +12,8 @@ export type storeType = {
     city: string,
     state: string,
     numberAddress: string,
-    neighborhood: string
+    neighborhood: string,
+    isOpen?: boolean,
 }
 
 export type entity = {
@@ -21,5 +22,6 @@ export type entity = {
     active: boolean,
     name: string,
     price?: string,
-    category?: string
+    category?: string,
+    isOpen?: boolean
 }

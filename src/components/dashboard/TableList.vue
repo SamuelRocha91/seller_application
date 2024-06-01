@@ -10,6 +10,7 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
   tableOne: string
   tableTwo: string
   tableThree: string
+  handleActive?: (id: number) => void
 }>();
 console.log(data);
 </script>
@@ -24,7 +25,8 @@ console.log(data);
         <th scope="col">{{ tableTwo }}</th>
         <th scope="col">{{ tableThree }}</th>
         <th scope="col">Ações</th>
-        <th scope="col">Ativar</th>
+        <th scope="col">Gerenciar loja</th>
+        <th v-if="handleActive" scope="col">Estado da loja</th>
       </tr>
     </thead>
     <tbody>
@@ -61,6 +63,17 @@ console.log(data);
           :for="'toggle-' + index"
            class="toggle-label">
           </label>
+        </td>
+        <td v-if="handleActive">
+          <button 
+          v-if="entity.isOpen"
+          class="btn btn-primary"
+          @click.prevent="handleActive(entity.id)">
+          Fechar loja
+          </button>
+          <button v-else 
+          class="btn btn-success"
+           @click.prevent="handleActive(entity.id)">Abrir loja</button>
         </td>
       </tr>
     </tbody>
