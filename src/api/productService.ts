@@ -7,12 +7,12 @@ class ProductService extends BaseService{
   
   async getProducts(
     id: number,  
-    onSuccess: () => void,
-    onFailure: () => void
+    onSuccess: (data?: any) => void,
+    onFailure: (data?: any) => void
   ) {
     const response = await this.getAll(`stores/${id}/products`);
     if (response.ok) {
-      this.success(response, onSuccess, id);
+      this.success(response, onSuccess);
     } else {
       this.failure(response, onFailure);
     }
@@ -30,7 +30,7 @@ class ProductService extends BaseService{
     }
     const response = await this.create(`stores/${id}/products`, formData);
     if (response.ok) {
-      this.success(response, onSuccess, id);
+      this.success(response, onSuccess);
     } else {
       this.failure(response, onFailure);
     }
@@ -54,7 +54,7 @@ class ProductService extends BaseService{
       formData
     );
     if (response.ok) {
-      this.success(response, onSuccess, id, "update");
+      this.success(response, onSuccess);
     } else {
       this.failure(response, onFailure);
     }
@@ -75,28 +75,15 @@ class ProductService extends BaseService{
 
   success(
     response: Response,
-    onSuccess: () => void,
-    id: number,
-    type = "generate"
+    onSuccess: (data?: any) => void,
   ) {
-    if (type == "generate") {
-      response.json().then((json) => {
-        this.generateStorage(json, id);
-        onSuccess();
-      });
-    } else if (type == "update") {
-      response.json().then(async (json) => {
-        this.updateStorage(json, id);
-        onSuccess();
-      });
-    } else {
-      onSuccess();
-    }
+    response.json().then((json) => {
+      onSuccess(json);
+    });
   }
   
-  failure(response: Response, onFailure: () => void) {
-    response.json().then((json) => console.log(json));
-    onFailure();
+  failure(response: Response, onFailure: (data: any) => void) {
+    response.json().then((json) => onFailure(json));
   }  
 
 
@@ -119,18 +106,6 @@ class ProductService extends BaseService{
       category: json.category,
       active: true
     };
-  }
-
-  private generateStorage(json: any, id: number) {
-    const storage = this.storage.get('stores') || '';
-    const productSaved = this.generateObjectSeller(json);
-    if (storage != '') {
-      const store = JSON.parse(storage);
-      const index = store
-        .findIndex((field: any) => Number(field.id) === Number(id));
-      store[index].products.push(productSaved);
-      this.storage.store('stores', JSON.stringify(store));
-    } 
   }
 
   private updateStorage(json: any, id: number) {

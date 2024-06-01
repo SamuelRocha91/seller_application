@@ -79,7 +79,7 @@ const validateEmailOnBlur = () => {
           <span v-if="passwordError" class="error">{{ passwordError }}</span>
         </div>
       </label>
-      <label for="remember-password" class="checkbox-label">
+      <label for="remember-password" class="checkbox-labelll">
         <input v-model="remember" type="checkbox" id="remember-password" />
         <p>Lembrar senha</p>
       </label>
@@ -138,11 +138,11 @@ form {
   filter: brightness(2);
 }
 
-.checkbox-label {
+.checkbox-labelll {
   display: flex;
   gap: 5px;
   justify-content: end;
-  display: flex;
+  text-align: center;
 }
 
 .links-redirect {
@@ -157,7 +157,8 @@ form {
   color: #ff1818;
 }
 
-.checkbox-label p {
+.checkbox-labelll p {
+  margin-top: 15px;
   font-size: 12px;
 }
 

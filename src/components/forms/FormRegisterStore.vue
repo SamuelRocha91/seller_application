@@ -93,6 +93,19 @@ const handleImageChange = (event: Event) => {
   }
 };
 
+const openStore = (id: number) => {
+  data.value
+    .map((entity: storeType) => {
+      if (entity.id == id) {
+        entity.active = !entity.active;
+        store.openStore(id, entity.active,
+          () => swalSuccess("abertura/fechamento feito com sucesso"),
+          () => swalSuccess("Erro ao abrir/fechar loja"));
+
+      }
+    });
+};
+
 const handleStatus = (id: number) => {
   data.value
     .map((entity: storeType) => {
@@ -235,12 +248,13 @@ onMounted(() => {
   store.getStores((info: any) => {
     data.value = info.result.stores.map((stor: any) => ({
       id: stor.id,
-      category: stor.id || '',
+      category: stor.category || '',
       src: `${URL_HOST}${stor.avatar_url}` || '',
       name: stor.name,
       active: false
     }));
     edit.value = true;
+    console.log(info);
   },
   (erro: any) => {
     console.error('Request failed:', erro);

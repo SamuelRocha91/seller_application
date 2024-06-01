@@ -10,6 +10,7 @@ import PageInfo from '../dashboard/PageInfo.vue';
 import { ProductService } from '@/api/productService';
 import { useStoreActive } from '@/store/storeActive';
 import { useProductsStore } from '@/store/productsStore';
+import Swal from 'sweetalert2';
 
 let image: File | string;
 
@@ -117,18 +118,9 @@ const createProduct = (dataProduct: any) => {
     storeActive.id,
     dataProduct,
     () => {
-      const establishment: any = productService.storage.get('stores') || [];
-      if (establishment !== null) {
-        const parseEstablishment = JSON.parse(establishment);
-        const products = parseEstablishment
-          .find((fields: any) =>
-            Number(fields.id) == storeActive.id).products || '';
-        data.value = products;
-        productsStore.productActive = products;
-        editId.value = null;
-        awaiting.value = false;
-        menuPage.value = false;
-      }
+      editId.value = null;
+      awaiting.value = false;
+      menuPage.value = false;
       swalSuccess('Dados salvos com sucesso!');
     },
     () => {
@@ -211,16 +203,20 @@ const objectForm = () => ({
 });
 
 onMounted(() => {
-  const sellerData = productService.getFallback('stores') || '';
-  const seller = sellerData ? JSON.parse(sellerData) : null;
-  if (seller !== null) {
-    const sellerACtive = seller
-      .find((cart: any) => Number(cart.id) == Number(storeActive.id));
-    if (sellerACtive.products.length != 0) {
-      data.value = sellerACtive.products;
-      productsStore.productActive = sellerACtive.products;
-      menuPage.value = false;
-    }
+  if (storeActive.active) {
+    productService.getProducts(storeActive.id, (info: any) => {
+      if (info.data.length > 0) {
+        data.value = info.data.map((product: any) => ({
+          ...product,
+          src: product.image_url,
+          active: true
+        }));
+        menuPage.value = false;
+      }
+    }, (erro: any) => {
+      console.error('Request failed:', erro);
+      Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
+    });
   }
 });
 </script>
