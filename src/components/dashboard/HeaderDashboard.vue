@@ -28,8 +28,8 @@ const updateStore = (id: number, value: boolean) => {
 };
 
 onMounted(() => {
-  const storage = storeService.getFallback('stores') || '';
-  const storageParse = storage !== '' ? JSON.parse(storage) : null;
+  const storage = storeService.getFallback('stores') || '[]';
+  const storageParse = JSON.parse(storage);
   if (storageParse !== null) {
     const active = storageParse.find((field: any) => field.active == true);
     const objectActive = {
