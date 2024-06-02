@@ -4,13 +4,28 @@ class ProductService extends BaseService{
   constructor() {
     super();
   }
+
+  async getProductById(
+    idStore: number,
+    idProduct: number,
+    onSuccess: (data?: any) => void,
+    onFailure: (data?: any) => void
+  ) {
+    const response = await this
+      .getEntity(`stores/${idStore}/products/${idProduct}`);
+    if (response.ok) {
+      this.success(response, onSuccess);
+    } else {
+      this.failure(response, onFailure);
+    }
+  }
   
   async getProducts(
     id: number,  
     onSuccess: (data?: any) => void,
     onFailure: (data?: any) => void
   ) {
-    const response = await this.getAll(`stores/${id}/products`);
+    const response = await this.getEntity(`stores/${id}/products?locale=pt-BR`);
     if (response.ok) {
       this.success(response, onSuccess);
     } else {
@@ -21,7 +36,7 @@ class ProductService extends BaseService{
   async createProduct(
     id: number,
     dataProduct: any,
-    onSuccess: () => void,
+    onSuccess: (data?: any) => void,
     onFailure: () => void
   ) {
     const formData = this.formData(dataProduct);
@@ -41,7 +56,7 @@ class ProductService extends BaseService{
     idProduct: number,
     dataProduct: any,
     image: File | string | null,
-    onSuccess: () => void,
+    onSuccess: (data?: any) => void,
     onFailure: () => void,
   ) {
     const formData = this.formData(dataProduct);
