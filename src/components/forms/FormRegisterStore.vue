@@ -111,7 +111,6 @@ const openStore = (id: number) => {
             entity.isOpen = !entity.isOpen;
           },
           () => swalSuccess("Erro ao abrir/fechar loja"));
-
       }
     });
 };
@@ -251,8 +250,9 @@ const editForm = async (id: number) => {
     numberAddress.value = data.number_address.toString();
     state.value = data.state;
     edit.value = false;
-  }, () => {
-
+  }, (erro: any) => {
+    console.error('Request failed:', erro);
+    Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
   });
   
   

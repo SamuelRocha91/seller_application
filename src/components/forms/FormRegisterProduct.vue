@@ -184,8 +184,11 @@ const editForm = async (id: number) => {
 const filterData = () => {
   const categoryFilter = category.value;
   const inputName = filterName.value;
-  const products = productsStore.productActive;
-  data.value = products.filter((product) => {
+  console.log(inputName);
+  console.log(categoryFilter);
+  const products = data.value;
+  console.log(products);
+  data.value = products.filter((product: any) => {
     if (inputName && categoryFilter && categoryFilter !== "Todos") {
       return product.category == categoryFilter
         && product.name.includes(inputName);
