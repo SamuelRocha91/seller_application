@@ -1,4 +1,5 @@
 import { BaseService } from './abstractService';
+import { type dataProductsRequest } from '@/types/productTypes';
 
 class ProductService extends BaseService{
   constructor() {
@@ -21,11 +22,20 @@ class ProductService extends BaseService{
   }
   
   async getProducts(
-    id: number,  
-    onSuccess: (data?: any) => void,
-    onFailure: (data?: any) => void
+    id: number,
+    onSuccess: (data: dataProductsRequest) => void,
+    onFailure: (data?: any) => void,
+    page: number,
+    searchQuery = '',
+    category = '',
   ) {
-    const response = await this.getEntity(`stores/${id}/products?locale=pt-BR`);
+    if (searchQuery == "Todos") {
+      searchQuery = '';
+    }
+    const response = await this
+      .getEntity(
+        `stores/${id}/products?page=${page}&name=${searchQuery}&category=${category}&locale=pt-BR`
+      );
     if (response.ok) {
       this.success(response, onSuccess);
     } else {
