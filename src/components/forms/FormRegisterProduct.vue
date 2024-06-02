@@ -10,6 +10,8 @@ import PageInfo from '../dashboard/PageInfo.vue';
 import { ProductService } from '@/api/productService';
 import { useStoreActive } from '@/store/storeActive';
 import { useProductsStore } from '@/store/productsStore';
+import { type dataProductsRequest } from '@/types/productTypes';
+import debounce from 'lodash.debounce';
 import Swal from 'sweetalert2';
 
 let image: File | string;
@@ -29,6 +31,11 @@ const price = ref('');
 const productService = new ProductService();
 const storeActive = useStoreActive().storeActive;
 const productsStore = useProductsStore();
+const current = ref(0);
+const next = ref(0);
+const previous = ref(0);
+const pages= ref(0);
+
 
 const handleClick = async () => {
   const validate = validateFields();
@@ -47,6 +54,11 @@ const handleClick = async () => {
   }
 };
 
+const handlePage = (page: number) => {
+  if (page > 0 && page <= pages.value) {
+    getlist(page);
+  }
+};
 const handleDelete = (id: number) => {
   swallWithDelete(() => deleteForm(id));
 };
@@ -114,15 +126,17 @@ const createProduct = (dataProduct: any) => {
     storeActive.id,
     dataProduct,
     (info: any) => {
-      data.value.push(
-        {
-          id: info.id,
-          name: info.title,
-          src: `${URL_HOST}${info.image_url}`,
-          price: info.price,
-          category: info.category
-        }
-      );
+      if (data.value.length < 4) {
+        data.value.push(
+          {
+            id: info.id,
+            name: info.title,
+            src: `${URL_HOST}${info.image_url}`,
+            price: info.price,
+            category: info.category
+          }
+        );
+      }
       editId.value = null;
       awaiting.value = false;
       menuPage.value = false;
@@ -181,23 +195,36 @@ const editForm = async (id: number) => {
     });
 };
 
-const filterData = () => {
-  const categoryFilter = category.value;
-  const inputName = filterName.value;
-  console.log(inputName);
-  console.log(categoryFilter);
-  const products = data.value;
-  console.log(products);
-  data.value = products.filter((product: any) => {
-    if (inputName && categoryFilter && categoryFilter !== "Todos") {
-      return product.category == categoryFilter
-        && product.name.includes(inputName);
-    } else if (categoryFilter !== "Todos") {
-      return  product.category == categoryFilter;
-    } else {
-      return product.name.toLowerCase().includes(inputName);
-    }
-  });
+const filteredStores = () => {
+  getlist(1, filterName.value.toLowerCase(), category.value.toLowerCase());
+};
+
+const debouncedSearch = debounce(filteredStores, 300);
+
+const getlist = (page: number, search = '', category = '') => {
+  productService.getProducts(
+    Number(storeActive.id),
+    (info: dataProductsRequest) => {
+      console.log(info);
+      data.value = info.result.products.map((product: any) => ({
+        ...product,
+        src: `${URL_HOST}${product.image_url}`,
+        name: product.title,
+        active: true,
+      }));
+      next.value = info.result.pagination.next || 1;
+      pages.value = info.result.pagination.pages;
+      current.value = info.result.pagination.current || 1;
+      previous.value = info.result.pagination.previous || 1;
+    },
+    (error: any) => {
+      console.error('Request failed:', error);
+      Swal.fire('Falha ao tentar carregar os produtos. Tente novamente');
+    },
+    page,
+    search,
+    category,
+  );
 };
 
 const startFormCreateProduct = () => {
@@ -221,6 +248,7 @@ onMounted(() => {
   if (storeActive.active) {
     productService.getProducts(storeActive.id, (info: any) => {
       if (info.result.products.length > 0) {
+        console.log(info);
         data.value = info.result.products.map((product: any) => ({
           ...product,
           name: product.title,
@@ -228,12 +256,17 @@ onMounted(() => {
           active: true,
           category: ''
         }));
+        next.value = info.result.pagination.next || 1;
+        pages.value = info.result.pagination.pages;
+        current.value = info.result.pagination.current || 1;
+        previous.value = info.result.pagination.previous || 1;
         menuPage.value = false;
+
       }
     }, (erro: any) => {
       console.error('Request failed:', erro);
       Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
-    });
+    }, 1);
   }
 });
 </script>
@@ -355,13 +388,13 @@ onMounted(() => {
                placeholder="Busque pelo nome do item" 
                type="search"
                v-model="filterName"
-               @input="filterData"
+               @input="debouncedSearch"
                >
             </label>
             <select 
             class="select-box-2" 
             v-model="category"
-             @change="filterData">
+             @change="debouncedSearch">
                 <option value="" disabled selected>
                   Filtrar por categoria
                 </option>
@@ -387,6 +420,26 @@ onMounted(() => {
             :data="data"
             />
           </div>
+      <nav>
+  <ul class="pagination justify-content-end">
+    <li class="page-item" :class="{ disabled: current === 1 }">
+      <a class="page-link" href="#" @click.prevent="handlePage(previous)">
+        Anterior
+      </a>
+    </li>
+    <li class="page-item" v-for="page in pages" :key="page" :class="{ active: current === page }">
+      <a class="page-link" href="#" @click.prevent="handlePage(page)">
+        {{ page }}
+      </a>
+    </li>
+    <li class="page-item" :class="{ disabled: current === pages }">
+      <a class="page-link" href="#" @click.prevent="handlePage(next)">
+        Próxima
+      </a>
+    </li>
+  </ul>
+</nav>
+
         </div>
    </template>
 </template>
