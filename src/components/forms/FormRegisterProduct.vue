@@ -14,6 +14,8 @@ import Swal from 'sweetalert2';
 
 let image: File | string;
 
+const URL_HOST = import.meta.env.VITE_BASE_URL;
+
 const awaiting = ref(false);
 const category = defineModel('category', { default: '' });
 const data = ref();
@@ -94,12 +96,6 @@ const deleteForm = (id: number) => {
   const productFiltered: any[] = data.value
     .filter((entity: any) => entity.id !== id);
   startFormCreateProduct();
-  const storage = productService.storage.get('stores') || '';
-  const store = JSON.parse(storage);
-  const index = store
-    .findIndex((field: any) => Number(field.id) === Number(storeActive.id));
-  store[index].products = productFiltered;
-  productService.storage.store('stores', JSON.stringify(store));
   productService.deleteProduct(storeActive.id, id,
     () => swalSuccess('Dados excluídos com sucesso'),
     () => swalSuccess('Erro no processamento da exclusão')
@@ -117,7 +113,16 @@ const createProduct = (dataProduct: any) => {
   productService.createProduct(
     storeActive.id,
     dataProduct,
-    () => {
+    (info: any) => {
+      data.value.push(
+        {
+          id: info.id,
+          name: info.title,
+          src: `${URL_HOST}${info.image_url}`,
+          price: info.price,
+          category: info.category
+        }
+      );
       editId.value = null;
       awaiting.value = false;
       menuPage.value = false;
@@ -137,17 +142,18 @@ const editProduct = (productData: any) => {
     storeActive.id,
     editId.value,
     productData,
-    imageUpdate, () => {
-      const establishment = productService.storage.get('stores') || '';
-      const parseEstablishment = JSON.parse(establishment);
-      const products = parseEstablishment
-        .find((fields: any) =>
-          Number(fields.id) == storeActive.id).products || '';
-      data.value = products;
-      productsStore.productActive = products;
-      swalSuccess('Dados atualizados com sucesso!');
+    imageUpdate, (info: any) => {
+      const index = data.value.findIndex((field: any) => field.id == info.id);
+      data.value[index] =  {
+        id: info.id,
+        name: info.title,
+        src: `${URL_HOST}${info.image_url}`,
+        price: info.price,
+        category: info.category
+      };
       awaiting.value = false;
       menuPage.value = false;
+      swalSuccess('Dados atualizados com sucesso!');
     }, () => {
       swalError('Erro ao salvar os dados',
         'Por favor, verifique os dados inseridos');
@@ -159,14 +165,20 @@ const editForm = async (id: number) => {
   editId.value = id;
   const productFiltered: any[] = data.value
     .filter((entity: any) => entity.id == id);
-
-  description.value = productFiltered[0].description;
-  category.value = productFiltered[0].category;
-  name.value = productFiltered[0].name;
-  imageUrl.value = productFiltered[0].src;
-  price.value = productFiltered[0].price;
-  image = productFiltered[0].src;
-  menuPage.value = true;
+  productService.getProductById(storeActive.id,
+    productFiltered[0].id, (info: any) => {
+      description.value = productFiltered[0].description;
+      category.value =
+        info.category.charAt(0).toUpperCase() + info.category.slice(1);
+      name.value = productFiltered[0].name;
+      imageUrl.value = productFiltered[0].src;
+      price.value = info.price;
+      image = productFiltered[0].src;
+      menuPage.value = true;
+    }, (erro: any) => {
+      console.error('Request failed:', erro);
+      Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
+    });
 };
 
 const filterData = () => {
@@ -199,17 +211,19 @@ const objectForm = () => ({
   name: name.value,
   price: parseFloat(price.value),
   description: description.value,
-  category: category.value,
+  category: category.value.toLowerCase(),
 });
 
 onMounted(() => {
   if (storeActive.active) {
     productService.getProducts(storeActive.id, (info: any) => {
-      if (info.data.length > 0) {
-        data.value = info.data.map((product: any) => ({
+      if (info.result.products.length > 0) {
+        data.value = info.result.products.map((product: any) => ({
           ...product,
-          src: product.image_url,
-          active: true
+          name: product.title,
+          src: `${URL_HOST}${product.image_url}`,
+          active: true,
+          category: ''
         }));
         menuPage.value = false;
       }
@@ -363,6 +377,7 @@ onMounted(() => {
             tableOne="Produto"
             tableTwo="Nome"
             tableThree="Preço"
+            tableFour="Produto disponível"
             :handleEdit="editForm"
             :handleClick="handleDelete"
             :handleStatus="handleStatus"
@@ -479,7 +494,7 @@ form {
 .filters-menu {
   margin-top: 5px;
   background-color: white;  
-  width: 90%;
+  width: 72%;
   height: 10vh;
   display: flex;
   justify-content: space-around;
@@ -490,7 +505,7 @@ form {
 .content-menu {
   background-color: white;
   padding: 20px;
-  width: 90%;
+  width: 72%;
   height: 100%;
 }
 .bg-input {
