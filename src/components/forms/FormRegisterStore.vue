@@ -18,7 +18,7 @@ const category = defineModel('category', { default: '' });
 const cep = ref('');
 const city = defineModel('city', {default: ''});
 const cnpj = ref('');
-const data = ref();
+const data = ref<any>([]);
 const description = defineModel('description', { default: '' });
 const edit = ref(false);
 const editId = ref();
@@ -34,7 +34,12 @@ const storeActive = useStoreActive();
 const cepMask = (value: string) => {
   if (!value) return '';
   value = value.replace(/\D/g, '');
-  value = value.replace(/(\d)(\d{3})$/, '$1-$2');
+  if (value.length > 5) {
+    value = value.replace(/(\d{5})(\d{1,3})/, '$1-$2');
+  } else {
+    value = value.replace(/(\d{1,5})/, '$1');
+  }
+  
   return value;
 };
 
@@ -148,24 +153,23 @@ const validateFields = () => {
 
 const createStore = (storeData: storeType) => {
   store.createStore(storeData,
-    (data: any) => {
+    (info: any) => {
       const stores = store.storage.get('stores') || '[]';
       const parse = JSON.parse(stores);
       parse.push({
-        id: data.id,
+        id: info.id,
         category: category.value || '',
-        src: `${URL_HOST}${data.avatar_url}` || '',
-        name: name.value,
-        active: false,
-        isOpen: data.is_open ? data.is_open : false,
+        src: `${URL_HOST}${info.avatar_url}` || '',
+        name: name.value, active: false,
+        isOpen: info.is_open ? info.is_open : false,
         colorTheme: navBarColor.value || ''
       });
-      data.value = parse;
-      swalSuccess('Dados salvos com sucesso!');
+      data.value = [...parse];
       updateGlobalState();
       edit.value = true;
       editId.value = null;
       awaiting.value = false;
+      swalSuccess('Dados salvos com sucesso!');
     },
     () => {
       swalError('Erro ao salvar os dados',
@@ -178,24 +182,28 @@ const createStore = (storeData: storeType) => {
 
 const editStore = (storeData: storeType) => {
   const imageUpdate = storeData.src === image ? null : image;
-  store.updateStore(editId.value, storeData, imageUpdate, (data: any) => {
+  store.updateStore(editId.value, storeData, imageUpdate, (info: any) => {
     const stores = store.storage.get('stores') || '[]';
     const parse = JSON.parse(stores);
     const index = parse
-      .findIndex((establish: any) => establish.id == data.id);
-    parse[index] = {
-      id: parse[index.id],
-      category: category.value || '',
-      src: `${URL_HOST}${data.avatar_url}` || '',
-      name: name.value,
-      active: parse[index.active],
-      isOpen: data.is_open ? data.is_open : false,
-      colorTheme: navBarColor.value || ''
-    };
-    data.value = parse;
-    swalSuccess('Dados atualizados com sucesso!');
-    edit.value = true;
-    awaiting.value = false;
+      .findIndex((establish: any) => establish.id == info.id);
+    if (index !== -1) {
+      parse[index] = {
+        id: info.id,
+        category: info.category || '',
+        src: `${URL_HOST}${info.avatar_url}` || '',
+        name: info.name, active: parse[index].active,
+        isOpen: info.is_open ? info.is_open : false,
+        colorTheme: info.color_theme || ''
+      };
+      store.storage.store('stores', JSON.stringify(parse));
+      data.value = [...parse];
+      swalSuccess('Dados atualizados com sucesso!');
+      awaiting.value = false;
+      edit.value = true;
+    } else {
+      throw new Error('Store not found in local storage');
+    }
   }, () => {
     swalError('Erro ao salvar os dados',
       'Por favor, verifique os dados inseridos');
@@ -226,13 +234,28 @@ const editForm = async (id: number) => {
   editId.value = id;
   const storeFiltered: storeType[] = data.value
     .filter((entity: storeType) => entity.id == id);
-  address.value = storeFiltered[0].address;
-  description.value = storeFiltered[0].description;
-  category.value = storeFiltered[0].category;
-  name.value = storeFiltered[0].name;
-  imageUrl.value = storeFiltered[0].src;
-  image = storeFiltered[0].src;
-  edit.value = false;
+  store.getStoreById(id, (data: any) => {
+    console.log(data);
+    address.value = data.address;
+    description.value = data.description;
+    category.value = data.category
+      .charAt(0).toUpperCase() + data.category.slice(1);
+    name.value = storeFiltered[0].name;
+    imageUrl.value = storeFiltered[0].src;
+    image = storeFiltered[0].src;
+    cnpj.value = data.cnpj;
+    navBarColor.value = data.color_theme;
+    city.value = data.city;
+    neighborhood.value = data.neighborhood;
+    cep.value = data.cep;
+    numberAddress.value = data.number_address.toString();
+    state.value = data.state;
+    edit.value = false;
+  }, () => {
+
+  });
+  
+  
 };
 
 const updateGlobalState = () => {
@@ -275,18 +298,21 @@ const startFormCreateStore = () => {
 };
 
 onMounted(() => {
+  const stores = store.storage.get('stores') || '[]';
+  const parse = JSON.parse(stores);
+  const activeStore = parse.find((object: any) => object.active);
   store.getStores((info: any) => {
     data.value = info.result.stores.map((stor: any) => ({
       id: stor.id,
       category: stor.category || '',
       src: `${URL_HOST}${stor.avatar_url}` || '',
       name: stor.name,
-      active: false,
+      active: activeStore && activeStore.id == stor.id ? true : false,
       isOpen: stor.is_open ? stor.is_open : false,
       colorTheme: stor.color_theme || ''
     }));
+    store.storage.store('stores', JSON.stringify(data.value));
     edit.value = true;
-    store.storage.store('store', JSON.stringify(data.value));
   },
   (erro: any) => {
     console.error('Request failed:', erro);
@@ -319,7 +345,7 @@ onMounted(() => {
               <img id="uploadedImage"
               :src="imageUrl" alt=""
                class="rounded-circle"
-               style="width: 100px; height: 100px;" />
+             />
           </div>
           <label for="imageInput" class="btn btn-primary">
             Alterar foto de perfil
@@ -377,6 +403,7 @@ onMounted(() => {
                 id="cep" class="form-control"
                 placeholder="Digite o CEP"
                 @input="handleCep"
+                maxlength="9"
                 :value="cep" />
               <div class="input-group-append">
                 <button
@@ -463,6 +490,7 @@ onMounted(() => {
         tableOne="Loja"
         tableTwo="Nome"
         tableThree="Categoria"
+        tableFour="Gerenciar loja"
         :handleEdit="editForm"
         :handleClick="handleDelete"
         :handleStatus="handleStatus"
@@ -506,5 +534,11 @@ onMounted(() => {
 
 .register-form-btn {
   cursor: pointer;
+}
+
+#uploadedImage {
+  width: 150%;
+  height: 150%;
+  object-fit: cover; 
 }
 </style>
