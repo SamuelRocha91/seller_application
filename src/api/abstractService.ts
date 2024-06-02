@@ -13,8 +13,9 @@ abstract class BaseService {
   getFallback(key: string): string | null {
     return this.storage.get(key);
   }
+
    
-  protected async getAll(path: string): Promise<Response> {
+  protected async getEntity(path: string): Promise<Response> {
     const token = this.getFallback('token');
     const response = await fetch(`${this.apiUrl}/${path}`,
       {
