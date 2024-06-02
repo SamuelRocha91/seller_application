@@ -10,9 +10,9 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
   tableOne: string
   tableTwo: string
   tableThree: string
+  tableFour: string
   handleActive?: (id: number) => void
 }>();
-console.log(data);
 </script>
 <template>
   <table>
@@ -25,7 +25,7 @@ console.log(data);
         <th scope="col">{{ tableTwo }}</th>
         <th scope="col">{{ tableThree }}</th>
         <th scope="col">Ações</th>
-        <th scope="col">Gerenciar loja</th>
+        <th scope="col">{{ tableFour }}</th>
         <th v-if="handleActive" scope="col">Estado da loja</th>
       </tr>
     </thead>
@@ -34,7 +34,7 @@ console.log(data);
         <td scope="row"  class="image-container"><img :src="entity.src" 
           alt="logo da loja" class="uploadedImage "></td>
         <td scope="row" >{{ entity.name }}</td>
-        <td scope="row" >{{ entity.category }}</td>
+        <td scope="row" >{{ entity.category || entity.price }}</td>
         <td scope="row" class="btns-crud">
           <button 
           class="btn-edit" 
