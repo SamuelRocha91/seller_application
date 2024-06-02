@@ -12,7 +12,8 @@ export const useStoreActive = defineStore('store', () => {
     src: '',
     category: '',
     name: '', 
-    isOpen: false
+    isOpen: false,
+    colorTheme: ''
   });
   function setStore(data: any) {
     storeActive.value.active = data.active;
@@ -23,8 +24,10 @@ export const useStoreActive = defineStore('store', () => {
     storeActive.value.price = data.price;
     storeActive.value.src = data.src;
     storeActive.value.category = data.category;
+    storeActive.value.isOpen = data.isOpen;
+    storeActive.value.colorTheme = data.colorTheme;
     storeActive.value.name = data.name;
-  }
+  };
 
   return { setStore, storeActive };
 });
