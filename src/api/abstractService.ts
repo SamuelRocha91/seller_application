@@ -3,6 +3,7 @@ import { createStorage, type SimpleStorage } from '../utils/storage';
 abstract class BaseService {
   protected apiUrl: string;
   storage: SimpleStorage;
+  static  X_API_KEY = import.meta.env.VITE_X_API_KEY;
 
   constructor() {
     this.apiUrl = import.meta.env.VITE_BASE_URL;
@@ -17,13 +18,16 @@ abstract class BaseService {
    
   protected async getEntity(path: string): Promise<Response> {
     const token = this.getFallback('token');
+    console.log(BaseService.X_API_KEY);
     const response = await fetch(`${this.apiUrl}/${path}`,
       {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'X-API-KEY': BaseService.X_API_KEY
+
         }
       }
     );
