@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@rails/actioncable": "^7.0.8-3",
+    "lodash.debounce": "^4.0.8",
     "pinia": "^2.1.7",
     "sweetalert2": "^11.10.8",
     "vue": "^3.4.21",
@@ -25,6 +26,7 @@
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/jsdom": "^21.1.6",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20.12.5",
     "@types/rails__actioncable": "^6.1.10",
     "@vitejs/plugin-vue": "^5.0.4",
