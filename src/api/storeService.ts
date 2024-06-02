@@ -6,11 +6,24 @@ class StoreService extends BaseService{
     super();
   }
 
+  async getStoreById(
+    id: number,
+    onSuccess: (data?: any) => void,
+    onFailure: (data: any) => void
+  ) {
+    const response = await this.getEntity(`stores/${id}`);
+    if (response.ok) {
+      this.success(response, onSuccess);
+    } else {
+      this.failure(response, onFailure);
+    }
+  }
+
   async getStores(
     onSuccess: (data?: any) => void,
     onFailure: (data: any) => void
   ) {
-    const response = await this.getAll('stores');
+    const response = await this.getEntity('stores');
     if (response.ok) {
       this.success(response, onSuccess);
     } else {
