@@ -3,10 +3,17 @@ import { RouterLink } from 'vue-router';
 import { useRoute } from 'vue-router';
 import { Auth } from '@/utils/auth';
 import { swalSuccess } from '@/utils/swal';
+import { computed } from 'vue';
+import { useStoreActive } from '@/store/storeActive';
 
+const color = useStoreActive();
 const route = useRoute();
 const auth = new Auth();
-
+const navStyle = computed(() => {
+  return {
+    backgroundColor: color.storeActive.colorTheme || 'white'
+  };
+});
 const logout = () => {
   auth.signOut(
     () => swalSuccess('Sessão encerrada com sucesso')
@@ -15,7 +22,7 @@ const logout = () => {
 
 </script>
 <template>
-  <nav class="nav-links">
+  <nav class="nav-links"  :style="navStyle">
     <ul>
       <li class="links-button">
         <img
