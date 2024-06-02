@@ -26,7 +26,7 @@ const logout = () => {
 
 const handleManager = () => {
   const storeActive = useStoreActive().storeActive;
-  if (storeActive.id) {
+  if (storeActive.active) {
     router.push('/dashboard/gerenciar-loja');
   } else {
     Swal.fire('É necessário ativar uma loja pra poder fazer o gerenciamento');
