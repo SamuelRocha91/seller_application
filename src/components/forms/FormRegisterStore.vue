@@ -7,6 +7,7 @@ import { type storeType } from '@/types/storeType';
 import { useStoreActive } from '@/store/storeActive';
 import Swal from 'sweetalert2';
 import TableList from '../dashboard/TableList.vue';
+import { watch } from 'vue';
 
 let image: File | string;
 
@@ -30,6 +31,12 @@ const numberAddress = ref('');
 const state = defineModel('state', {default: ''});
 const store = new StoreService();
 const storeActive = useStoreActive();
+
+watch(storeActive, () => {
+  const index = data.value
+    .findIndex((field: any) => field.id === storeActive.storeActive.id);
+  data.value[index].isOpen = storeActive.storeActive.isOpen;
+});
 
 const cepMask = (value: string) => {
   if (!value) return '';
@@ -491,7 +498,7 @@ onMounted(() => {
         tableOne="Loja"
         tableTwo="Nome"
         tableThree="Categoria"
-        tableFour="Gerenciar loja"
+        tableFour="Exibir loja"
         :handleEdit="editForm"
         :handleClick="handleDelete"
         :handleStatus="handleStatus"
