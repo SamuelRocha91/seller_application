@@ -109,6 +109,7 @@ const openStore = (id: number) => {
           () => {
             swalSuccess("abertura/fechamento feito com sucesso");
             entity.isOpen = !entity.isOpen;
+            updateGlobalState();
           },
           () => swalSuccess("Erro ao abrir/fechar loja"));
       }

@@ -56,7 +56,18 @@ onMounted(() => {
           </div>
           <h1>{{ store.storeActive.name }}</h1>
         </div>
-        <a @click.prevent="handleStatusStore">Fechar agora</a>
+        <a 
+        v-if="store.storeActive.isOpen"
+         @click.prevent="handleStatusStore"
+         class="open-close"
+         >Fechar agora
+        </a>
+         <a 
+        v-else
+        class="open-close"
+         @click.prevent="handleStatusStore"
+         >Abrir loja
+        </a>
       </div>
       <div v-if="store.storeActive.isOpen" class="store-status">
         <img src="../../assets/icons/Subtract.png" alt="ícone de abertura">
@@ -78,6 +89,9 @@ onMounted(() => {
   </header>
 </template>
 <style scoped>
+.open-close:hover {
+  cursor: pointer;
+}
   header {
     display: flex;
     justify-content: center;
