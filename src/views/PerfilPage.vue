@@ -6,22 +6,8 @@ import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import PageInfo from '@/components/dashboard/PageInfo.vue';
 import UserCircle from '../assets/icons/UserCircle.png';
 import FormRegisterStore from '@/components/forms/FormRegisterStore.vue';
-import FormRegisterOperation
-  from '@/components/forms/FormRegisterOperation.vue';
-import { useStoreActive } from '@/store/storeActive';
 
 const BignavBar = ref(true);
-const storeActive = useStoreActive();
-const selected = ref(true);
-
-const handleSelect = (id: number) => {
-
-  if (id == 2 && storeActive.storeActive.active) {
-    selected.value = false;
-  } else if (id == 1) {
-    selected.value = true;
-  }
-};
 
 const handleClick = () => {
   BignavBar.value = !BignavBar.value;
@@ -71,8 +57,7 @@ const handleClick = () => {
           description="Gerencie aqui as informações de sua loja
           e permissões de acesso"
         />
-        <FormRegisterStore v-show="selected"/>
-        <FormRegisterOperation v-show="!selected"/>
+        <FormRegisterStore />
       </main>
     </div>
   </div>
