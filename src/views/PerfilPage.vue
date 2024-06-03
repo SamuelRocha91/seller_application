@@ -68,17 +68,16 @@ const handleClick = () => {
   display: flex;
 }
 
-.header-nav {
-  width: 20vw;
+.header-nav, .header-nav-small {
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 100vh;
   display: flex;
+  z-index: 1000;
+  transition: width 0.3s ease;
 }
 
-.header-nav-small {
-  width: 6vw;
-  height: 100vh;
-  display: flex;
-}
 .nav-links {
   width: 100%;
   height: 100%;
@@ -136,6 +135,7 @@ const handleClick = () => {
   flex-direction: column;
   height: 100vh;
   width: 100%;
+  margin-left: 6vw;
 }
 
 .header-content {
