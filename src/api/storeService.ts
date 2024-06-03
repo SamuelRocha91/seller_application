@@ -118,7 +118,8 @@ class StoreService extends BaseService{
     formData.append('store[number_address]', dataStore.numberAddress);
     formData.append('store[neighborhood]', dataStore.neighborhood);
     formData.append('store[color_theme]', dataStore.colorTheme);
-    formData.append('store[is_open]',"false");
+    formData.append('store[is_open]', "false");
+    
     return formData;
   }
 }

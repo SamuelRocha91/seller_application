@@ -252,8 +252,8 @@ onMounted(() => {
         data.value = info.result.products.map((product: any) => ({
           ...product,
           name: product.title,
-          src: `${URL_HOST}${product.image_url}`,
-          active: true,
+          src: `${URL_HOST}${product.thumbnail_url}`,
+          active: product.product_available,
           category: ''
         }));
         next.value = info.result.pagination.next || 1;
