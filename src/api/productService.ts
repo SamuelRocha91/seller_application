@@ -85,6 +85,27 @@ class ProductService extends BaseService{
     }
   }
 
+  async updateProductAvailable(
+    id: number,
+    idProduct: number,
+    productAvailable: boolean,
+    onSuccess: (data?: any) => void,
+    onFailure: () => void,
+  ) {
+    const formData = new FormData();
+    formData.append('product[product_available]', productAvailable ? "true" : "false");
+    const response = await this.update(
+      idProduct,
+      `stores/${id}/products`,
+      formData
+    );
+    if (response.ok) {
+      this.success(response, onSuccess);
+    } else {
+      this.failure(response, onFailure);
+    }
+  }
+
   async deleteProduct(
     id: number,
     idProduct: number,
@@ -118,6 +139,7 @@ class ProductService extends BaseService{
     formData.append('product[category]', dataProduct.category);
     formData.append('product[price]', dataProduct.price);
     formData.append('product[description]', dataProduct.description);
+    formData.append('store[product_available]', "false");
     return formData;
   }
 
