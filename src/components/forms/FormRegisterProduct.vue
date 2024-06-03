@@ -10,8 +10,13 @@ import PageInfo from '../dashboard/PageInfo.vue';
 import { ProductService } from '@/api/productService';
 import { useStoreActive } from '@/store/storeActive';
 import { useProductsStore } from '@/store/productsStore';
+import { type dataProductsRequest } from '@/types/productTypes';
+import debounce from 'lodash.debounce';
+import Swal from 'sweetalert2';
 
 let image: File | string;
+
+const URL_HOST = import.meta.env.VITE_BASE_URL;
 
 const awaiting = ref(false);
 const category = defineModel('category', { default: '' });
@@ -26,6 +31,11 @@ const price = ref('');
 const productService = new ProductService();
 const storeActive = useStoreActive().storeActive;
 const productsStore = useProductsStore();
+const current = ref(0);
+const next = ref(0);
+const previous = ref(0);
+const pages= ref(0);
+
 
 const handleClick = async () => {
   const validate = validateFields();
@@ -44,6 +54,11 @@ const handleClick = async () => {
   }
 };
 
+const handlePage = (page: number) => {
+  if (page > 0 && page <= pages.value) {
+    getlist(page);
+  }
+};
 const handleDelete = (id: number) => {
   swallWithDelete(() => deleteForm(id));
 };
@@ -93,12 +108,6 @@ const deleteForm = (id: number) => {
   const productFiltered: any[] = data.value
     .filter((entity: any) => entity.id !== id);
   startFormCreateProduct();
-  const storage = productService.storage.get('stores') || '';
-  const store = JSON.parse(storage);
-  const index = store
-    .findIndex((field: any) => Number(field.id) === Number(storeActive.id));
-  store[index].products = productFiltered;
-  productService.storage.store('stores', JSON.stringify(store));
   productService.deleteProduct(storeActive.id, id,
     () => swalSuccess('Dados excluídos com sucesso'),
     () => swalSuccess('Erro no processamento da exclusão')
@@ -116,19 +125,21 @@ const createProduct = (dataProduct: any) => {
   productService.createProduct(
     storeActive.id,
     dataProduct,
-    () => {
-      const establishment: any = productService.storage.get('stores') || [];
-      if (establishment !== null) {
-        const parseEstablishment = JSON.parse(establishment);
-        const products = parseEstablishment
-          .find((fields: any) =>
-            Number(fields.id) == storeActive.id).products || '';
-        data.value = products;
-        productsStore.productActive = products;
-        editId.value = null;
-        awaiting.value = false;
-        menuPage.value = false;
+    (info: any) => {
+      if (data.value.length < 4) {
+        data.value.push(
+          {
+            id: info.id,
+            name: info.title,
+            src: `${URL_HOST}${info.image_url}`,
+            price: info.price,
+            category: info.category
+          }
+        );
       }
+      editId.value = null;
+      awaiting.value = false;
+      menuPage.value = false;
       swalSuccess('Dados salvos com sucesso!');
     },
     () => {
@@ -139,24 +150,24 @@ const createProduct = (dataProduct: any) => {
   );
 };
 
-
 const editProduct = (productData: any) => {
   const imageUpdate = productData.src === image ? null : image;
   productService.updateProduct(
     storeActive.id,
     editId.value,
     productData,
-    imageUpdate, () => {
-      const establishment = productService.storage.get('stores') || '';
-      const parseEstablishment = JSON.parse(establishment);
-      const products = parseEstablishment
-        .find((fields: any) =>
-          Number(fields.id) == storeActive.id).products || '';
-      data.value = products;
-      productsStore.productActive = products;
-      swalSuccess('Dados atualizados com sucesso!');
+    imageUpdate, (info: any) => {
+      const index = data.value.findIndex((field: any) => field.id == info.id);
+      data.value[index] =  {
+        id: info.id,
+        name: info.title,
+        src: `${URL_HOST}${info.image_url}`,
+        price: info.price,
+        category: info.category
+      };
       awaiting.value = false;
       menuPage.value = false;
+      swalSuccess('Dados atualizados com sucesso!');
     }, () => {
       swalError('Erro ao salvar os dados',
         'Por favor, verifique os dados inseridos');
@@ -168,30 +179,52 @@ const editForm = async (id: number) => {
   editId.value = id;
   const productFiltered: any[] = data.value
     .filter((entity: any) => entity.id == id);
-
-  description.value = productFiltered[0].description;
-  category.value = productFiltered[0].category;
-  name.value = productFiltered[0].name;
-  imageUrl.value = productFiltered[0].src;
-  price.value = productFiltered[0].price;
-  image = productFiltered[0].src;
-  menuPage.value = true;
+  productService.getProductById(storeActive.id,
+    productFiltered[0].id, (info: any) => {
+      description.value = productFiltered[0].description;
+      category.value =
+        info.category.charAt(0).toUpperCase() + info.category.slice(1);
+      name.value = productFiltered[0].name;
+      imageUrl.value = productFiltered[0].src;
+      price.value = info.price;
+      image = productFiltered[0].src;
+      menuPage.value = true;
+    }, (erro: any) => {
+      console.error('Request failed:', erro);
+      Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
+    });
 };
 
-const filterData = () => {
-  const categoryFilter = category.value;
-  const inputName = filterName.value;
-  const products = productsStore.productActive;
-  data.value = products.filter((product) => {
-    if (inputName && categoryFilter && categoryFilter !== "Todos") {
-      return product.category == categoryFilter
-        && product.name.includes(inputName);
-    } else if (categoryFilter !== "Todos") {
-      return  product.category == categoryFilter;
-    } else {
-      return product.name.toLowerCase().includes(inputName);
-    }
-  });
+const filteredStores = () => {
+  getlist(1, filterName.value.toLowerCase(), category.value.toLowerCase());
+};
+
+const debouncedSearch = debounce(filteredStores, 300);
+
+const getlist = (page: number, search = '', category = '') => {
+  productService.getProducts(
+    Number(storeActive.id),
+    (info: dataProductsRequest) => {
+      console.log(info);
+      data.value = info.result.products.map((product: any) => ({
+        ...product,
+        src: `${URL_HOST}${product.image_url}`,
+        name: product.title,
+        active: true,
+      }));
+      next.value = info.result.pagination.next || 1;
+      pages.value = info.result.pagination.pages;
+      current.value = info.result.pagination.current || 1;
+      previous.value = info.result.pagination.previous || 1;
+    },
+    (error: any) => {
+      console.error('Request failed:', error);
+      Swal.fire('Falha ao tentar carregar os produtos. Tente novamente');
+    },
+    page,
+    search,
+    category,
+  );
 };
 
 const startFormCreateProduct = () => {
@@ -208,32 +241,44 @@ const objectForm = () => ({
   name: name.value,
   price: parseFloat(price.value),
   description: description.value,
-  category: category.value,
+  category: category.value.toLowerCase(),
 });
 
 onMounted(() => {
-  const sellerData = productService.getFallback('stores') || '';
-  const seller = sellerData ? JSON.parse(sellerData) : null;
-  if (seller !== null) {
-    const sellerACtive = seller
-      .find((cart: any) => Number(cart.id) == Number(storeActive.id));
-    if (sellerACtive.products.length != 0) {
-      data.value = sellerACtive.products;
-      productsStore.productActive = sellerACtive.products;
-      menuPage.value = false;
-    }
+  if (storeActive.active) {
+    productService.getProducts(storeActive.id, (info: any) => {
+      if (info.result.products.length > 0) {
+        console.log(info);
+        data.value = info.result.products.map((product: any) => ({
+          ...product,
+          name: product.title,
+          src: `${URL_HOST}${product.image_url}`,
+          active: true,
+          category: ''
+        }));
+        next.value = info.result.pagination.next || 1;
+        pages.value = info.result.pagination.pages;
+        current.value = info.result.pagination.current || 1;
+        previous.value = info.result.pagination.previous || 1;
+        menuPage.value = false;
+
+      }
+    }, (erro: any) => {
+      console.error('Request failed:', erro);
+      Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
+    }, 1);
   }
 });
 </script>
 <template>
   <template v-if="menuPage">
     <div class="main-content" >
-        <PageInfo
-              :src="ShoppingCart"
-              alt="ícone de carrinho"
-              title="Dados do produto"
-              description="Adicione um novo produto"
-            />
+      <PageInfo
+        :src="ShoppingCart"
+        alt="ícone de carrinho"
+        title="Dados do produto"
+        description="Adicione um novo produto"
+      />
       <div class="form-container">
         <form
         id="uploadForm"
@@ -343,13 +388,13 @@ onMounted(() => {
                placeholder="Busque pelo nome do item" 
                type="search"
                v-model="filterName"
-               @input="filterData"
+               @input="debouncedSearch"
                >
             </label>
             <select 
             class="select-box-2" 
             v-model="category"
-             @change="filterData">
+             @change="debouncedSearch">
                 <option value="" disabled selected>
                   Filtrar por categoria
                 </option>
@@ -368,12 +413,33 @@ onMounted(() => {
             tableOne="Produto"
             tableTwo="Nome"
             tableThree="Preço"
+            tableFour="Produto disponível"
             :handleEdit="editForm"
             :handleClick="handleDelete"
             :handleStatus="handleStatus"
             :data="data"
             />
           </div>
+      <nav>
+  <ul class="pagination justify-content-end">
+    <li class="page-item" :class="{ disabled: current === 1 }">
+      <a class="page-link" href="#" @click.prevent="handlePage(previous)">
+        Anterior
+      </a>
+    </li>
+    <li class="page-item" v-for="page in pages" :key="page" :class="{ active: current === page }">
+      <a class="page-link" href="#" @click.prevent="handlePage(page)">
+        {{ page }}
+      </a>
+    </li>
+    <li class="page-item" :class="{ disabled: current === pages }">
+      <a class="page-link" href="#" @click.prevent="handlePage(next)">
+        Próxima
+      </a>
+    </li>
+  </ul>
+</nav>
+
         </div>
    </template>
 </template>
@@ -448,8 +514,8 @@ form {
   height: fit-content;
   align-items: center;
   padding: 20px;
-  width: 90%;
-  height: 62vh;
+  width: 72%;
+  height: 67vh;
 }
 .image-container {
   width: 100px;
@@ -484,7 +550,7 @@ form {
 .filters-menu {
   margin-top: 5px;
   background-color: white;  
-  width: 90%;
+  width: 72%;
   height: 10vh;
   display: flex;
   justify-content: space-around;
@@ -495,7 +561,7 @@ form {
 .content-menu {
   background-color: white;
   padding: 20px;
-  width: 90%;
+  width: 72%;
   height: 100%;
 }
 .bg-input {
@@ -560,9 +626,9 @@ form {
   height: fit-content;
   justify-content: center;
 }
-textarea {
+.text-description textarea {
   width: 90%;
-  height: 100%;
+  height: 200px;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #fff;

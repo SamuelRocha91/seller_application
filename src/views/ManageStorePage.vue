@@ -57,18 +57,17 @@ const handleClick = () => {
 <style scoped>
 .perfil-frame {
   display: flex;
+  height: 100%;
 }
 
-.header-nav {
-  width: 20vw;
+.header-nav, .header-nav-small {
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 100vh;
   display: flex;
-}
-
-.header-nav-small {
-  width: 6vw;
-  height: 100vh;
-  display: flex;
+  z-index: 1000;
+  transition: width 0.3s ease;
 }
 .nav-links {
   width: 100%;
@@ -127,6 +126,7 @@ const handleClick = () => {
   flex-direction: column;
   height: 100vh;
   width: 100%;
+  margin-left: 6vw;
 }
 
 .header-content {
@@ -138,7 +138,7 @@ const handleClick = () => {
 main {
   background-color: gray;
   display: flex;
-  height: 83.4vh;
+  height: 100%;
   width: 100%;
   align-items: center;
   gap: 8px;

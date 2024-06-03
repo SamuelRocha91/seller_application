@@ -1,28 +1,64 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { categories, prices } from '@/utils/data';
+import { categories } from '@/utils/data';
 import { swalError, swalSuccess, swallWithDelete } from '@/utils/swal';
 import { StoreService } from '../../api/storeService';
-import { phoneMask } from '@/utils/formUtils';
-import TableList from '../dashboard/TableList.vue';
 import { type storeType } from '@/types/storeType';
 import { useStoreActive } from '@/store/storeActive';
+import Swal from 'sweetalert2';
+import TableList from '../dashboard/TableList.vue';
+import { watch } from 'vue';
 
 let image: File | string;
+
+const URL_HOST = import.meta.env.VITE_BASE_URL;
 
 const address = defineModel('address', { default: '' });
 const awaiting = ref(false);
 const category = defineModel('category', { default: '' });
-const data = ref();
+const cep = ref('');
+const city = defineModel('city', {default: ''});
+const cnpj = ref('');
+const data = ref<any>([]);
 const description = defineModel('description', { default: '' });
 const edit = ref(false);
 const editId = ref();
 const imageUrl = ref();
 const name = defineModel('name', { default: '' });
-const minimumPrice = defineModel('minimumPrice', { default: '' });
-const phoneNumber = ref('');
+const navBarColor = defineModel('navColor', { default: '' });
+const neighborhood = defineModel('neighborhood', { default: '' });
+const numberAddress = ref('');
+const state = defineModel('state', {default: ''});
 const store = new StoreService();
 const storeActive = useStoreActive();
+
+watch(storeActive, () => {
+  const index = data.value
+    .findIndex((field: any) => field.id === storeActive.storeActive.id);
+  data.value[index].isOpen = storeActive.storeActive.isOpen;
+});
+
+const cepMask = (value: string) => {
+  if (!value) return '';
+  value = value.replace(/\D/g, '');
+  if (value.length > 5) {
+    value = value.replace(/(\d{5})(\d{1,3})/, '$1-$2');
+  } else {
+    value = value.replace(/(\d{1,5})/, '$1');
+  }
+  
+  return value;
+};
+
+const cnpjMask = (value: string) => {
+  if (!value) return '';
+  value = value.replace(/\D/g, '');
+  value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+  value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+  value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+  value = value.replace(/(\d{4})(\d)/, '$1-$2');
+  return value;
+};
 
 const handleClick = async () => {
   const validate = validateFields();
@@ -31,6 +67,7 @@ const handleClick = async () => {
       'Por favor, verifique os dados inseridos');
     return;
   }
+
   const storeData = objectForm();
   if (editId.value) {
     awaiting.value = true;
@@ -39,6 +76,22 @@ const handleClick = async () => {
     awaiting.value = true;
     createStore(storeData);
   };
+};
+
+const handleCep = (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  cep.value = cepMask(value || '');
+};
+
+const handleCnpj = (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  cnpj.value = cnpjMask(value || '');
+};
+
+const handleNumberAddress = (event: Event) => {
+  let value = (event.target as HTMLInputElement).value;
+  value = value.replace(/\D/g, '');
+  numberAddress.value = value;
 };
 
 const handleDelete = (id: number) => {
@@ -54,16 +107,27 @@ const handleImageChange = (event: Event) => {
   }
 };
 
-const handlePhone = (event: Event) => {
-  const value = (event.target as HTMLInputElement).value;
-  phoneNumber.value = phoneMask(value || '');
+const openStore = (id: number) => {
+  data.value
+    .map((entity: storeType) => {
+      if (entity.id == id) {
+        const newValue = !entity.isOpen;
+        store.openStore(id, newValue,
+          () => {
+            swalSuccess("abertura/fechamento feito com sucesso");
+            entity.isOpen = !entity.isOpen;
+            updateGlobalState();
+          },
+          () => swalSuccess("Erro ao abrir/fechar loja"));
+      }
+    });
 };
 
 const handleStatus = (id: number) => {
   data.value
     .map((entity: storeType) => {
       if (entity.id == id) {
-        entity.active = !entity.active ;
+        entity.active = !entity.active;
       } else {
         entity.active = false;
       }
@@ -72,11 +136,22 @@ const handleStatus = (id: number) => {
   store.storage.store('stores', JSON.stringify(data.value));
 };
 
+const searchCep = () => {
+  const formatedCep = cep.value.replace('-', '');
+  fetch(`https://viacep.com.br/ws/${formatedCep}/json/`)
+    .then((data) => data.json().then((json) => {
+      address.value = json.logradouro;
+      state.value = json.uf;
+      city.value = json.localidade;
+      neighborhood.value = json.bairro;
+    })).catch(() => Swal.fire("Cep inválido"));
+};
+
 const validateFields = () => {
-  const fields = [name, address, description, category, minimumPrice];
+  const fields = [name, address, description, category];
   if (fields.some((field) => field.value.length < 3)) {
     return false;
-  } else if (phoneNumber.value.length < 11) {
+  } else if (cnpj.value.length < 18) {
     return false;
   } else {
     return true;
@@ -85,14 +160,23 @@ const validateFields = () => {
 
 const createStore = (storeData: storeType) => {
   store.createStore(storeData,
-    () => {
-      const stores = store.storage.get('stores');
-      data.value = JSON.parse(stores || '');
-      swalSuccess('Dados salvos com sucesso!');
+    (info: any) => {
+      const stores = store.storage.get('stores') || '[]';
+      const parse = JSON.parse(stores);
+      parse.push({
+        id: info.id,
+        category: category.value || '',
+        src: `${URL_HOST}${info.avatar_url}` || '',
+        name: name.value, active: false,
+        isOpen: info.is_open ? info.is_open : false,
+        colorTheme: navBarColor.value || ''
+      });
+      data.value = [...parse];
       updateGlobalState();
       edit.value = true;
       editId.value = null;
       awaiting.value = false;
+      swalSuccess('Dados salvos com sucesso!');
     },
     () => {
       swalError('Erro ao salvar os dados',
@@ -105,12 +189,28 @@ const createStore = (storeData: storeType) => {
 
 const editStore = (storeData: storeType) => {
   const imageUpdate = storeData.src === image ? null : image;
-  store.updateStore(editId.value, storeData, imageUpdate, () => {
-    const stores = store.storage.get('stores');
-    data.value = JSON.parse(stores || '');
-    swalSuccess('Dados atualizados com sucesso!');
-    edit.value = true;
-    awaiting.value = false;
+  store.updateStore(editId.value, storeData, imageUpdate, (info: any) => {
+    const stores = store.storage.get('stores') || '[]';
+    const parse = JSON.parse(stores);
+    const index = parse
+      .findIndex((establish: any) => establish.id == info.id);
+    if (index !== -1) {
+      parse[index] = {
+        id: info.id,
+        category: info.category || '',
+        src: `${URL_HOST}${info.avatar_url}` || '',
+        name: info.name, active: parse[index].active,
+        isOpen: info.is_open ? info.is_open : false,
+        colorTheme: info.color_theme || ''
+      };
+      store.storage.store('stores', JSON.stringify(parse));
+      data.value = [...parse];
+      swalSuccess('Dados atualizados com sucesso!');
+      awaiting.value = false;
+      edit.value = true;
+    } else {
+      throw new Error('Store not found in local storage');
+    }
   }, () => {
     swalError('Erro ao salvar os dados',
       'Por favor, verifique os dados inseridos');
@@ -121,17 +221,19 @@ const editStore = (storeData: storeType) => {
 const deleteForm = (id: number) => {
   const storeFiltered: storeType[] = data.value
     .filter((entity: storeType) => entity.id !== id);
-  if (storeFiltered.length === 0) {
-    store.storage.remove('stores');
-    startFormCreateStore();
-  } else {
-    store.storage.store('stores', JSON.stringify(storeFiltered));
-  }
   store.deleteStore(id,
-    () => swalSuccess('Dados excluídos com sucesso'),
+    () => {
+      data.value = storeFiltered;   
+      swalSuccess('Dados excluídos com sucesso');
+      if (storeFiltered.length === 0) {
+        store.storage.remove('stores');
+        startFormCreateStore();
+      } else {
+        store.storage.store('stores', JSON.stringify(storeFiltered));
+      }
+    },
     () => swalSuccess('Erro no processamento da exclusão')
   );
-  data.value = storeFiltered;
   updateGlobalState();
 };
 
@@ -139,15 +241,29 @@ const editForm = async (id: number) => {
   editId.value = id;
   const storeFiltered: storeType[] = data.value
     .filter((entity: storeType) => entity.id == id);
-  address.value = storeFiltered[0].address;
-  description.value = storeFiltered[0].description;
-  category.value = storeFiltered[0].category;
-  name.value = storeFiltered[0].name;
-  minimumPrice.value = storeFiltered[0].price;
-  phoneNumber.value = storeFiltered[0].phoneNumber;
-  imageUrl.value = storeFiltered[0].src;
-  image = storeFiltered[0].src;
-  edit.value = false;
+  store.getStoreById(id, (data: any) => {
+    console.log(data);
+    address.value = data.address;
+    description.value = data.description;
+    category.value = data.category
+      .charAt(0).toUpperCase() + data.category.slice(1);
+    name.value = storeFiltered[0].name;
+    imageUrl.value = storeFiltered[0].src;
+    image = storeFiltered[0].src;
+    cnpj.value = data.cnpj;
+    navBarColor.value = data.color_theme;
+    city.value = data.city;
+    neighborhood.value = data.neighborhood;
+    cep.value = data.cep;
+    numberAddress.value = data.number_address.toString();
+    state.value = data.state;
+    edit.value = false;
+  }, (erro: any) => {
+    console.error('Request failed:', erro);
+    Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
+  });
+  
+  
 };
 
 const updateGlobalState = () => {
@@ -161,11 +277,16 @@ const updateGlobalState = () => {
 const objectForm = () => ({
   src: image,
   name: name.value,
-  price: minimumPrice.value,
   description: description.value,
   address: address.value,
-  category: category.value,
-  phoneNumber: phoneNumber.value
+  category: category.value.toLowerCase(),
+  neighborhood: neighborhood.value,
+  numberAddress: numberAddress.value,
+  state: state.value,
+  city: city.value,
+  cnpj: cnpj.value,
+  cep: cep.value,
+  colorTheme: navBarColor.value
 });
 
 const startFormCreateStore = () => {
@@ -173,222 +294,232 @@ const startFormCreateStore = () => {
   description.value = '';
   category.value = '';
   name.value = '';
-  minimumPrice.value = '';
-  phoneNumber.value = '';
   imageUrl.value = '';
+  cep.value = '';
+  numberAddress.value = '';
+  state.value = '';
+  city.value = '';
+  cnpj.value = '';
+  neighborhood.value = '';
   edit.value = false;
   editId.value = null;
 };
 
 onMounted(() => {
-  const sellerData = store.getFallback('stores') || '';
-  const seller = sellerData ? JSON.parse(sellerData) : null;
-  if (seller !== null) {
-    data.value = seller;
+  const stores = store.storage.get('stores') || '[]';
+  const parse = JSON.parse(stores);
+  const activeStore = parse.find((object: any) => object.active);
+  store.getStores((info: any) => {
+    data.value = info.result.stores.map((stor: any) => ({
+      id: stor.id,
+      category: stor.category || '',
+      src: `${URL_HOST}${stor.avatar_url}` || '',
+      name: stor.name,
+      active: activeStore && activeStore.id == stor.id ? true : false,
+      isOpen: stor.is_open ? stor.is_open : false,
+      colorTheme: stor.color_theme || ''
+    }));
+    store.storage.store('stores', JSON.stringify(data.value));
     edit.value = true;
-  }
+  },
+  (erro: any) => {
+    console.error('Request failed:', erro);
+    Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
+  });
+
 });
 </script>
 
 <template>
   <template v-if="!edit">
-    <div class="form-container">
+    <div
+    class="container mt-4 p-4 bg-white w-90"
+    style="max-height: 100vh;
+     overflow-y: auto;">
       <form
-      id="uploadForm"
-      action="/upload"
-      method="post"
-      enctype="multipart/form-data"
-      >
-        <div class="form-init">
-          <div class="image-form">
-            <div class="image-container">
-              <img id="uploadedImage" :src="imageUrl" alt="" />
-            </div>
-            <label
-            for="imageInput"
-            class="custom-file-upload"
-            >
+        id="uploadForm"
+        action="/upload"
+        method="post"
+        enctype="multipart/form-data">
+        <div
+          class=
+          "form-group d-flex flex-column
+          text-center justify-content-center align-items-center"
+          >
+          <div
+            class="mb-3 bg-secondary p-3
+            rounded-circle d-flex justify-content-center align-items-center"
+            style="width: 150px; height: 150px;">
+              <img id="uploadedImage"
+              :src="imageUrl" alt=""
+               class="rounded-circle"
+             />
+          </div>
+          <label for="imageInput" class="btn btn-primary">
             Alterar foto de perfil
           </label>
+          <input
+            type="file"
+            name="image"
+            id="imageInput"
+            @change="handleImageChange"
+            class="d-none" />
+        </div>
+        <div class="form-group">
+          <label for="storeName">Nome da loja</label>
+          <input
+          type="text"
+           id="storeName"
+           class="form-control"
+            placeholder="O nome precisa ter no mínimo 3 caracteres"
+            v-model="name" />
+        </div>
+        <div class="form-group">
+          <label for="cnpj">CNPJ</label>
+          <input
+            type="text"
+            id="cnpj"
+            class="form-control"
+            maxlength="18"
+            placeholder="XX.XXX.XXX/0001-XX"
+            @input="handleCnpj"
+            v-model="cnpj" />
+        </div>
+        <div class="form-group d-flex align-items-center align-center">
+             <label class="mt-2" for="navbar-color">
+              Escolha uma cor para a Navbar:</label>
+             <input type="color" 
+             id="navbar-color" 
+             name="navbar-color" 
+             v-model="navBarColor">
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="category">Categoria</label>
+            <select id="category" class="form-control" v-model="category">
+              <option
+                v-for="(categoria, index)
+                 in categories" :key="index"
+                 :value="categoria">{{ categoria }}</option>
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="cep">CEP</label>
+            <div class="input-group">
+              <input
+                type="text"
+                id="cep" class="form-control"
+                placeholder="Digite o CEP"
+                @input="handleCep"
+                maxlength="9"
+                :value="cep" />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary"
+                  @click.prevent="searchCep">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="bairro">Estado</label>
             <input
-              type="file"
-              name="image"
-              id="imageInput"
-              @change="handleImageChange"
-              style="display: none"
+            type="text"
+             id="bairro"
+            class="form-control"
+            :value="state"
+            readonly
             />
           </div>
-          <div class="inputs-init">
-            <label>
-              <p>Nome da loja</p>
-              <input
-                placeholder="O nome precisa ter no mínimo 3 caracteres"
-                class="bg-input"
-                type="text"
-                v-model="name"
-              />
-            </label>
-            <label for="">
-              <p>Endereço</p>
-              <input
-                placeholder="Insira um endereço válido"
-                class="bg-input"
-                type="text"
-                v-model="address"
-              />
-            </label>
+          <div class="form-group col-md-6">
+            <label for="rua">Cidade</label>
+            <input
+             type="text"
+             id="rua"
+             class="form-control"
+             v-model="city"
+              readonly />
           </div>
         </div>
-        <div class="section-intermediate">
-          <div class="intermediate-content">
-            <div>
-              <p>Categoria</p>
-              <select class="select-box" v-model="category">
-                <option
-                v-for="(categoria, index) in categories"
-                :key="index"
-                :value="categoria"
-                >
-                  {{ categoria }}
-                </option>
-              </select>
-            </div>
-            <div>
-              <p>Pedido Mínimo</p>
-              <select class="select-box" v-model="minimumPrice">
-                <option
-                  v-for="(price, index) in prices"
-                  :key="index"
-                  :value="price"
-                  class="content-option"
-                >
-                  {{ price }}
-                </option>
-              </select>
-            </div>
-            <div class="input-phone">
-              <p>Telefone</p>
-              <input
-                @input="handlePhone"
-                :value="phoneNumber"
-                class="bg-input"
-                type="text"
-                maxlength="15"
-                placeholder="xx xxxxx-xxxx"
-              />
-            </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="bairro">Bairro</label>
+            <input
+             type="text"
+             id="bairro"
+             class="form-control"
+            v-model="neighborhood"
+             readonly
+            />
+          </div>
+  
+          <div class="form-group col-md-6">
+            <label for="numero">Número</label>
+            <input
+            type="text"
+            id="numero"
+            class="form-control"
+            @input="handleNumberAddress"
+            :value="numberAddress"  />
+          </div>
+  
+          <div class="form-group w-100">
+            <label for="endereço">Endereço</label>
+            <input
+             type="text"
+             id="endereço" class="form-control"
+             v-model="address"
+             readonly />
           </div>
         </div>
-        <div class="section-finish">
-          <div class="text-description">
-            <p>Descrição</p>
-            <textarea
-              placeholder="Máximo: 50 caracteres"
-              cols="30"
-              rows="10"
-              v-model="description"
-              maxlength="50"
-            ></textarea>
-          </div>
-          <div class="btn-div">
-            <button
-            :disabled="awaiting"
-            type="submit"
-            @click.prevent="handleClick"
-            class="save-form-btn"
-            >
-            Salvar
-          </button>
-          </div>
+        <div class="form-group">
+          <label for="description">Descrição</label>
+          <textarea
+            id="description"
+            class="form-control"
+            rows="3" placeholder="Máximo: 50 caracteres"
+            v-model="description" maxlength="50"></textarea>
         </div>
+        <button
+          type="submit" class="btn btn-success btn-block"
+          @click.prevent="handleClick" :disabled="awaiting">
+          Salvar
+        </button>
       </form>
     </div>
   </template>
-  <template v-else>
-    <div class="form-container">
-      <TableList
-      title="Lojas cadastradas"
-      tableOne="Loja"
-      tableTwo="Nome"
-      tableThree="Pedido Mínimo"
-      :handleEdit="editForm"
-      :handleClick="handleDelete"
-      :handleStatus="handleStatus"
-      :data="data"
-      />
-      <button 
-      @click.prevent="startFormCreateStore" 
-      class="register-form-btn"
-      >
-      Cadastrar nova loja
-      </button>
-    </div>
+  <template v-else >
+      <div class="form-container">
+        <TableList
+        title="Lojas cadastradas"
+        tableOne="Loja"
+        tableTwo="Nome"
+        tableThree="Categoria"
+        tableFour="Exibir loja"
+        :handleEdit="editForm"
+        :handleClick="handleDelete"
+        :handleStatus="handleStatus"
+        :handleActive="openStore"
+        :data="data"
+        />
+        <button
+        @click.prevent="startFormCreateStore"
+        class="register-form-btn"
+        >
+        Cadastrar nova loja
+        </button>
+      </div>
   </template>
 </template>
 
 <style scoped>
-.filters-menu label {
-  width: 50%;
+.bg-secondary {
+  background-color: #ccc !important;
 }
-.bg-input-2 {
-  border: 1px solid #dedede;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  padding: 13px;
-  width: 100%;
-  height: 37px;
-}
-.select-box {
-  width: 200px;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-}
-.select-box-2 {
-  width: 400px;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  height: 41px;
-}
-.main-content{
-  background-color: gray;
-  display: flex;
-  height: 100%;
-  width: 100%;
-  align-items: center;
-  gap: 8px;
-  flex-direction: column;
-}
-.custom-file-upload {
-  cursor: pointer;
-  color: #0000ff;
-  text-decoration: underline;
-  padding: 10px 20px;
-  border-radius: 5px;
-}
-form {
-  width: 100%;
-  padding: 10px;
-}
-.form-init {
-  background-color: white;
-  display: flex;
-  align-items: center;
-  height: fit-content;
-  padding: 10px;
-  width: 100%;
-  gap: 10px;
-  border: 1px solid rgb(189, 187, 187);
-}
+
 .form-container {
   background-color: white;
   display: flex;
@@ -396,206 +527,10 @@ form {
   height: fit-content;
   align-items: center;
   padding: 20px;
-  width: 90%;
+  width: 72%;
   height: 62vh;
 }
-.image-container {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: #ccc;
-}
-#uploadedImage {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-}
-.form-init {
-  display: flex;
-}
-.save-form-btn {
-  color: #ffffff;
-  background-color: #14bb1d;
-  font-size: 16px;
-  width: 70px;
-  height: 50px;
-  border-radius: 5px;
-}
-.label-intermediate {
-  margin-left: 4%;
-  width: 90%;
-}
-.save-form-btn:hover {
-  cursor: pointer;
-}
-.filters-menu {
-  margin-top: 5px;
-  background-color: white;  
-  width: 90%;
-  height: 10vh;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 5px;
-  border-radius: 5px;
-}
-.content-menu {
-  background-color: white;
-  padding: 20px;
-  width: 90%;
-  height: 100%;
-}
-.bg-input {
-  border: 1px solid #dedede;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  padding: 13px;
-  width: 100%;
-  height: 37px;
-}
-.category {
-  width: 99%;
-}
-.inputs-init {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.intermediate {
-  width: 100%;
-}
-.image-form {
-  display: flex;
-  width: 30%;
-  flex-direction: column;
-  justify-content: center;  
-  align-items: center;
-}
-.section-intermediate {
-  display: flex;
-  padding: 10px;
-  width: 100%;
-  padding: 10px;
-  justify-content: space-between;
-  border-right: 1px solid rgb(189, 187, 187);
-  border-left: 1px solid rgb(189, 187, 187);
-  align-items: center;
-}
-.intermediate-content {
-  display: flex;
-  width: 100%;
-  gap: 40px;
-  padding: 10px;
-  justify-content: space-between;
-}
-.section-finish {
-  width: 100%;
-  height: 32.0vh;
-  display: flex;
-  justify-content: center;
-  border: 1px solid #ccc;
-}
-.text-description {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 20px;
-  width: 87%;
-  height: fit-content;
-  justify-content: center;
-}
-textarea {
-  width: 90%;
-  height: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  padding: 15px;
-}
-.btn-div {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: 100%;
-}
-.input-phone {
-  width: 30%;
-}
-h2 {
-  font-weight: bold;
-  font-size: 20px;
-}
-.inputs-two {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-}
-.input-simulate {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  outline: none;
-  padding: 13px;
-  width: 100%;
-  height: 37px;
-}
-.section-finish-two {
-  width: 100%;
-  height: 35vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-content: space-between;
-  padding: 30px;
-  margin-left: 21px;
-  gap: 10px;
-}
-.section-finish-two .text-description {
-  height: 100%;
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 10px;
-}
-.text-description .input-simulate {
-  height: 80%;
-}
-.address {
-  width: 100%;
-}
-.address .input-simulate {
-  width: 91%;
-}
-.name-store {
-  width: 100%;
-}
-.name-store .input-simulate {
-  width: 91%;
-}
-.inputs-two .name {
-  width: 50%;
-}
-.edit-form-btn {
-  color: #ffffff;
-  background-color: #3f07c0;
-  font-size: 16px;
-  width: 70px;
-  height: 50px;
-  border-radius: 5px;
-}
-.delete-form-btn {
-  color: #ffffff;
-  background-color: #ff1818;
-  font-size: 16px;
-  width: 70px;
-  height: 50px;
-  border-radius: 5px;
-}
+
 .register-form-btn {
   color: #ffffff;
   background-color: #ff1818;
@@ -604,14 +539,14 @@ h2 {
   height: 50px;
   border-radius: 5px;
 }
-.edit-form-btn:hover,
-.delete-form-btn:hover {
+
+.register-form-btn {
   cursor: pointer;
 }
-.btn-div-two {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
 
+#uploadedImage {
+  width: 150%;
+  height: 150%;
+  object-fit: cover; 
+}
 </style>

@@ -45,10 +45,20 @@ defineProps<{
   transition: 3s;
 }
 
+.info-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  margin-top: 15px;
+}
+
 .info-page {
   margin-top: 5px;
   background-color: white;  
-  width: 90%;
+  width: 72%;
   height: fit-content;
   display: flex;
   justify-content: flex-start;
@@ -59,20 +69,19 @@ defineProps<{
 }
 
 .info-image {
-   margin-top: 5px;
-  background-color: white;  
+  margin-top: 5px;
   width: 85%;
-  height: fit-content;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  align-content: center;
   gap: 5px;
   padding: 5px;
   border-radius: 5px;
 }
 h1 {
   font-weight: bold;
-  font-size: x-large;
+  font-size: 20px;
 }
 
 </style>

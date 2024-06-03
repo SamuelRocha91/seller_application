@@ -3,15 +3,33 @@ import { onMounted } from 'vue';
 import { Auth } from '../../utils/auth';
 import { useStoreActive } from '@/store/storeActive';
 import { StoreService } from '@/api/storeService';
+import Swal from 'sweetalert2';
 
 const auth = new Auth();
 const user = auth.currentUser();
 const store = useStoreActive();
 const storeService = new StoreService();
 
+const handleStatusStore = () => {
+  if (store.storeActive.isOpen) {
+    updateStore(store.storeActive.id, false);
+  } else {
+    updateStore(store.storeActive.id, true);
+  }
+};
+
+const updateStore = (id: number, value: boolean) => {
+  storeService.openStore(id, value,
+    () => {
+      Swal.fire("abertura/fechamento feito com sucesso");
+      store.storeActive.isOpen = value;
+    },
+    () => Swal.fire("Erro ao abrir/fechar loja"));
+};
+
 onMounted(() => {
-  const storage = storeService.getFallback('stores') || '';
-  const storageParse = storage !== '' ? JSON.parse(storage) : null;
+  const storage = storeService.getFallback('stores') || '[]';
+  const storageParse = JSON.parse(storage);
   if (storageParse !== null) {
     const active = storageParse.find((field: any) => field.active == true);
     const objectActive = {
@@ -38,19 +56,42 @@ onMounted(() => {
           </div>
           <h1>{{ store.storeActive.name }}</h1>
         </div>
-        <a href="">Fechar agora</a>
+        <a 
+        v-if="store.storeActive.isOpen"
+         @click.prevent="handleStatusStore"
+         class="open-close"
+         >Fechar agora
+        </a>
+         <a 
+        v-else
+        class="open-close"
+         @click.prevent="handleStatusStore"
+         >Abrir loja
+        </a>
       </div>
-      <div class="store-status">
+      <div v-if="store.storeActive.isOpen" class="store-status">
         <img src="../../assets/icons/Subtract.png" alt="ícone de abertura">
         <div>
           <h2>Loja aberta</h2>
           <p>Dentro do horário</p>
         </div>
       </div>
+       <div v-else class="store-status-closed">
+        <img class="icon-closed" 
+        src="../../assets/icons/closed.webp" alt="ícone de abertura">
+        <div>
+          <h2>Loja Fechada</h2>
+          <p>Fora do horário de funcionamento</p>
+        </div>
+      </div>
     </div>
+  
   </header>
 </template>
 <style scoped>
+.open-close:hover {
+  cursor: pointer;
+}
   header {
     display: flex;
     justify-content: center;
@@ -128,5 +169,24 @@ onMounted(() => {
   width: 100%;
   align-items: center;
   margin-left: 90px;
+}
+
+.store-status-closed {
+   border-left: 1px solid rgb(212, 198, 198);
+  height: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 25px;
+}
+
+.store-status-closed  h2 {
+  color: #cf1c0f;
+}
+
+.icon-closed {
+  width: 75px;
+  height: 75px;
 }
 </style>@/api/storeService

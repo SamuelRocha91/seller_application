@@ -5,24 +5,9 @@ import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import PageInfo from '@/components/dashboard/PageInfo.vue';
 import UserCircle from '../assets/icons/UserCircle.png';
-import MenuPage from '@/components/dashboard/MenuPage.vue';
 import FormRegisterStore from '@/components/forms/FormRegisterStore.vue';
-import FormRegisterOperation
-  from '@/components/forms/FormRegisterOperation.vue';
-import { useStoreActive } from '@/store/storeActive';
 
 const BignavBar = ref(true);
-const storeActive = useStoreActive();
-const selected = ref(true);
-
-const handleSelect = (id: number) => {
-
-  if (id == 2 && storeActive.storeActive.active) {
-    selected.value = false;
-  } else if (id == 1) {
-    selected.value = true;
-  }
-};
 
 const handleClick = () => {
   BignavBar.value = !BignavBar.value;
@@ -72,14 +57,7 @@ const handleClick = () => {
           description="Gerencie aqui as informações de sua loja
           e permissões de acesso"
         />
-        <MenuPage
-        buttonOne="Dados gerais"
-        buttonTwo="Funcionamento"
-        :handleSelect="handleSelect"
-        :selected="selected"
-        />
-        <FormRegisterStore v-show="selected"/>
-        <FormRegisterOperation v-show="!selected"/>
+        <FormRegisterStore />
       </main>
     </div>
   </div>
@@ -90,17 +68,16 @@ const handleClick = () => {
   display: flex;
 }
 
-.header-nav {
-  width: 20vw;
+.header-nav, .header-nav-small {
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 100vh;
   display: flex;
+  z-index: 1000;
+  transition: width 0.3s ease;
 }
 
-.header-nav-small {
-  width: 6vw;
-  height: 100vh;
-  display: flex;
-}
 .nav-links {
   width: 100%;
   height: 100%;
@@ -158,6 +135,7 @@ const handleClick = () => {
   flex-direction: column;
   height: 100vh;
   width: 100%;
+  margin-left: 6vw;
 }
 
 .header-content {

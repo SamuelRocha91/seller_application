@@ -1,6 +1,7 @@
 <script setup lang="ts"> 
 import { onBeforeMount, onMounted, ref } from 'vue';
 import consumer from '../utils/cable'; 
+let subscription: any;
 
 const messages = ref([]);
 const newMessage = defineModel('newMessage', {default: ''});
@@ -10,7 +11,6 @@ const sendMessage = () => {
   newMessage.value = '';
 };
 
-let subscription;
   
 onMounted(() => {
   subscription = consumer.subscriptions.create(

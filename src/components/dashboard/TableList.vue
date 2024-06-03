@@ -10,8 +10,9 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
   tableOne: string
   tableTwo: string
   tableThree: string
+  tableFour: string
+  handleActive?: (id: number) => void
 }>();
-
 </script>
 <template>
   <table>
@@ -24,7 +25,8 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
         <th scope="col">{{ tableTwo }}</th>
         <th scope="col">{{ tableThree }}</th>
         <th scope="col">Ações</th>
-        <th scope="col">Ativar</th>
+        <th scope="col">{{ tableFour }}</th>
+        <th v-if="handleActive" scope="col">Estado da loja</th>
       </tr>
     </thead>
     <tbody>
@@ -32,7 +34,7 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
         <td scope="row"  class="image-container"><img :src="entity.src" 
           alt="logo da loja" class="uploadedImage "></td>
         <td scope="row" >{{ entity.name }}</td>
-        <td scope="row" >{{ entity.price }}</td>
+        <td scope="row" >{{ entity.category || entity.price }}</td>
         <td scope="row" class="btns-crud">
           <button 
           class="btn-edit" 
@@ -62,6 +64,17 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
            class="toggle-label">
           </label>
         </td>
+        <td v-if="handleActive">
+          <button 
+          v-if="entity.isOpen"
+          class="btn btn-primary"
+          @click.prevent="handleActive(entity.id)">
+          Fechar loja
+          </button>
+          <button v-else 
+          class="btn btn-success"
+           @click.prevent="handleActive(entity.id)">Abrir loja</button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -79,6 +92,8 @@ caption {
   font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 10px;
+  text-align: center;
+  caption-side: top
 }
 
 thead th {

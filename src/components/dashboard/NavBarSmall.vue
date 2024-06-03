@@ -3,19 +3,38 @@ import { RouterLink } from 'vue-router';
 import { useRoute } from 'vue-router';
 import { Auth } from '@/utils/auth';
 import { swalSuccess } from '@/utils/swal';
+import { computed } from 'vue';
+import { useStoreActive } from '@/store/storeActive';
+import Swal from 'sweetalert2';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+const color = useStoreActive();
 const route = useRoute();
 const auth = new Auth();
-
+const navStyle = computed(() => {
+  return {
+    backgroundColor: color.storeActive.colorTheme || 'white'
+  };
+});
 const logout = () => {
   auth.signOut(
     () => swalSuccess('Sessão encerrada com sucesso')
   );
 };
 
+const handleManager = () => {
+  const storeActive = useStoreActive().storeActive;
+  if (storeActive.active) {
+    router.push('/dashboard/gerenciar-loja');
+  } else {
+    Swal.fire('É necessário ativar uma loja pra poder fazer o gerenciamento');
+  }
+};
+
 </script>
 <template>
-  <nav class="nav-links">
+  <nav class="nav-links"  :style="navStyle">
     <ul>
       <li class="links-button">
         <img
@@ -50,12 +69,12 @@ const logout = () => {
         src="../../assets/navBar/Store.png"
         alt="ícone de loja"
          />
-        <RouterLink
+        <a
          class="links-style"
-         to="/dashboard/gerenciar-loja"
+         @click.prevent="handleManager"
          >
          Gerenciar loja
-        </RouterLink>
+        </a>
       </li>
       <li class="links-button">
         <img
