@@ -35,7 +35,9 @@ const storeActive = useStoreActive();
 watch(storeActive, () => {
   const index = data.value
     .findIndex((field: any) => field.id === storeActive.storeActive.id);
-  data.value[index].isOpen = storeActive.storeActive.isOpen;
+  if (index) {
+    data.value[index].isOpen = storeActive.storeActive.isOpen;
+  }
 });
 
 const cepMask = (value: string) => {
@@ -204,6 +206,9 @@ const editStore = (storeData: storeType) => {
         colorTheme: info.color_theme || ''
       };
       store.storage.store('stores', JSON.stringify(parse));
+      if (storeActive.storeActive.id === editId.value) {
+        storeActive.storeActive.colorTheme = info.color_theme;
+      }
       data.value = [...parse];
       swalSuccess('Dados atualizados com sucesso!');
       awaiting.value = false;

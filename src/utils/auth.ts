@@ -1,10 +1,11 @@
 import { swalError } from './swal';
-const URL = import.meta.env.VITE_BASE_URL;
-const X_API_KEY = import.meta.env.VITE_X_API_KEY;
 import { createStorage, type SimpleStorage } from './storage';
 
 class Auth {
   private storage: SimpleStorage;
+  static URL = import.meta.env.VITE_BASE_URL;
+  static X_API_KEY = import.meta.env.VITE_X_API_KEY;
+
   constructor(persistent = false) {
     this.storage = createStorage(persistent);
   }
@@ -67,12 +68,12 @@ class Auth {
         password: password
       }
     };
-    fetch(`${URL}/sign_in`, {
+    fetch(`${Auth.URL}/sign_in`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'X-API-KEY': X_API_KEY
+        'X-API-KEY': Auth.X_API_KEY
       },
       body: JSON.stringify(body)
     }).then((response) => {
@@ -98,12 +99,12 @@ class Auth {
         password_confirmation: password_confirmation,
       }
     };
-    await fetch(`${URL}/new`, {
+    await fetch(`${Auth.URL}/new`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'X-API-KEY': X_API_KEY
+        'X-API-KEY': Auth.X_API_KEY
       },
       body: JSON.stringify(body)
     }).then((response) => {
@@ -114,6 +115,26 @@ class Auth {
       }
     });
   }
+
+  async refreshTokens(refresh_token: string) {
+    const response = await fetch(`${Auth.URL}/refresh`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-KEY': Auth.X_API_KEY
+      },
+      body: JSON.stringify({ refresh_token: refresh_token })
+    });
+    if (response.ok) {
+      const data = await response.json();
+      this.storage.store('token', data.token);
+      this.storage.store('email', data.email);
+      this.storage.store('refresh_token', data.refresh_token);
+    } else {
+      return null;
+    }
+  }
+
 }
 
 export { Auth };

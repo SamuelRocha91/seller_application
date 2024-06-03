@@ -16,6 +16,18 @@ class ProductService extends BaseService{
       .getEntity(`stores/${idStore}/products/${idProduct}`);
     if (response.ok) {
       this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this
+        .getEntity
+        (
+          `stores/${idStore}/products/${idProduct}`
+        );
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
     } else {
       this.failure(response, onFailure);
     }
@@ -38,6 +50,18 @@ class ProductService extends BaseService{
       );
     if (response.ok) {
       this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this
+        .getEntity
+        (
+          `stores/${id}/products?page=\n${page}&name=${searchQuery}&category=${category}&locale=pt-BR`
+        );
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
     } else {
       this.failure(response, onFailure);
     }
@@ -56,6 +80,15 @@ class ProductService extends BaseService{
     const response = await this.create(`stores/${id}/products`, formData);
     if (response.ok) {
       this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this
+        .create(`stores/${id}/products`, formData);
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
     } else {
       this.failure(response, onFailure);
     }
@@ -80,6 +113,51 @@ class ProductService extends BaseService{
     );
     if (response.ok) {
       this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this.update(
+        idProduct,
+        `stores/${id}/products`,
+        formData
+      );
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
+    } else {
+      this.failure(response, onFailure);
+    }
+  }
+
+  async updateProductAvailable(
+    id: number,
+    idProduct: number,
+    productAvailable: boolean,
+    onSuccess: (data?: any) => void,
+    onFailure: () => void,
+  ) {
+    const formData = new FormData();
+    formData.append('product[product_available]', productAvailable ? "true" : "false");
+    const response = await this.update(
+      idProduct,
+      `stores/${id}/products`,
+      formData
+    );
+    if (response.ok) {
+      this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this.update(
+        idProduct,
+        `stores/${id}/products`,
+        formData
+      );
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
     } else {
       this.failure(response, onFailure);
     }
@@ -93,6 +171,14 @@ class ProductService extends BaseService{
     const response = await this.delete(idProduct, `stores/${id}/products`);
     if (response.ok) {
       onSuccess();
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this.delete(idProduct, `stores/${id}/products`);
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
     } else {
       this.failure(response, onFailure);
     }
@@ -118,6 +204,7 @@ class ProductService extends BaseService{
     formData.append('product[category]', dataProduct.category);
     formData.append('product[price]', dataProduct.price);
     formData.append('product[description]', dataProduct.description);
+    formData.append('store[product_available]', "false");
     return formData;
   }
 

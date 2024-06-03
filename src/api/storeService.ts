@@ -14,6 +14,14 @@ class StoreService extends BaseService{
     const response = await this.getEntity(`stores/${id}`);
     if (response.ok) {
       this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this.getEntity(`stores/${id}`);
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
     } else {
       this.failure(response, onFailure);
     }
@@ -26,6 +34,18 @@ class StoreService extends BaseService{
     const response = await this.getEntity('stores');
     if (response.ok) {
       this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this
+        .getEntity
+        (
+          'stores'
+        );
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
     } else {
       this.failure(response, onFailure);
     }
@@ -41,6 +61,14 @@ class StoreService extends BaseService{
     const response = await this.create('stores', formData);
     if (response.ok) {
       this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this.create('stores', formData);
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
     } else {
       this.failure(response, onFailure);
     }
@@ -57,6 +85,14 @@ class StoreService extends BaseService{
     const response = await this.update(id, 'stores', formData);
     if (response.ok) {
       this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this.update(id, 'stores', formData);
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
     } else {
       this.failure(response, onFailure);
     }
@@ -76,6 +112,14 @@ class StoreService extends BaseService{
     const response = await this.update(id, 'stores', formData);
     if (response.ok) {
       this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this.update(id, 'stores', formData);
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
     } else {
       this.failure(response, onFailure);
     }
@@ -85,6 +129,14 @@ class StoreService extends BaseService{
     const response = await this.delete(id, 'stores');
     if (response.ok) {
       onSuccess();
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this.delete(id, 'stores');
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
     } else {
       this.failure(response, onFailure);
     }
@@ -118,7 +170,8 @@ class StoreService extends BaseService{
     formData.append('store[number_address]', dataStore.numberAddress);
     formData.append('store[neighborhood]', dataStore.neighborhood);
     formData.append('store[color_theme]', dataStore.colorTheme);
-    formData.append('store[is_open]',"false");
+    formData.append('store[is_open]', "false");
+    
     return formData;
   }
 }
