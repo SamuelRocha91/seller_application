@@ -76,7 +76,10 @@ const handleStatus = (id: number) => {
   data.value
     .map((entity: any) => {
       if (entity.id == id) {
-        entity.active = !entity.active ;
+        entity.active = !entity.active;
+        productService.updateProductAvailable(storeActive.id, id, entity.active,
+          () => Swal.fire("Estado do produto atualizado com sucesso"),
+          () => Swal.fire('Falha ao atualizar estado do produto'));
       } 
     });
   const storage = productService.storage.get('stores') || '';
@@ -210,7 +213,7 @@ const getlist = (page: number, search = '', category = '') => {
         ...product,
         src: `${URL_HOST}${product.image_url}`,
         name: product.title,
-        active: true,
+        active: product.product_available,
       }));
       next.value = info.result.pagination.next || 1;
       pages.value = info.result.pagination.pages;
@@ -420,25 +423,25 @@ onMounted(() => {
             :data="data"
             />
           </div>
-      <nav>
-  <ul class="pagination justify-content-end">
-    <li class="page-item" :class="{ disabled: current === 1 }">
-      <a class="page-link" href="#" @click.prevent="handlePage(previous)">
-        Anterior
-      </a>
-    </li>
-    <li class="page-item" v-for="page in pages" :key="page" :class="{ active: current === page }">
-      <a class="page-link" href="#" @click.prevent="handlePage(page)">
-        {{ page }}
-      </a>
-    </li>
-    <li class="page-item" :class="{ disabled: current === pages }">
-      <a class="page-link" href="#" @click.prevent="handlePage(next)">
-        Próxima
-      </a>
-    </li>
-  </ul>
-</nav>
+           <nav>
+            <ul class="pagination justify-content-end">
+              <li class="page-item" :class="{ disabled: current === 1 }">
+                <a class="page-link" href="#" @click.prevent="handlePage(previous)">
+                  Anterior
+                </a>
+              </li>
+              <li class="page-item" v-for="page in pages" :key="page" :class="{ active: current === page }">
+                <a class="page-link" href="#" @click.prevent="handlePage(page)">
+                  {{ page }}
+                </a>
+              </li>
+              <li class="page-item" :class="{ disabled: current === pages }">
+                <a class="page-link" href="#" @click.prevent="handlePage(next)">
+                  Próxima
+                </a>
+              </li>
+            </ul>
+           </nav>
 
         </div>
    </template>
