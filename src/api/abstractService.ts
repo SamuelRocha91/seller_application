@@ -1,14 +1,19 @@
 import { createStorage, type SimpleStorage } from '../utils/storage';
+import { Auth } from '@/utils/auth';
 
 abstract class BaseService {
   protected apiUrl: string;
   storage: SimpleStorage;
-  static  X_API_KEY = import.meta.env.VITE_X_API_KEY;
+  static X_API_KEY = import.meta.env.VITE_X_API_KEY;
+  protected auth: Auth;
+
 
   constructor() {
     this.apiUrl = import.meta.env.VITE_BASE_URL;
     const persistent: boolean = this.whatIsMyStorage();
     this.storage = createStorage(persistent);
+    this.auth = new Auth(persistent);
+
   }
     
   getFallback(key: string): string | null {
@@ -38,7 +43,9 @@ abstract class BaseService {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
+        'X-API-KEY': BaseService.X_API_KEY
+
       },
       body: data
     });
@@ -56,7 +63,9 @@ abstract class BaseService {
       method: 'PUT',
       headers: {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
+        'X-API-KEY': BaseService.X_API_KEY
+
       },
       body: data
     });
@@ -71,7 +80,8 @@ abstract class BaseService {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
+        'X-API-KEY': BaseService.X_API_KEY
       }
     });
     return response;
@@ -84,6 +94,12 @@ abstract class BaseService {
     } else {
       return true;
     }
+  }
+
+  protected async refreshToken() {
+    const refresh_token = this.storage.get('refresh_token') || '[]';
+    const parseRefresh = refresh_token;
+    await this.auth.refreshTokens(parseRefresh);
   }
 }
 
