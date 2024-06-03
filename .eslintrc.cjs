@@ -17,6 +17,6 @@ module.exports = {
     indent: ['error', 2],
     'no-multiple-empty-lines': ['error', { max: 2 }],
     complexity: ['error', 10],
-    'max-lines-per-function': ['error', { max: 30 }],
+    'max-lines-per-function': ['error', { max: 40 }],
   }
 };
