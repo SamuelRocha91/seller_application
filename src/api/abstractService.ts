@@ -15,10 +15,8 @@ abstract class BaseService {
     return this.storage.get(key);
   }
 
-   
   protected async getEntity(path: string): Promise<Response> {
     const token = this.getFallback('token');
-    console.log(BaseService.X_API_KEY);
     const response = await fetch(`${this.apiUrl}/${path}`,
       {
         method: 'GET',
