@@ -58,7 +58,7 @@ const handleManager = () => {
         />
         <RouterLink
         class="links-style" 
-        to="/dashboard/perfil"
+        to="/dashboard/pedidos"
         >
         Pedidos
         </RouterLink>

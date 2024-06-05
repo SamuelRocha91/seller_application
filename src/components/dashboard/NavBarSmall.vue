@@ -140,6 +140,7 @@ const handleManager = () => {
   border: 1px solid black;
   height: 100%;
   display: flex;
+  width: 100%;
   background-color: #fff8f8;
 }
 
