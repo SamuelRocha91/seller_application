@@ -15,37 +15,33 @@ const handleClick = () => {
 </script>
 
 <template>
-  <div class="perfil-frame">
+<div class="d-flex">
     <template v-if="BignavBar">
-      <div class="header-nav">
-        <div class="nav-links">
-          <div class="filter">
-            <img
-              class="toogle"
-              @click="handleClick"
-              src="../assets/navBar/ToggleNav.png"
-              alt="Botão para reduzir navbar"
-            />
-          </div>
-          <NavBar />
+      <div class="header-nav bg-danger d-flex flex-column align-items-center">
+        <div class="filter py-3">
+          <img
+            class="toggle"
+            @click="handleClick"
+            src="../assets/navBar/ToggleNav.png"
+            alt="Botão para reduzir navbar"
+          />
         </div>
+        <NavBar />
       </div>
     </template>
     <template v-else>
-      <div class="header-nav-small">
-        <div class="nav-links-phone">
-          <div class="filter-small">
-            <img
-              @click="handleClick"
-              src="../assets/navBar/ToggleNav.png"
-              alt="Botão para aumentar navbar"
-            />
-          </div>
-          <NavBarSmall />
+      <div class="header-nav-small bg-danger d-flex flex-column align-items-center">
+        <div class="filter-small py-3">
+          <img
+            @click="handleClick"
+            src="../assets/navBar/ToggleNav.png"
+            alt="Botão para aumentar navbar"
+          />
         </div>
+        <NavBarSmall />
       </div>
     </template>
-    <div class="page-content">
+    <div class="page-content flex-grow-1">
       <div class="header-content">
         <HeaderDashboard />
       </div>
@@ -64,148 +60,92 @@ const handleClick = () => {
 </template>
 
 <style scoped>
-.perfil-frame {
-  display: flex;
-}
-
 .header-nav, .header-nav-small {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
-  display: flex;
   z-index: 1000;
   transition: width 0.3s ease;
 }
 
-.nav-links {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+.header-nav {
+  width: 15vw;
 }
 
-.filter {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 20%;
-  background-color: #ff1818;
-  justify-content: center;
-  padding: 10px;
+.header-nav-small {
+  width: 7vw;
 }
 
-.filter img {
-  height: 7vh;
-  width: 8vh;
-}
-
-.filter img:hover {
-  cursor: pointer;
-}
-
-.nav-links-phone {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.filter-small {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 20%;
-  background-color: #ff1818;
-  justify-content: center;
-  padding: 5px;
-}
-
-.filter-small img {
-  height: 4vh;
-  width: 4vh;
-}
-
-.filter-small img:hover {
-  cursor: pointer;
+.filter img, .filter-small img {
+  height: auto;
+  max-width: 100%;
 }
 
 .page-content {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100%;
-  margin-left: 6vw;
+  margin-left: 15vw;
+  transition: margin-left 0.3s ease;
+}
+
+.header-nav-small ~ .page-content {
+  margin-left: 7vw;
 }
 
 .header-content {
-  display: flex;
   height: 17%;
-  width: 100%;
 }
+
 main {
-  background-color: gray;
+  height: 100%;
   display: flex;
-  height: 83.4vh;
-  width: 100%;
-  align-items: center;
-  gap: 8px;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: gray;
 }
 
 @media (max-width: 860px) {
-  .header-nav {
+  .header-nav, .header-nav-small {
     width: 30vw;
-    height: 100vh;
-    display: flex;
   }
-
-  .filter .toogle {
-    height: 60px;
-    width: 80px;
-  }
-
   .header-nav-small {
     width: 15vw;
+  }
+  .page-content {
+    margin-left: 30vw;
+  }
+  .header-nav-small ~ .page-content {
+    margin-left: 15vw;
   }
 }
 
 @media (max-width: 540px) {
-  .header-nav {
-    width: 30vw;
-    height: 100vh;
-    display: flex;
+  .header-nav, .header-nav-small {
+    width: 40vw;
   }
-
-  .filter .toogle {
-    height: 60px;
-    width: 80px;
+  .header-nav-small {
+    width: 20vw;
   }
-
-  .header-nav {
-    font-size: small;
+  .page-content {
+    margin-left: 40vw;
+  }
+  .header-nav-small ~ .page-content {
+    margin-left: 20vw;
   }
 }
 
 @media (max-width: 460px) {
-  .header-nav {
-    width: 38vw;
-    height: 100vh;
-    display: flex;
+  .header-nav, .header-nav-small {
+    width: 50vw;
   }
-
-  .filter .toogle {
-    height: 60px;
-    width: 80px;
-  }
-
   .header-nav-small {
-    width: 23vw;
+    width: 25vw;
   }
-
-  .filter .toogle {
-    height: 50px;
-    width: 60px;
+  .page-content {
+    margin-left: 50vw;
+  }
+  .header-nav-small ~ .page-content {
+    margin-left: 25vw;
   }
 }
 </style>

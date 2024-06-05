@@ -33,9 +33,10 @@ const store = new StoreService();
 const storeActive = useStoreActive();
 
 watch(storeActive, () => {
-  const index = data.value
-    .findIndex((field: any) => field.id === storeActive.storeActive.id);
-  if (index) {
+  if (storeActive.storeActive.id) {
+    const index = data.value
+      .findIndex((field: any) => field.id === storeActive.storeActive.id);
+
     data.value[index].isOpen = storeActive.storeActive.isOpen;
   }
 });
