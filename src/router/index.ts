@@ -10,6 +10,7 @@ import PerfilPage from '@/views/PerfilPage.vue';
 import ManageStorePage from '@/views/ManageStorePage.vue';
 import ChatPage from '@/views/ChatPage.vue';
 import OrderPage from '@/views/OrderPage.vue';
+import NotFoundView from '@/views/NotFoundView.vue';
 
 
 const router = createRouter({
@@ -62,6 +63,10 @@ const router = createRouter({
       path: '/chat',
       name: '/chat',
       component: ChatPage
+    },
+    {
+      path: '/:catchAll(.*)',
+      component: NotFoundView,
     },
   ]
 });
