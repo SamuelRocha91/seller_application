@@ -8,7 +8,6 @@ import RecoveryPasswordPage from '@/views/RecoveryPasswordPage.vue';
 import RecoveryPasswordEmailPage from '@/views/RecoveryPasswordEmailPage.vue';
 import PerfilPage from '@/views/PerfilPage.vue';
 import ManageStorePage from '@/views/ManageStorePage.vue';
-import ChatPage from '@/views/ChatPage.vue';
 import OrderPage from '@/views/OrderPage.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
 
@@ -61,8 +60,8 @@ const router = createRouter({
     },
     {
       path: '/chat',
-      name: '/chat',
-      component: ChatPage
+      name: 'chat',
+      component: () => import('@/views/ChatPage.vue')
     },
     {
       path: '/:catchAll(.*)',

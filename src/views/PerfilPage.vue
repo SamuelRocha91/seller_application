@@ -85,6 +85,8 @@ const handleClick = () => {
 .page-content {
   margin-left: 15vw;
   transition: margin-left 0.3s ease;
+  background-color: gray;
+  height: 100%;
 }
 
 .header-nav-small ~ .page-content {
@@ -92,14 +94,15 @@ const handleClick = () => {
 }
 
 .header-content {
-  height: 17%;
+  height: 17vh;
+  background-color: white;
 }
 
 main {
-  height: 100%;
+  height: 83vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   background-color: gray;
 }

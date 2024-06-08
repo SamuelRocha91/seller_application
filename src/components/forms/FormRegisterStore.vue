@@ -33,10 +33,10 @@ const store = new StoreService();
 const storeActive = useStoreActive();
 
 watch(storeActive, () => {
-  if (storeActive.storeActive.id) {
+  if (storeActive.storeActive.id !== 0) {
     const index = data.value
       .findIndex((field: any) => field.id === storeActive.storeActive.id);
-
+    console.log(index);
     data.value[index].isOpen = storeActive.storeActive.isOpen;
   }
 });
@@ -314,8 +314,10 @@ const startFormCreateStore = () => {
 onMounted(() => {
   const stores = store.storage.get('stores') || '[]';
   const parse = JSON.parse(stores);
+  console.log('aqui');
   const activeStore = parse.find((object: any) => object.active);
   store.getStores((info: any) => {
+    console.log(info);
     data.value = info.result.stores.map((stor: any) => ({
       id: stor.id,
       category: stor.category || '',
@@ -325,13 +327,13 @@ onMounted(() => {
       isOpen: stor.is_open ? stor.is_open : false,
       colorTheme: stor.color_theme || ''
     }));
-    store.storage.store('stores', JSON.stringify(data.value));
     edit.value = true;
   },
   (erro: any) => {
     console.error('Request failed:', erro);
     Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
   });
+  console.log(data.value);
 
 });
 </script>

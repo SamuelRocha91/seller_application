@@ -108,7 +108,6 @@ onMounted(() => {
     align-items: center;
     justify-content: space-between;
     gap: 40px;
-    border: 1px solid black;
 }
 
 .image-container {

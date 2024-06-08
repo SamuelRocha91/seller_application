@@ -5,13 +5,59 @@ import NavBar from '../components/dashboard/NavBar.vue';
 import OrderColumn from '../components/dashboard/OrderColumn.vue';
 import OrderContent from '../components/dashboard/OrderContent.vue';
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue'; 
-import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue'; // Adicione esta importação
+import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { onMounted } from 'vue';
 
 const BignavBar = ref(true);
+const hasNewOrder = ref(false);
+const newOrder = ref([]);
 
 const handleClick = () => {
   BignavBar.value = !BignavBar.value;
 };
+
+
+onMounted(() => {
+  const token = localStorage.getItem('token');
+  const X_API_KEY = import.meta.env.VITE_X_API_KEY;
+  fetchEventSource('http://localhost:3000/stores/1/orders/new', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'X-API-KEY': X_API_KEY,
+    },
+    async onopen(response) {
+      if(response.ok) {
+        console.log('Conexão estabelecida');
+      } else {
+        console.log('Erro ao estabelecer conexão');
+      }
+    },
+    onmessage(msg) {
+      if (msg.event === 'new orders') {
+        let data = JSON.parse(msg.data);
+        console.log(data.orders);
+        if (data.orders && Array.isArray(data.orders)) {
+          console.log('dentro');
+          newOrder.value = data.orders.map((order: any) => ({
+            id: order.id,
+            hour: order.created_at.split('T')[1].split('.')[0],
+            date: order.created_at.split('T')[0],
+            status: order.state,
+          }));
+          console.log(newOrder.value);
+        };
+        hasNewOrder.value = true;
+      } else {
+        console.log('fora');
+        hasNewOrder.value = false;
+      }
+    }
+  });
+});
 </script>
 
 <template>
@@ -48,10 +94,10 @@ const handleClick = () => {
       <main class="p-3">
         <div class="container-fluid">
           <div class="row">
-            <div class="col-md-4">
-              <OrderColumn />
+            <div class="col-md-4 w-100 details-order">
+              <OrderColumn v-if="hasNewOrder" :orders="newOrder"/>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 w-100 details-order">
               <OrderContent />
             </div>
           </div>
@@ -62,6 +108,10 @@ const handleClick = () => {
 </template>
 
 <style scoped>
+.details-order {
+  background-color: gray;
+}
+
 .header-nav, .header-nav-small {
   position: fixed;
   top: 0;
@@ -87,6 +137,7 @@ const handleClick = () => {
 .page-content {
   margin-left: 15vw;
   transition: margin-left 0.3s ease;
+  background-color: gray;
 }
 
 .header-nav-small ~ .page-content {
@@ -95,10 +146,12 @@ const handleClick = () => {
 
 .header-content {
   height: 17%;
+  background-color: white;
 }
 
 main {
   height: 100vh;
+  background-color: gray;
   background-color: gray;
 }
 
