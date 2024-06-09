@@ -38,6 +38,7 @@ const acceptOrder = (id: number) => {
 
 const cancelOrder = (id: number) => {
   orderService.cancelOrder(storeActive.id, id, () => {
+    newOrder.value = newOrder.value.filter((order: any) => order.id !== id);
     orderSelected.value = null;
   });
 };
