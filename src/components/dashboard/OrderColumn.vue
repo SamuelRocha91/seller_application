@@ -30,7 +30,7 @@ const getOrderStatusClass = (status: string) => {
       <FiltersComponent />
     </div>
     <div class="card-body">
-      <div class="list-group">
+      <div class="list-group gap-2">
         <div 
           v-for="(data, index) in orders" 
           class="list-group-item" 
@@ -67,5 +67,9 @@ const getOrderStatusClass = (status: string) => {
 .list-group-item-secondary {
   background-color: #e2e3e5;
   color: #383d41;
+}
+
+.list-group-item:hover {
+  cursor: pointer;
 }
 </style>

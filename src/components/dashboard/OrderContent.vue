@@ -9,7 +9,7 @@ defineProps<{
       <h1>Pedido {{ order.id }}</h1>
     </div>
     <div class="card-body">
-      <p>Status: {{ order.status }}</p>
+      <p class="status-content">Status: {{ order.status }}</p>
       <div v-for="(data, index) in order.items" :key="index" class="order-item">
         <div class="product-info">
           <p>Produto: {{ data.product }}</p>
@@ -63,5 +63,11 @@ defineProps<{
   font-size: 18px;
   font-weight: bold;
   margin-left: 15px;
+}
+
+.status-content {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 </style>
