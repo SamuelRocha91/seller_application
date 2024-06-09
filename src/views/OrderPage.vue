@@ -12,6 +12,7 @@ import { useStoreActive } from '@/store/storeActive';
 const BignavBar = ref(true);
 const hasNewOrder = ref(false);
 const newOrder = ref([]);
+const orderSelected = ref(null);
 const storeActive = useStoreActive().storeActive;
 
 const handleClick = () => {
@@ -75,7 +76,10 @@ onMounted(() => {
              <OrderColumn v-if="hasNewOrder" :orders="newOrder"/>
            </div>
             <div class="col-md-8 w-100 details-order">
-              <OrderContent />
+              <OrderContent v-if="orderSelected" :order="orderSelected"/>
+            <div v-else class="d-flex align-items-center justify-content-center not-content">
+              <h2>Você ainda não selecionou nenhum pedido</h2>
+            </div>
             </div>
           </div>
         </div>
@@ -107,6 +111,11 @@ onMounted(() => {
 
 .header-nav-small {
   width: 7vw;
+}
+
+.not-content {
+ background-color: white;
+ height: 500px;
 }
 
 .filter img, .filter-small img {
