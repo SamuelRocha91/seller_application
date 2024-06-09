@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
 import NavBar from '../components/dashboard/NavBar.vue';
 import OrderColumn from '../components/dashboard/OrderColumn.vue';
 import OrderContent from '../components/dashboard/OrderContent.vue';
@@ -8,7 +7,6 @@ import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { onMounted } from 'vue';
-
 const BignavBar = ref(true);
 const hasNewOrder = ref(false);
 const newOrder = ref([]);
@@ -37,7 +35,7 @@ onMounted(() => {
       }
     },
     onmessage(msg) {
-      if (msg.event === 'new orders') {
+      if (msg.event as string === 'new orders') {
         let data = JSON.parse(msg.data);
         console.log(data.orders);
         if (data.orders && Array.isArray(data.orders)) {
@@ -61,7 +59,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="d-flex">
+  <div class="d-flex color-back">
     <template v-if="BignavBar">
       <div class="header-nav bg-danger d-flex flex-column align-items-center">
         <div class="filter py-3">
@@ -94,9 +92,9 @@ onMounted(() => {
       <main class="p-3">
         <div class="container-fluid">
           <div class="row">
-            <div class="col-md-4 w-100 details-order">
-              <OrderColumn v-if="hasNewOrder" :orders="newOrder"/>
-            </div>
+           <div class="col-md-4 w-100 details-order" style="max-height: 85vh; overflow-y: auto;">
+             <OrderColumn v-if="hasNewOrder" :orders="newOrder"/>
+           </div>
             <div class="col-md-8 w-100 details-order">
               <OrderContent />
             </div>
@@ -111,7 +109,10 @@ onMounted(() => {
 .details-order {
   background-color: gray;
 }
-
+.color-back {
+  background-color: gray;
+  height: 100vh;
+}
 .header-nav, .header-nav-small {
   position: fixed;
   top: 0;

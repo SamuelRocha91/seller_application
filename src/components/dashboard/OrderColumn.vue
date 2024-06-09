@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import FiltersComponent from './FiltersComponent.vue';
-
 defineProps<{
   orders: any,
 }>();
