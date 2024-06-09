@@ -64,6 +64,15 @@ class OrderService extends BaseService {
       console.log('Erro ao iniciar preparo');
     }
   }
+
+  async readyForDelivery(storeId: number, orderId: number, success: () => void) {
+    const response = await this.patch(`stores/${storeId}/orders/${orderId}/ready_for_delivery`);
+    if (response.ok) {
+      success();
+    } else {
+      console.log('Erro ao marcar como pronto para entrega');
+    }
+  }
 }
 
 export default new OrderService();  

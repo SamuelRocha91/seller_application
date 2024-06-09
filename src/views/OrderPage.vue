@@ -54,6 +54,17 @@ const startPreparation = (id: number) => {
   });
 };
 
+const readyForDelivery = (id: number) => {
+  orderService.readyForDelivery(storeActive.id, id, () => {
+    newOrder.value.map((order: any) => {
+      if (order.id === id) {
+        order.status = 'ready_for_delivery';
+      }
+    });
+    orderSelected.value = null;
+  });
+};
+
 onMounted(() => {
   orderService.connectToOrderStream(storeActive.id, (data: any) => {
     let parsedData = JSON.parse(data);
@@ -116,6 +127,7 @@ onMounted(() => {
                :acceptOrder="acceptOrder"
                :cancelOrder="cancelOrder"
                :startPreparation="startPreparation"
+               :readyForDelivery="readyForDelivery"
                />
             <div v-else class="d-flex align-items-center justify-content-center not-content">
               <h2>Você ainda não selecionou nenhum pedido</h2>
