@@ -31,6 +31,12 @@ const acceptOrder = (id: number) => {
   });
 };
 
+const cancelOrder = (id: number) => {
+  orderService.cancelOrder(storeActive.id, id, () => {
+    orderSelected.value = null;
+  });
+};
+
 onMounted(() => {
   orderService.connectToOrderStream(storeActive.id, (data: any) => {
     let parsedData = JSON.parse(data);
@@ -90,7 +96,9 @@ onMounted(() => {
               <OrderContent
                v-if="orderSelected" 
                :order="orderSelected"
-               :acceptOrder="acceptOrder"/>
+               :acceptOrder="acceptOrder"
+               :cancelOrder="cancelOrder"
+               />
             <div v-else class="d-flex align-items-center justify-content-center not-content">
               <h2>Você ainda não selecionou nenhum pedido</h2>
             </div>

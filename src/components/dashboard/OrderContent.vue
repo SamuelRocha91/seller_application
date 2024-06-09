@@ -2,6 +2,7 @@
 defineProps<{
   order: any,
   acceptOrder: (id: number) => void,
+  cancelOrder: (id: number) => void,
 }>();
 </script>
 <template>
@@ -25,7 +26,7 @@ defineProps<{
     </div>
     <div v-if="order.status == 'payment_confirmed'" class="card-footer d-flex justify-content-end">
       <button @click="acceptOrder(order.id)" class="btn btn-success me-2">Aceitar</button>
-      <button class="btn btn-danger">Recusar</button>
+      <button @click="cancelOrder(order.id)" class="btn btn-danger">Recusar</button>
     </div>
     <div v-if="order.status == 'accepted'" class="card-footer d-flex justify-content-end">
       <button class="btn btn-success me-2">Começar preparo</button>

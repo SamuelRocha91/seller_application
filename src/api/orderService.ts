@@ -46,6 +46,15 @@ class OrderService extends BaseService {
       console.log('Erro ao aceitar pedido');
     }
   }
+
+  async cancelOrder(storeId: number, orderId: number, success: () => void) {
+    const response = await this.patch(`stores/${storeId}/orders/${orderId}/cancel`);
+    if (response.ok) {
+      success();
+    } else {
+      console.log('Erro ao cancelar pedido');
+    }
+  }
 }
 
 export default new OrderService();  
