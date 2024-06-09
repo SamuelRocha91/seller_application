@@ -25,6 +25,12 @@ const selectOrder = (id: number) => {
   });
 };
 
+const acceptOrder = (id: number) => {
+  orderService.acceptOrder(storeActive.id, id, () => {
+    orderSelected.value = null;
+  });
+};
+
 onMounted(() => {
   orderService.connectToOrderStream(storeActive.id, (data: any) => {
     let parsedData = JSON.parse(data);
@@ -81,7 +87,10 @@ onMounted(() => {
              <OrderColumn v-if="hasNewOrder" :orders="newOrder" :handleSelect="selectOrder"/>
            </div>
             <div class="col-md-8 w-100 details-order">
-              <OrderContent v-if="orderSelected" :order="orderSelected"/>
+              <OrderContent
+               v-if="orderSelected" 
+               :order="orderSelected"
+               :acceptOrder="acceptOrder"/>
             <div v-else class="d-flex align-items-center justify-content-center not-content">
               <h2>Você ainda não selecionou nenhum pedido</h2>
             </div>

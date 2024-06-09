@@ -37,6 +37,15 @@ class OrderService extends BaseService {
       success(data);
     }
   }
+
+  async acceptOrder(storeId: number, orderId: number, success: () => void) {
+    const response = await this.patch(`stores/${storeId}/orders/${orderId}/accept`);
+    if (response.ok) {
+      success();
+    } else {
+      console.log('Erro ao aceitar pedido');
+    }
+  }
 }
 
 export default new OrderService();  
