@@ -29,6 +29,14 @@ class OrderService extends BaseService {
       }
     });
   }
+
+  async getOrderById(orderId: number, success: (data: any) => void) {
+    const response = await this.getEntity(`buyers/orders/${orderId}`);
+    if (response.ok) {
+      const data = await response.json();
+      success(data);
+    }
+  }
 }
 
 export default new OrderService();  

@@ -19,7 +19,7 @@ const handleClick = () => {
   BignavBar.value = !BignavBar.value;
 };
 
-const handleSelect = (id: number) => {
+const selectOrder = (id: number) => {
   orderService.getOrderById(id, (data: any) => {
     orderSelected.value = data;
   });
