@@ -19,6 +19,11 @@ const handleClick = () => {
   BignavBar.value = !BignavBar.value;
 };
 
+const handleSelect = (id: number) => {
+  orderService.getOrderById(id, (data: any) => {
+    orderSelected.value = data;
+  });
+};
 
 onMounted(() => {
   orderService.connectToOrderStream(storeActive.id, (data: any) => {
@@ -73,7 +78,7 @@ onMounted(() => {
         <div class="container-fluid">
           <div class="row">
            <div class="col-md-4 w-100 details-order" style="max-height: 85vh; overflow-y: auto;">
-             <OrderColumn v-if="hasNewOrder" :orders="newOrder"/>
+             <OrderColumn v-if="hasNewOrder" :orders="newOrder" :handleSelect="selectOrder"/>
            </div>
             <div class="col-md-8 w-100 details-order">
               <OrderContent v-if="orderSelected" :order="orderSelected"/>

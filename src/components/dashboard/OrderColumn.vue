@@ -2,6 +2,7 @@
 import FiltersComponent from './FiltersComponent.vue';
 defineProps<{
   orders: any,
+  handleSelect: (id: number) => void,
 }>();
 
 
@@ -35,6 +36,7 @@ const getOrderStatusClass = (status: string) => {
           class="list-group-item" 
           :key="index" 
           :class="getOrderStatusClass(data.status)"
+          @click="handleSelect(data.id)"
         >
           <h5 class="mb-1">Número do pedido: ####{{ data.id }}</h5>
           <h5 class="mb-1">Horário: {{ data.hour }}</h5>
