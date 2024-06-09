@@ -8,6 +8,7 @@ import { useStoreActive } from '@/store/storeActive';
 import Swal from 'sweetalert2';
 import TableList from '../dashboard/TableList.vue';
 import { watch } from 'vue';
+import LoadingSpiner from '../dashboard/LoadingSpiner.vue';
 
 let image: File | string;
 
@@ -24,6 +25,7 @@ const description = defineModel('description', { default: '' });
 const edit = ref(false);
 const editId = ref();
 const imageUrl = ref();
+const isLoading = ref(false);
 const name = defineModel('name', { default: '' });
 const navBarColor = defineModel('navColor', { default: '' });
 const neighborhood = defineModel('neighborhood', { default: '' });
@@ -314,10 +316,9 @@ const startFormCreateStore = () => {
 onMounted(() => {
   const stores = store.storage.get('stores') || '[]';
   const parse = JSON.parse(stores);
-  console.log('aqui');
   const activeStore = parse.find((object: any) => object.active);
+  isLoading.value = true;
   store.getStores((info: any) => {
-    console.log(info);
     data.value = info.result.stores.map((stor: any) => ({
       id: stor.id,
       category: stor.category || '',
@@ -327,9 +328,11 @@ onMounted(() => {
       isOpen: stor.is_open ? stor.is_open : false,
       colorTheme: stor.color_theme || ''
     }));
+    isLoading.value = false;
     edit.value = true;
   },
   (erro: any) => {
+    isLoading.value = false;
     console.error('Request failed:', erro);
     Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
   });
@@ -337,189 +340,193 @@ onMounted(() => {
 
 });
 </script>
-
 <template>
-  <template v-if="!edit">
-    <div
-    class="container mt-4 p-4 bg-white w-90"
-    style="max-height: 100vh;
-     overflow-y: auto;">
-      <form
-        id="uploadForm"
-        action="/upload"
-        method="post"
-        enctype="multipart/form-data">
+  <template v-if="isLoading">
+    <LoadingSpiner :isLoading="isLoading"/>
+  </template>
+  <template v-else>
+      <template v-if="!edit">
         <div
-          class=
-          "form-group d-flex flex-column
-          text-center justify-content-center align-items-center"
-          >
-          <div
-            class="mb-3 bg-secondary p-3
-            rounded-circle d-flex justify-content-center align-items-center"
-            style="width: 150px; height: 150px;">
-              <img id="uploadedImage"
-              :src="imageUrl" alt=""
-               class="rounded-circle"
-             />
-          </div>
-          <label for="imageInput" class="btn btn-primary">
-            Alterar foto de perfil
-          </label>
-          <input
-            type="file"
-            name="image"
-            id="imageInput"
-            @change="handleImageChange"
-            class="d-none" />
-        </div>
-        <div class="form-group">
-          <label for="storeName">Nome da loja</label>
-          <input
-          type="text"
-           id="storeName"
-           class="form-control"
-            placeholder="O nome precisa ter no mínimo 3 caracteres"
-            v-model="name" />
-        </div>
-        <div class="form-group">
-          <label for="cnpj">CNPJ</label>
-          <input
-            type="text"
-            id="cnpj"
-            class="form-control"
-            maxlength="18"
-            placeholder="XX.XXX.XXX/0001-XX"
-            @input="handleCnpj"
-            v-model="cnpj" />
-        </div>
-        <div class="form-group d-flex align-items-center align-center">
-             <label class="mt-2" for="navbar-color">
-              Escolha uma cor para a Navbar:</label>
-             <input type="color" 
-             id="navbar-color" 
-             name="navbar-color" 
-             v-model="navBarColor">
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="category">Categoria</label>
-            <select id="category" class="form-control" v-model="category">
-              <option
-                v-for="(categoria, index)
-                 in categories" :key="index"
-                 :value="categoria">{{ categoria }}</option>
-            </select>
-          </div>
-          <div class="form-group col-md-6">
-            <label for="cep">CEP</label>
-            <div class="input-group">
+        class="container mt-4 p-4 bg-white w-90"
+        style="max-height: 100vh;
+         overflow-y: auto;">
+          <form
+            id="uploadForm"
+            action="/upload"
+            method="post"
+            enctype="multipart/form-data">
+            <div
+              class=
+              "form-group d-flex flex-column
+              text-center justify-content-center align-items-center"
+              >
+              <div
+                class="mb-3 bg-secondary p-3
+                rounded-circle d-flex justify-content-center align-items-center"
+                style="width: 150px; height: 150px;">
+                  <img id="uploadedImage"
+                  :src="imageUrl" alt=""
+                   class="rounded-circle"
+                 />
+              </div>
+              <label for="imageInput" class="btn btn-primary">
+                Alterar foto de perfil
+              </label>
+              <input
+                type="file"
+                name="image"
+                id="imageInput"
+                @change="handleImageChange"
+                class="d-none" />
+            </div>
+            <div class="form-group">
+              <label for="storeName">Nome da loja</label>
+              <input
+              type="text"
+               id="storeName"
+               class="form-control"
+                placeholder="O nome precisa ter no mínimo 3 caracteres"
+                v-model="name" />
+            </div>
+            <div class="form-group">
+              <label for="cnpj">CNPJ</label>
               <input
                 type="text"
-                id="cep" class="form-control"
-                placeholder="Digite o CEP"
-                @input="handleCep"
-                maxlength="9"
-                :value="cep" />
-              <div class="input-group-append">
-                <button
-                  class="btn btn-outline-secondary"
-                  @click.prevent="searchCep">
-                  <i class="fa fa-search"></i>
-                </button>
+                id="cnpj"
+                class="form-control"
+                maxlength="18"
+                placeholder="XX.XXX.XXX/0001-XX"
+                @input="handleCnpj"
+                v-model="cnpj" />
+            </div>
+            <div class="form-group d-flex align-items-center align-center">
+                 <label class="mt-2" for="navbar-color">
+                  Escolha uma cor para a Navbar:</label>
+                 <input type="color"
+                 id="navbar-color"
+                 name="navbar-color"
+                 v-model="navBarColor">
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="category">Categoria</label>
+                <select id="category" class="form-control" v-model="category">
+                  <option
+                    v-for="(categoria, index)
+                     in categories" :key="index"
+                     :value="categoria">{{ categoria }}</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="cep">CEP</label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    id="cep" class="form-control"
+                    placeholder="Digite o CEP"
+                    @input="handleCep"
+                    maxlength="9"
+                    :value="cep" />
+                  <div class="input-group-append">
+                    <button
+                      class="btn btn-outline-secondary"
+                      @click.prevent="searchCep">
+                      <i class="fa fa-search"></i>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="bairro">Estado</label>
-            <input
-            type="text"
-             id="bairro"
-            class="form-control"
-            :value="state"
-            readonly
-            />
-          </div>
-          <div class="form-group col-md-6">
-            <label for="rua">Cidade</label>
-            <input
-             type="text"
-             id="rua"
-             class="form-control"
-             v-model="city"
-              readonly />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="bairro">Bairro</label>
-            <input
-             type="text"
-             id="bairro"
-             class="form-control"
-            v-model="neighborhood"
-             readonly
-            />
-          </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="bairro">Estado</label>
+                <input
+                type="text"
+                 id="bairro"
+                class="form-control"
+                :value="state"
+                readonly
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="rua">Cidade</label>
+                <input
+                 type="text"
+                 id="rua"
+                 class="form-control"
+                 v-model="city"
+                  readonly />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="bairro">Bairro</label>
+                <input
+                 type="text"
+                 id="bairro"
+                 class="form-control"
+                v-model="neighborhood"
+                 readonly
+                />
+              </div>
   
-          <div class="form-group col-md-6">
-            <label for="numero">Número</label>
-            <input
-            type="text"
-            id="numero"
-            class="form-control"
-            @input="handleNumberAddress"
-            :value="numberAddress"  />
-          </div>
+              <div class="form-group col-md-6">
+                <label for="numero">Número</label>
+                <input
+                type="text"
+                id="numero"
+                class="form-control"
+                @input="handleNumberAddress"
+                :value="numberAddress"  />
+              </div>
   
-          <div class="form-group w-100">
-            <label for="endereço">Endereço</label>
-            <input
-             type="text"
-             id="endereço" class="form-control"
-             v-model="address"
-             readonly />
+              <div class="form-group w-100">
+                <label for="endereço">Endereço</label>
+                <input
+                 type="text"
+                 id="endereço" class="form-control"
+                 v-model="address"
+                 readonly />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="description">Descrição</label>
+              <textarea
+                id="description"
+                class="form-control"
+                rows="3" placeholder="Máximo: 50 caracteres"
+                v-model="description" maxlength="50"></textarea>
+            </div>
+            <button
+              type="submit" class="btn btn-success btn-block"
+              @click.prevent="handleClick" :disabled="awaiting">
+              Salvar
+            </button>
+          </form>
+        </div>
+      </template>
+      <template v-else >
+          <div class="form-container">
+            <TableList
+            title="Lojas cadastradas"
+            tableOne="Loja"
+            tableTwo="Nome"
+            tableThree="Categoria"
+            tableFour="Exibir loja"
+            :handleEdit="editForm"
+            :handleClick="handleDelete"
+            :handleStatus="handleStatus"
+            :handleActive="openStore"
+            :data="data"
+            />
+            <button
+            @click.prevent="startFormCreateStore"
+            class="register-form-btn"
+            >
+            Cadastrar nova loja
+            </button>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="description">Descrição</label>
-          <textarea
-            id="description"
-            class="form-control"
-            rows="3" placeholder="Máximo: 50 caracteres"
-            v-model="description" maxlength="50"></textarea>
-        </div>
-        <button
-          type="submit" class="btn btn-success btn-block"
-          @click.prevent="handleClick" :disabled="awaiting">
-          Salvar
-        </button>
-      </form>
-    </div>
-  </template>
-  <template v-else >
-      <div class="form-container">
-        <TableList
-        title="Lojas cadastradas"
-        tableOne="Loja"
-        tableTwo="Nome"
-        tableThree="Categoria"
-        tableFour="Exibir loja"
-        :handleEdit="editForm"
-        :handleClick="handleDelete"
-        :handleStatus="handleStatus"
-        :handleActive="openStore"
-        :data="data"
-        />
-        <button
-        @click.prevent="startFormCreateStore"
-        class="register-form-btn"
-        >
-        Cadastrar nova loja
-        </button>
-      </div>
+      </template>
   </template>
 </template>
 

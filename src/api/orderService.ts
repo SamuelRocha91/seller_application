@@ -2,7 +2,7 @@ import { BaseService } from "./abstractService";
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 
 class OrderService extends BaseService {
-  async connectToOrderStream(storeId: number, success: (data: any) => void) {
+  async connectToOrderStream(storeId: number, success: (data: any) => void, noConnection: () => void) {
     const token = this.getFallback('token');
     fetchEventSource(`${this.apiUrl}/stores/${storeId}/orders/new`, {
       method: 'GET',
@@ -22,6 +22,9 @@ class OrderService extends BaseService {
       onmessage(msg) {
         if (msg.event === 'new orders') {
           success(msg.data);
+        } else {
+          console.log('Evento desconhecido');
+          noConnection();
         }
       },
       onerror(err) {

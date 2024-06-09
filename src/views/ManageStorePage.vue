@@ -77,6 +77,7 @@ const handleClick = () => {
   margin-left: 15vw;
   transition: margin-left 0.3s ease;
   background-color: gray;
+  height: 100vh;
 }
 
 .header-nav-small ~ .page-content {

@@ -8,9 +8,11 @@ import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import { onMounted } from 'vue';
 import orderService from '@/api/orderService';
 import { useStoreActive } from '@/store/storeActive';
+import LoadingSpiner from '@/components/dashboard/LoadingSpiner.vue';
 
 const BignavBar = ref(true);
 const hasNewOrder = ref(false);
+const isLoading = ref(false);
 const newOrder = ref([]);
 const orderSelected = ref(null);
 const storeActive = useStoreActive().storeActive;
@@ -66,6 +68,7 @@ const readyForDelivery = (id: number) => {
 };
 
 onMounted(() => {
+  isLoading.value = true;
   orderService.connectToOrderStream(storeActive.id, (data: any) => {
     let parsedData = JSON.parse(data);
     if (parsedData.orders && Array.isArray(parsedData.orders)) {
@@ -75,69 +78,78 @@ onMounted(() => {
         date: order.created_at.split('T')[0],
         status: order.state,
       }));
+      isLoading.value = false;
       hasNewOrder.value = true;
     } else {
       hasNewOrder.value = false;
+      isLoading.value = false;
     }
+  }, () => {
+    isLoading.value = false;
   });
 });
 </script>
 
 <template>
-  <div class="d-flex color-back">
-    <template v-if="BignavBar">
-      <div class="header-nav bg-danger d-flex flex-column align-items-center">
-        <div class="filter py-3">
-          <img
-            class="toggle"
-            @click="handleClick"
-            src="../assets/navBar/ToggleNav.png"
-            alt="Botão para reduzir navbar"
-          />
+  <template v-if="isLoading">
+    <LoadingSpiner :isLoading="isLoading" />
+  </template>
+  <template v-else>
+    <div class="d-flex color-back">
+      <template v-if="BignavBar">
+        <div class="header-nav bg-danger d-flex flex-column align-items-center">
+          <div class="filter py-3">
+            <img
+              class="toggle"
+              @click="handleClick"
+              src="../assets/navBar/ToggleNav.png"
+              alt="Botão para reduzir navbar"
+            />
+          </div>
+          <NavBar />
         </div>
-        <NavBar />
-      </div>
-    </template>
-    <template v-else>
-      <div class="header-nav-small bg-danger d-flex flex-column align-items-center">
-        <div class="filter-small py-3">
-          <img
-            @click="handleClick"
-            src="../assets/navBar/ToggleNav.png"
-            alt="Botão para aumentar navbar"
-          />
+      </template>
+      <template v-else>
+        <div class="header-nav-small bg-danger d-flex flex-column align-items-center">
+          <div class="filter-small py-3">
+            <img
+              @click="handleClick"
+              src="../assets/navBar/ToggleNav.png"
+              alt="Botão para aumentar navbar"
+            />
+          </div>
+          <NavBarSmall />
         </div>
-        <NavBarSmall />
-      </div>
-    </template>
-    <div class="page-content flex-grow-1">
-      <div class="header-content">
-        <HeaderDashboard />
-      </div>
-      <main class="p-3">
-        <div class="container-fluid">
-          <div class="row">
-           <div class="col-md-4 w-100 details-order" style="max-height: 85vh; overflow-y: auto;">
-             <OrderColumn v-if="hasNewOrder" :orders="newOrder" :handleSelect="selectOrder"/>
-           </div>
-            <div class="col-md-8 w-100 details-order">
-              <OrderContent
-               v-if="orderSelected" 
-               :order="orderSelected"
-               :acceptOrder="acceptOrder"
-               :cancelOrder="cancelOrder"
-               :startPreparation="startPreparation"
-               :readyForDelivery="readyForDelivery"
-               />
-            <div v-else class="d-flex align-items-center justify-content-center not-content">
-              <h2>Você ainda não selecionou nenhum pedido</h2>
-            </div>
+      </template>
+      <div class="page-content flex-grow-1">
+        <div class="header-content">
+          <HeaderDashboard />
+        </div>
+        <main class="p-3">
+          <div class="container-fluid">
+            <div class="row">
+             <div class="col-md-4 w-100 details-order" style="max-height: 85vh; overflow-y: auto;">
+               <OrderColumn v-if="hasNewOrder" :orders="newOrder" :handleSelect="selectOrder"/>
+             </div>
+              <div class="col-md-8 w-100 details-order">
+                <OrderContent
+                 v-if="orderSelected"
+                 :order="orderSelected"
+                 :acceptOrder="acceptOrder"
+                 :cancelOrder="cancelOrder"
+                 :startPreparation="startPreparation"
+                 :readyForDelivery="readyForDelivery"
+                 />
+              <div v-else class="d-flex align-items-center justify-content-center not-content">
+                <h2>Você ainda não selecionou nenhum pedido</h2>
+              </div>
+              </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
-  </div>
+  </template>
 </template>
 
 <style scoped>
