@@ -43,6 +43,17 @@ const cancelOrder = (id: number) => {
   });
 };
 
+const startPreparation = (id: number) => {
+  orderService.startPreparation(storeActive.id, id, () => {
+    newOrder.value.map((order: any) => {
+      if (order.id === id) {
+        order.status = 'in_progress';
+      }
+    });
+    orderSelected.value = null;
+  });
+};
+
 onMounted(() => {
   orderService.connectToOrderStream(storeActive.id, (data: any) => {
     let parsedData = JSON.parse(data);
@@ -104,6 +115,7 @@ onMounted(() => {
                :order="orderSelected"
                :acceptOrder="acceptOrder"
                :cancelOrder="cancelOrder"
+               :startPreparation="startPreparation"
                />
             <div v-else class="d-flex align-items-center justify-content-center not-content">
               <h2>Você ainda não selecionou nenhum pedido</h2>

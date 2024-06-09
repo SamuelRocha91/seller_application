@@ -55,6 +55,15 @@ class OrderService extends BaseService {
       console.log('Erro ao cancelar pedido');
     }
   }
+
+  async startPreparation(storeId: number, orderId: number, success: () => void) {
+    const response = await this.patch(`stores/${storeId}/orders/${orderId}/start_progress`);
+    if (response.ok) {
+      success();
+    } else {
+      console.log('Erro ao iniciar preparo');
+    }
+  }
 }
 
 export default new OrderService();  
