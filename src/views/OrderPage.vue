@@ -27,6 +27,11 @@ const selectOrder = (id: number) => {
 
 const acceptOrder = (id: number) => {
   orderService.acceptOrder(storeActive.id, id, () => {
+    newOrder.value.map((order: any) => {
+      if (order.id === id) {
+        order.status = 'accepted';
+      }
+    });
     orderSelected.value = null;
   });
 };
