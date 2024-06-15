@@ -1,43 +1,78 @@
 # Projeto do Lojista - Aplicação de Delivery
 
-Este projeto representa a aplicação do lojista em uma aplicação mais ampla de delivery, que inclui um backend em Rails.
+Este repositório contém a aplicação do vendedor para a plataforma de delivery, desenvolvida em Vue.js. Esta aplicação oferece uma interface para gerenciamento de pedidos e produtos por parte dos vendedores.
 
-![Em desenvolvimento](https://img.shields.io/badge/Status-Em%20desenvolvimento-yellow)
+[![Em desenvolvimento](https://img.shields.io/badge/Status-Em%20desenvolvimento-yellow)](https://github.com/SamuelRocha91/seller_application)
+
+## Repositórios Relacionados
+
+- [Delivery Application](https://github.com/SamuelRocha91/delivery_back) - Backend em Rails para a aplicação de delivery.
+- [Consumer Application](https://github.com/SamuelRocha91/consumy) - Aplicação do consumidor.
+
+
+**Links do Projeto:**
+
+- [Design no Figma](https://www.figma.com/file/tS8r4eROXBknYixtDcijXd/Meu-portf%C3%B3lio?type=design&node-id=0-1&mode=design&t=pL6yJYx6lOSWBGdw-0)
+
+
+## Dependências e Funcionalidades
+
+### Dependências Principais
+
+- **Vue.js:** Framework JavaScript progressivo para construção de interfaces.
+- **Vue Router:** Para roteamento de páginas no Vue.js.
+- **Vite:** Ferramenta de build para desenvolvimento rápido e otimizado.
+- **Vitest:** Framework de testes unitários para Vue.js.
+- **ESLint & Prettier:** Ferramentas de linting e formatação de código para manter a qualidade do código.
+- **TypeScript:** Suporte a TypeScript para um desenvolvimento mais seguro e escalável.
+- **Pinia:** Biblioteca de gerenciamento de estado inspirada no Vuex.
+
+### Funcionalidades Implementadas
+
+- **Fetch Event Source:** Para comunicação em tempo real com o backend.
+- **SweetAlert2:** Para exibir alertas e diálogos bonitos e personalizados.
+- **Vuedraggable:** Para drag-and-drop de elementos na interface.
+
+### Outras Ferramentas e Plugins
+
+- **@rails/actioncable:** Para integração com WebSockets no backend Rails.
+- **lodash.debounce:** Utilitário de funções para facilitar operações com debounce.
+- **@types/rails__actioncable:** Tipagens TypeScript para ActionCable.
+
+
+
 ## Setup do Projeto
+
+Para configurar e executar o projeto localmente, siga os passos abaixo:
+
+### Pré-requisitos
+
+Certifique-se de ter o [Node.js](https://nodejs.org/) e o [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/) instalados em sua máquina.
+
+### Instalação das Dependências
 
 ```sh
 npm install
 ```
 
-### Compilar e Hot-Reload para Desenvolvimento
+### Iniciar o Servidor de Desenvolvimento
+
+Para iniciar o servidor de desenvolvimento, execute:
 
 ```sh
 npm run dev
 ```
 
-### Verificação de Tipos, Compilação e Minificação para Produção
+### Executar Testes
 
-```sh
-npm run build
-```
-
-### Executar Testes Unitários com [Vitest](https://vitest.dev/)
+Para executar os testes unitários, utilize:
 
 ```sh
 npm run test:unit
-```
-
-### Lint com [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
 
 ---
 
 Este projeto foi criado como requisito avaliativo para o programa Quero Ser Dev 9ª edição da LWSA.
 
-**Links do Projeto:**
-
-- [Design no Figma](https://www.figma.com/file/tS8r4eROXBknYixtDcijXd/Meu-portf%C3%B3lio?type=design&node-id=0-1&mode=design&t=pL6yJYx6lOSWBGdw-0)
-- [Trello](https://trello.com/b/dkiKJoIq/delivery-lojista)
+---
