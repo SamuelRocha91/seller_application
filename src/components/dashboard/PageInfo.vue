@@ -60,6 +60,7 @@ defineProps<{
   background-color: white;  
   width: 72%;
   height: fit-content;
+  margin-bottom: 10px;
   display: flex;
   justify-content: flex-start;
   align-items: center;

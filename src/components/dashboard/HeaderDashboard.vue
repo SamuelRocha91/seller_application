@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import { Auth } from '../../utils/auth';
 import { useStoreActive } from '@/store/storeActive';
 import { StoreService } from '@/api/storeService';
@@ -26,18 +25,6 @@ const updateStore = (id: number, value: boolean) => {
     },
     () => Swal.fire("Erro ao abrir/fechar loja"));
 };
-
-onMounted(() => {
-  const storage = storeService.getFallback('stores') || '[]';
-  const storageParse = JSON.parse(storage);
-  if (storageParse !== null) {
-    const active = storageParse.find((field: any) => field.active == true);
-    const objectActive = {
-      ...active
-    };
-    store.setStore(objectActive);
-  }
-});
 
 </script>
 <template>
@@ -108,7 +95,6 @@ onMounted(() => {
     align-items: center;
     justify-content: space-between;
     gap: 40px;
-    border: 1px solid black;
 }
 
 .image-container {

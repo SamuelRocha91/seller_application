@@ -49,7 +49,7 @@ const handleManager = () => {
         Início
       </RouterLink>
       </li>
-      <li class="links-button">
+      <li class="links-button" :class="{ 'active': $route.path === '/dashboard/pedidos' }">
         <img
         class="image-dimension"
         src="../../assets/navBar/Order.png"
@@ -64,7 +64,7 @@ const handleManager = () => {
       </li>
       <li class="links-button">
         <img
-        :class="{ 'active': $route.path === '/dashboard/perfil' }"
+        :class="{ 'active': $route.path === '/dashboard/gerenciar-loja' }"
         class="image-dimension"
         src="../../assets/navBar/Store.png"
         alt="ícone de loja"
@@ -112,7 +112,7 @@ const handleManager = () => {
         />
         <RouterLink
         class="links-style"
-        to="/configuracoes"
+        to="/dashboard/perfil"
         >
         Configurações
       </RouterLink>
@@ -137,9 +137,9 @@ const handleManager = () => {
 <style scoped>
 .nav-links {
   display: flex;
-  border: 1px solid black;
   height: 100%;
   display: flex;
+  width: 100%;
   background-color: #fff8f8;
 }
 
@@ -189,6 +189,7 @@ img {
 .links-button:hover {
   background-color: rgb(185, 250, 228);
   width: 100%;
+  cursor: pointer;
 }
 
 .links-style:hover {

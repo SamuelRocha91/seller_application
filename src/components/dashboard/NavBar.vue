@@ -45,12 +45,12 @@ const handleManager = () => {
         />
         <RouterLink
         class="links-style"
-        to="/dashboard/perfil"
+        to="/dashboard"
         >
         Início
         </RouterLink>
       </li>
-      <li class="links-button">
+      <li class="links-button" :class="{ 'active': $route.path === '/dashboard/pedidos' }">
         <img
         class="image-dimension"
         src="../../assets/navBar/Order.png"
@@ -58,7 +58,7 @@ const handleManager = () => {
         />
         <RouterLink
         class="links-style" 
-        to="/dashboard/perfil"
+        to="/dashboard/pedidos"
         >
         Pedidos
         </RouterLink>

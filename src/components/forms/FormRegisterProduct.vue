@@ -35,7 +35,7 @@ const current = ref(0);
 const next = ref(0);
 const previous = ref(0);
 const pages= ref(0);
-
+const isLoading = ref(false);
 
 const handleClick = async () => {
   const validate = validateFields();
@@ -205,10 +205,11 @@ const filteredStores = () => {
 const debouncedSearch = debounce(filteredStores, 300);
 
 const getlist = (page: number, search = '', category = '') => {
+  isLoading.value = true;
   productService.getProducts(
     Number(storeActive.id),
     (info: dataProductsRequest) => {
-      console.log(info);
+      isLoading.value = false;
       data.value = info.result.products.map((product: any) => ({
         ...product,
         src: `${URL_HOST}${product.image_url}`,
@@ -223,6 +224,7 @@ const getlist = (page: number, search = '', category = '') => {
     (error: any) => {
       console.error('Request failed:', error);
       Swal.fire('Falha ao tentar carregar os produtos. Tente novamente');
+      isLoading.value = false;
     },
     page,
     search,
@@ -249,9 +251,9 @@ const objectForm = () => ({
 
 onMounted(() => {
   if (storeActive.active) {
+    isLoading.value = true;
     productService.getProducts(storeActive.id, (info: any) => {
       if (info.result.products.length > 0) {
-        console.log(info);
         data.value = info.result.products.map((product: any) => ({
           ...product,
           name: product.title,
@@ -263,56 +265,151 @@ onMounted(() => {
         pages.value = info.result.pagination.pages;
         current.value = info.result.pagination.current || 1;
         previous.value = info.result.pagination.previous || 1;
+        isLoading.value = false;
         menuPage.value = false;
 
       }
     }, (erro: any) => {
       console.error('Request failed:', erro);
+      isLoading.value = false;
       Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
     }, 1);
   }
 });
 </script>
 <template>
-  <template v-if="menuPage">
-    <div class="main-content" >
-      <PageInfo
-        :src="ShoppingCart"
-        alt="ícone de carrinho"
-        title="Dados do produto"
-        description="Adicione um novo produto"
-      />
-      <div class="form-container">
-        <form
-        id="uploadForm"
-        action="/upload"
-        method="post"
-        enctype="multipart/form-data"
-        >
-          <div class="form-init">
-            <div class="image-form">
-              <div class="image-container">
-                <img id="uploadedImage" :src="imageUrl" alt="" />
+   <template v-if="isLoading">
+    <LoadingSpiner :isLoading="isLoading"/>
+  </template>
+  <template v-else>
+    <template v-if="menuPage">
+      <div class="main-content" >
+        <PageInfo
+          :src="ShoppingCart"
+          alt="ícone de carrinho"
+          title="Dados do produto"
+          description="Adicione um novo produto"
+        />
+        <div class="form-container">
+          <form
+          id="uploadForm"
+          action="/upload"
+          method="post"
+          enctype="multipart/form-data"
+          >
+            <div class="form-init">
+              <div class="image-form">
+                <div class="image-container">
+                  <img id="uploadedImage" :src="imageUrl" alt="" />
+                </div>
+                <label
+                for="imageInput"
+                class="custom-file-upload"
+                >
+                Alterar Imagem do produto
+              </label>
+                <input
+                  type="file"
+                  name="image"
+                  id="imageInput"
+                  @change="handleImageChange"
+                  style="display: none"
+                />
               </div>
-              <label
-              for="imageInput"
-              class="custom-file-upload"
-              >
-              Alterar Imagem do produto
-            </label>
-              <input
-                type="file"
-                name="image"
-                id="imageInput"
-                @change="handleImageChange"
-                style="display: none"
-              />
+              <div class="inputs-init">
+                 <div>
+                  <p>Categoria</p>
+                  <select class="select-box category" v-model="category">
+                    <option
+                    v-for="(categoria, index) in catergoriesProducts"
+                    :key="index"
+                    :value="categoria"
+                    >
+                      {{ categoria }}
+                    </option>
+                  </select>
+                </div>
+              </div>
             </div>
-            <div class="inputs-init">
-               <div>
-                <p>Categoria</p>
-                <select class="select-box category" v-model="category">
-                  <option
+            <div class="section-intermediate">
+              <div class="intermediate-content">
+                <label class="label-intermediate">
+                  <p>Nome do produto</p>
+                  <input
+                    placeholder="O nome precisa ter no mínimo 3 caracteres"
+                    class="bg-input intermediate"
+                    type="text"
+                    v-model="name"
+                  />
+                </label>
+                <div class="input-phone">
+                  <p>Valor</p>
+                  <input
+                    @input="handlePrice"
+                    v-model="price"
+                    class="bg-input intermediate"
+                    type="text"
+                    maxlength="15"
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="section-finish">
+              <div class="text-description">
+                <p>Descrição</p>
+                <textarea
+                  placeholder="Máximo: 50 caracteres"
+                  cols="30"
+                  rows="10"
+                  v-model="description"
+                  maxlength="50"
+                ></textarea>
+              </div>
+              <div class="btn-div">
+                <button
+                :disabled="awaiting"
+                type="submit"
+                @click.prevent="handleClick"
+                class="save-form-btn"
+                >
+                Salvar
+              </button>
+              </div>
+            </div>
+          </form>
+        </div>
+       </div>
+    </template>
+    <template v-else>
+      <div class="main-content" >
+          <PageInfo
+              :src="Menu"
+              alt="ícone de menu"
+              title="Cardápios"
+              description="Gerencie os itens disponíveis em sua loja
+              através do cardápio"
+              :display="true"
+              :handleClick="goToFormCreate"
+            />
+            <div class="filters-menu">
+              <label for="">
+                <input
+                 class="bg-input-2"
+                 placeholder="Busque pelo nome do item"
+                 type="search"
+                 v-model="filterName"
+                 @input="debouncedSearch"
+                 >
+              </label>
+              <select
+              class="select-box-2"
+              v-model="category"
+               @change="debouncedSearch">
+                  <option value="" disabled selected>
+                    Filtrar por categoria
+                  </option>
+                 <option
                   v-for="(categoria, index) in catergoriesProducts"
                   :key="index"
                   :value="categoria"
@@ -320,131 +417,43 @@ onMounted(() => {
                     {{ categoria }}
                   </option>
                 </select>
-              </div>
             </div>
+            <div class="content-menu">
+              <TableList
+              title="Produtos cadastrados"
+              tableOne="Produto"
+              tableTwo="Nome"
+              tableThree="Preço"
+              tableFour="Produto disponível"
+              :handleEdit="editForm"
+              :handleClick="handleDelete"
+              :handleStatus="handleStatus"
+              :data="data"
+              />
+            </div>
+             <nav>
+              <ul class="pagination justify-content-end">
+                <li class="page-item" :class="{ disabled: current === 1 }">
+                  <a class="page-link" href="#" @click.prevent="handlePage(previous)">
+                    Anterior
+                  </a>
+                </li>
+                <li class="page-item" v-for="page in pages" :key="page" :class="{ active: current === page }">
+                  <a class="page-link" href="#" @click.prevent="handlePage(page)">
+                    {{ page }}
+                  </a>
+                </li>
+                <li class="page-item" :class="{ disabled: current === pages }">
+                  <a class="page-link" href="#" @click.prevent="handlePage(next)">
+                    Próxima
+                  </a>
+                </li>
+              </ul>
+             </nav>
+  
           </div>
-          <div class="section-intermediate">
-            <div class="intermediate-content">
-              <label class="label-intermediate">
-                <p>Nome do produto</p>
-                <input
-                  placeholder="O nome precisa ter no mínimo 3 caracteres"
-                  class="bg-input intermediate"
-                  type="text"
-                  v-model="name"
-                />
-              </label>
-              <div class="input-phone">
-                <p>Valor</p>
-                <input
-                  @input="handlePrice"
-                  v-model="price"
-                  class="bg-input intermediate"
-                  type="text"
-                  maxlength="15"
-                  placeholder="0.00"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="section-finish">
-            <div class="text-description">
-              <p>Descrição</p>
-              <textarea
-                placeholder="Máximo: 50 caracteres"
-                cols="30"
-                rows="10"
-                v-model="description"
-                maxlength="50"
-              ></textarea>
-            </div>
-            <div class="btn-div">
-              <button
-              :disabled="awaiting"
-              type="submit"
-              @click.prevent="handleClick"
-              class="save-form-btn"
-              >
-              Salvar
-            </button>
-            </div>
-          </div>
-        </form>
-      </div>
-     </div>
+     </template>
   </template>
-  <template v-else>
-    <div class="main-content" >
-        <PageInfo
-            :src="Menu"
-            alt="ícone de menu"
-            title="Cardápios"
-            description="Gerencie os itens disponíveis em sua loja
-            através do cardápio"
-            :display="true"
-            :handleClick="goToFormCreate"
-          />
-          <div class="filters-menu">
-            <label for="">
-              <input 
-               class="bg-input-2"
-               placeholder="Busque pelo nome do item" 
-               type="search"
-               v-model="filterName"
-               @input="debouncedSearch"
-               >
-            </label>
-            <select 
-            class="select-box-2" 
-            v-model="category"
-             @change="debouncedSearch">
-                <option value="" disabled selected>
-                  Filtrar por categoria
-                </option>
-               <option
-                v-for="(categoria, index) in catergoriesProducts"
-                :key="index"
-                :value="categoria"
-                >
-                  {{ categoria }}
-                </option>
-              </select>
-          </div>
-          <div class="content-menu">
-            <TableList 
-            title="Produtos cadastrados"
-            tableOne="Produto"
-            tableTwo="Nome"
-            tableThree="Preço"
-            tableFour="Produto disponível"
-            :handleEdit="editForm"
-            :handleClick="handleDelete"
-            :handleStatus="handleStatus"
-            :data="data"
-            />
-          </div>
-           <nav>
-            <ul class="pagination justify-content-end">
-              <li class="page-item" :class="{ disabled: current === 1 }">
-                <a class="page-link" href="#" @click.prevent="handlePage(previous)">
-                  Anterior
-                </a>
-              </li>
-              <li class="page-item" v-for="page in pages" :key="page" :class="{ active: current === page }">
-                <a class="page-link" href="#" @click.prevent="handlePage(page)">
-                  {{ page }}
-                </a>
-              </li>
-              <li class="page-item" :class="{ disabled: current === pages }">
-                <a class="page-link" href="#" @click.prevent="handlePage(next)">
-                  Próxima
-                </a>
-              </li>
-            </ul>
-           </nav>
-
-        </div>
-   </template>
 </template>
 <style scoped>
 

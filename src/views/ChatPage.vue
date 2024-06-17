@@ -15,8 +15,8 @@ const sendMessage = () => {
 onMounted(() => {
   subscription = consumer.subscriptions.create(
 
-    { channel: 'ChatChannel', room: 'public' },
-
+    { channel: 'ChatChannel', order_id: 'public' },
+    // tenho que recuperar esse id pra criar a sala de chat
     {
 
       connected: () => {
@@ -32,6 +32,7 @@ onMounted(() => {
       },
 
       received: (data) => {
+        console.log(data);
         messages.value.push(data);
       },
 
@@ -47,67 +48,47 @@ onBeforeMount(() => {
 });
 
 </script> 
-<template> 
-  <div class="chat-room"> 
+<template>
+  <div class="container chat-room"> 
     <div class="area-text">
-      <h1>Chat Room</h1>
-      <div id="messages">
-        <p v-for="(message, index) in messages" :key="index">{{ message }}</p>
+      <h1 class="text-center my-3">Chat Room</h1>
+      <div id="messages" class="border rounded p-3 mb-3 overflow-auto" style="height: 70vh;">
+        <div v-for="(data, index) in messages" :key="index" class="mb-2">
+          <p class="mb-1 font-weight-bold">{{ data.user }}</p>
+          <p class="mb-1">{{ data.message }}</p>
+        </div>
       </div>
     </div>
     <div class="message-send">
-      <input
-        v-model="newMessage"
-       @keyup.enter="sendMessage"
-       placeholder="Type a message...">
-      <button @click.prevent="sendMessage">Send</button>
+      <div class="input-group">
+        <input
+          v-model="newMessage"
+          @keyup.enter="sendMessage"
+          placeholder="Type a message..."
+          class="form-control"
+        >
+        <div class="input-group-append">
+          <button @click.prevent="sendMessage" class="btn btn-primary">Send</button>
+        </div>
+      </div>
     </div>
-  </div> 
-
+  </div>
 </template>
 
 <style scoped>
 .chat-room {
   display: flex;
   flex-direction: column;
-  align-items: center;
   height: 100vh;
   width: 100%;
-  border: 1px solid black;
 }
 
 .area-text {
-  height: 90vh;
-  border: 1px solid black;
-  height: 90vh;
+  flex: 1;
   width: 100%;
-  justify-content: center;
-  display: flex;
 }
 
 .message-send {
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  height: 10vh;
-}
-
-.message-send input {
-  width: 100%;
-  height: 50%;
-  flex-direction: column;
-  padding: 15px;
-}
-
-.message-send button {
-  width: 100%;
-  height: 50%;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
 </style>
-
-  
