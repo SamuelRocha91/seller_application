@@ -253,7 +253,7 @@ onMounted(() => {
   if (storeActive.active) {
     isLoading.value = true;
     productService.getProducts(storeActive.id, (info: any) => {
-      if (info.result.products.length > 0) {
+      if (info && info.result && info.result.product && info.result.product.length > 0) {
         data.value = info.result.products.map((product: any) => ({
           ...product,
           name: product.title,
@@ -268,6 +268,9 @@ onMounted(() => {
         isLoading.value = false;
         menuPage.value = false;
 
+      } else {
+        isLoading.value = false;
+        menuPage.value = true;
       }
     }, (erro: any) => {
       console.error('Request failed:', erro);
