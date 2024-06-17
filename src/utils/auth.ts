@@ -24,6 +24,9 @@ class Auth {
       if (json.email) {
         this.storage.store('email', json.email);
       }
+      if (json.refresh_token) {
+        this.storage.store('refresh_token', json.refresh_token);
+      }
       onSuccess();
     });
   }
@@ -53,6 +56,8 @@ class Auth {
     const persistent = createStorage(true);
     transient.remove('token');
     transient.remove('email');
+    transient.remove('refresh_token');
+    persistent.remove('refresh_token');
     persistent.remove('token');
     persistent.remove('email');
     andThen();
