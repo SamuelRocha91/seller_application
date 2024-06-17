@@ -38,8 +38,6 @@ watch(storeActive, () => {
   if (storeActive.storeActive.id !== 0) {
     const index = data.value
       .findIndex((field: any) => field.id === storeActive.storeActive.id);
-    console.log(storeActive.storeActive.id);
-    console.log(data.value);
     data.value[index].isOpen = storeActive.storeActive.isOpen;
   }
 });
@@ -110,6 +108,8 @@ const handleImageChange = (event: Event) => {
   if (file) {
     image = file;
     imageUrl.value = URL.createObjectURL(file);
+    console.log(image);
+    console.log(imageUrl.value);
   }
 };
 
@@ -194,32 +194,24 @@ const createStore = (storeData: storeType) => {
 };
 
 const editStore = (storeData: storeType) => {
-  const imageUpdate = storeData.src === image ? null : image;
+  const imageUpdate = storeData.src ? storeData.src : null;
   store.updateStore(editId.value, storeData, imageUpdate, (info: any) => {
-    const stores = store.storage.get('stores') || '[]';
-    const parse = JSON.parse(stores);
-    const index = parse
-      .findIndex((establish: any) => establish.id == info.id);
-    if (index !== -1) {
-      parse[index] = {
-        id: info.id,
-        category: info.category || '',
-        src: `${URL_HOST}${info.avatar_url}` || '',
-        name: info.name, active: parse[index].active,
-        isOpen: info.is_open ? info.is_open : false,
-        colorTheme: info.color_theme || ''
-      };
-      store.storage.store('stores', JSON.stringify(parse));
-      if (storeActive.storeActive.id === editId.value) {
-        storeActive.storeActive.colorTheme = info.color_theme;
-      }
-      data.value = [...parse];
-      swalSuccess('Dados atualizados com sucesso!');
-      awaiting.value = false;
-      edit.value = true;
-    } else {
-      throw new Error('Store not found in local storage');
-    }
+    const storIndex = data.value
+      .findIndex((entity: storeType) => entity.id === editId.value);
+    data.value[storIndex] = {
+      id: editId.value,
+      category: category.value || '',
+      src: `${URL_HOST}${info.avatar_url}` || '',
+      name: name.value,
+      active: data.value[storIndex].active,
+      isOpen: info.is_open ? info.is_open : false,
+      colorTheme: navBarColor.value || ''
+    };
+    updateGlobalState();
+    edit.value = true;
+    editId.value = null;
+    awaiting.value = false;
+    swalSuccess('Dados salvos com sucesso!');
   }, () => {
     swalError('Erro ao salvar os dados',
       'Por favor, verifique os dados inseridos');
@@ -254,17 +246,17 @@ const editForm = async (id: number) => {
     console.log(data);
     address.value = data.address;
     description.value = data.description;
-    category.value = data.category
-      .charAt(0).toUpperCase() + data.category.slice(1);
+    category.value = data.category ? data.category
+      .charAt(0).toUpperCase() + data.category.slice(1) : '';
     name.value = storeFiltered[0].name;
     imageUrl.value = storeFiltered[0].src;
     image = storeFiltered[0].src;
     cnpj.value = data.cnpj;
     navBarColor.value = data.color_theme;
     city.value = data.city;
-    neighborhood.value = data.neighborhood;
+    neighborhood.value = data.neighborhood || '';
     cep.value = data.cep;
-    numberAddress.value = data.number_address.toString();
+    numberAddress.value = data.number_address ? data.number_address.toString() : '';
     state.value = data.state;
     edit.value = false;
   }, (erro: any) => {
@@ -346,7 +338,7 @@ onMounted(() => {
   <template v-else>
       <template v-if="!edit">
         <div
-        class="container mt-4 p-4 bg-white w-90"
+        class="container mt-4 p-5 bg-white w-90"
         style="max-height: 100vh;
          overflow-y: auto;">
           <form

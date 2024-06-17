@@ -106,6 +106,7 @@ class StoreService extends BaseService{
     onFailure: () => void
   ) {
     const formData = this.formData(dataStore);
+    console.log(image);
     if (image !== null) {
       formData.append('store[avatar]', image);
     }
@@ -161,14 +162,14 @@ class StoreService extends BaseService{
     const formData = new FormData();
     formData.append('store[name]', dataStore.name);
     formData.append('store[category]', dataStore.category);
-    formData.append('store[cep]', dataStore.cep);
+    formData.append('store[addresses_attributes][0][postal_code]', dataStore.cep);
     formData.append('store[description]', dataStore.description);
-    formData.append('store[address]', dataStore.address);
+    formData.append('store[addresses_attributes][0][street]', dataStore.address);
     formData.append('store[cnpj]', dataStore.cnpj);
-    formData.append('store[city]', dataStore.city);
-    formData.append('store[state]', dataStore.state);
-    formData.append('store[number_address]', dataStore.numberAddress);
-    formData.append('store[neighborhood]', dataStore.neighborhood);
+    formData.append('store[addresses_attributes][0][city]', dataStore.city);
+    formData.append('store[addresses_attributes][0][state]', dataStore.state);
+    formData.append('store[addresses_attributes][0][number]', dataStore.numberAddress);
+    formData.append('store[addresses_attributes][0][neighborhood]', dataStore.neighborhood);
     formData.append('store[color_theme]', dataStore.colorTheme);
     formData.append('store[is_open]', "false");
     

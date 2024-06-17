@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import { Auth } from '../../utils/auth';
 import { useStoreActive } from '@/store/storeActive';
 import { StoreService } from '@/api/storeService';
