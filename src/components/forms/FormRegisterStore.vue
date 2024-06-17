@@ -325,7 +325,11 @@ onMounted(() => {
     }));
     isLoading.value = false;
     edit.value = true;
-    console.log(data.value);
+    if (storeActive.storeActive.id !== 0) {
+      const index = data.value
+        .findIndex((field: any) => field.id === storeActive.storeActive.id);
+      data.value[index].active = true;
+    }
   },
   (erro: any) => {
     isLoading.value = false;
