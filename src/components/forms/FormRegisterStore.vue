@@ -108,8 +108,6 @@ const handleImageChange = (event: Event) => {
   if (file) {
     image = file;
     imageUrl.value = URL.createObjectURL(file);
-    console.log(image);
-    console.log(imageUrl.value);
   }
 };
 
@@ -167,17 +165,15 @@ const validateFields = () => {
 const createStore = (storeData: storeType) => {
   store.createStore(storeData,
     (info: any) => {
-      const stores = store.storage.get('stores') || '[]';
-      const parse = JSON.parse(stores);
-      parse.push({
+      data.value.push({
         id: info.id,
         category: category.value || '',
         src: `${URL_HOST}${info.avatar_url}` || '',
-        name: name.value, active: false,
+        name: name.value,
+        active: false,
         isOpen: info.is_open ? info.is_open : false,
         colorTheme: navBarColor.value || ''
       });
-      data.value = [...parse];
       updateGlobalState();
       edit.value = true;
       editId.value = null;
@@ -194,7 +190,7 @@ const createStore = (storeData: storeType) => {
 };
 
 const editStore = (storeData: storeType) => {
-  const imageUpdate = storeData.src ? storeData.src : null;
+  const imageUpdate = image ? image : null;
   store.updateStore(editId.value, storeData, imageUpdate, (info: any) => {
     const storIndex = data.value
       .findIndex((entity: storeType) => entity.id === editId.value);
@@ -227,10 +223,7 @@ const deleteForm = (id: number) => {
       data.value = storeFiltered;   
       swalSuccess('Dados excluídos com sucesso');
       if (storeFiltered.length === 0) {
-        store.storage.remove('stores');
         startFormCreateStore();
-      } else {
-        store.storage.store('stores', JSON.stringify(storeFiltered));
       }
     },
     () => swalSuccess('Erro no processamento da exclusão')
@@ -244,27 +237,27 @@ const editForm = async (id: number) => {
     .filter((entity: storeType) => entity.id == id);
   store.getStoreById(id, (data: any) => {
     console.log(data);
-    address.value = data.address;
     description.value = data.description;
     category.value = data.category ? data.category
       .charAt(0).toUpperCase() + data.category.slice(1) : '';
     name.value = storeFiltered[0].name;
     imageUrl.value = storeFiltered[0].src;
-    image = storeFiltered[0].src;
     cnpj.value = data.cnpj;
     navBarColor.value = data.color_theme;
-    city.value = data.city;
-    neighborhood.value = data.neighborhood || '';
-    cep.value = data.cep;
-    numberAddress.value = data.number_address ? data.number_address.toString() : '';
-    state.value = data.state;
+   
+    if (data.address) {
+      address.value = data.address.street;
+      city.value = data.address.city;
+      neighborhood.value = data.address.neighborhood || '';
+      cep.value = data.cep;
+      numberAddress.value = data.address.number ? data.address.number : '';
+      state.value = data.address.state;
+    }
     edit.value = false;
   }, (erro: any) => {
     console.error('Request failed:', erro);
     Swal.fire('Falha ao tentar carregar as lojas. Tente novamente');
   });
-  
-  
 };
 
 const updateGlobalState = () => {
