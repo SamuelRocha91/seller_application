@@ -204,10 +204,11 @@ const editStore = (storeData: storeType) => {
       colorTheme: navBarColor.value || ''
     };
     updateGlobalState();
-    edit.value = true;
     editId.value = null;
     awaiting.value = false;
     swalSuccess('Dados salvos com sucesso!');
+    edit.value = true;
+
   }, () => {
     swalError('Erro ao salvar os dados',
       'Por favor, verifique os dados inseridos');
@@ -225,10 +226,11 @@ const deleteForm = (id: number) => {
       if (storeFiltered.length === 0) {
         startFormCreateStore();
       }
+      updateGlobalState();
+
     },
     () => swalSuccess('Erro no processamento da exclusão')
   );
-  updateGlobalState();
 };
 
 const editForm = async (id: number) => {
@@ -249,7 +251,7 @@ const editForm = async (id: number) => {
       address.value = data.address.street;
       city.value = data.address.city;
       neighborhood.value = data.address.neighborhood || '';
-      cep.value = data.cep;
+      cep.value = data.address.postal_code ? cepMask(data.address.postal_code) : '';
       numberAddress.value = data.address.number ? data.address.number : '';
       state.value = data.address.state;
     }
@@ -262,10 +264,19 @@ const editForm = async (id: number) => {
 
 const updateGlobalState = () => {
   const active = data.value.find((field: any) => field.active);
-  const objectActive = {
-    ...active
-  };
-  storeActive.setStore(objectActive);
+  console.log(active);
+  if (active) {
+    const objectActive = {
+      ...active
+    };
+    storeActive.setStore(objectActive);
+  } else {
+    storeActive.setStore({
+      id: 0,
+      active: false,
+      isOpen: false
+    });
+  }
 };
 
 const objectForm = () => ({
