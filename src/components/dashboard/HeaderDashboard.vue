@@ -27,18 +27,6 @@ const updateStore = (id: number, value: boolean) => {
     () => Swal.fire("Erro ao abrir/fechar loja"));
 };
 
-onMounted(() => {
-  const storage = storeService.getFallback('stores') || '[]';
-  const storageParse = JSON.parse(storage);
-  if (storageParse !== null) {
-    const active = storageParse.find((field: any) => field.active == true);
-    const objectActive = {
-      ...active
-    };
-    store.setStore(objectActive);
-  }
-});
-
 </script>
 <template>
   <header>
