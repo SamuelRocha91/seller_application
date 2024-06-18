@@ -20,7 +20,7 @@ const URL_HOST = import.meta.env.VITE_BASE_URL;
 
 const awaiting = ref(false);
 const category = defineModel('category', { default: '' });
-const data = ref();
+const data = ref<any[]>([]);
 const description = defineModel('description', { default: '' });
 const editId = ref();
 const imageUrl = ref();
@@ -129,7 +129,7 @@ const createProduct = (dataProduct: any) => {
     storeActive.id,
     dataProduct,
     (info: any) => {
-      if (data.value.length < 4) {
+      if (data.value && data.value.length < 4) {
         data.value.push(
           {
             id: info.id,
@@ -189,7 +189,7 @@ const editForm = async (id: number) => {
         info.category.charAt(0).toUpperCase() + info.category.slice(1);
       name.value = productFiltered[0].name;
       imageUrl.value = productFiltered[0].src;
-      price.value = info.price;
+      price.value = info.price.replace('R$', '');
       image = productFiltered[0].src;
       menuPage.value = true;
     }, (erro: any) => {
@@ -253,7 +253,8 @@ onMounted(() => {
   if (storeActive.active) {
     isLoading.value = true;
     productService.getProducts(storeActive.id, (info: any) => {
-      if (info && info.result && info.result.product && info.result.product.length > 0) {
+      console.log(info);
+      if (info && info.result && info.result.products && info.result.products.length > 0) {
         data.value = info.result.products.map((product: any) => ({
           ...product,
           name: product.title,
