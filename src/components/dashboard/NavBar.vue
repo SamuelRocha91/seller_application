@@ -39,7 +39,7 @@ const handleManager = () => {
     <ul>
       <li 
         class="links-button"
-        :class="{ 'active': route.path === '/dashboard/perfil' }"
+        :class="{ 'active': route.path === '/dashboard' }"
       >
         <img
         class="image-dimension"
@@ -84,7 +84,7 @@ const handleManager = () => {
       </li>
       <li 
         class="links-button"
-        :class="{ 'active': route.path === '/dashboard/perfil' }"
+        :class="{ 'active': route.path === '/dashboard/relatorios' }"
       >
         <img
         class="image-dimension"
@@ -100,7 +100,7 @@ const handleManager = () => {
       </li>
       <li 
         class="links-button" 
-        :class="{ 'active': route.path === '/dashboard/perfil' }"
+        :class="{ 'active': route.path === '/dashboard/financas' }"
       >
         <img
         class="image-dimension"
