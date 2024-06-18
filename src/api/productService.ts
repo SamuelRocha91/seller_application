@@ -13,7 +13,7 @@ class ProductService extends BaseService{
     onFailure: (data?: any) => void
   ) {
     const response = await this
-      .getEntity(`stores/${idStore}/products/${idProduct}`);
+      .getEntity(`stores/${idStore}/products/${idProduct}?locale=pt-BR`);
     if (response.ok) {
       this.success(response, onSuccess);
     } else if (response.status === 401) {
