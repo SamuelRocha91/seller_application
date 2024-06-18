@@ -37,7 +37,10 @@ const handleManager = () => {
   <nav class="nav-links"
    :style="navStyle">
     <ul>
-      <li class="links-button">
+      <li 
+        class="links-button"
+        :class="{ 'active': route.path === '/dashboard/perfil' }"
+      >
         <img
         class="image-dimension"
         src="../../assets/navBar/Home.png"
@@ -79,7 +82,10 @@ const handleManager = () => {
         Gerenciar loja
       </a>
       </li>
-      <li class="links-button">
+      <li 
+        class="links-button"
+        :class="{ 'active': route.path === '/dashboard/perfil' }"
+      >
         <img
         class="image-dimension"
         src="../../assets/navBar/Reports.png" 
@@ -87,12 +93,15 @@ const handleManager = () => {
         />
         <RouterLink
         class="links-style"
-        to="/dashboard/perfil"
+        to="/dashboard/relatorios"
         >
         Relatórios
       </RouterLink>
       </li>
-      <li class="links-button">
+      <li 
+        class="links-button" 
+        :class="{ 'active': route.path === '/dashboard/perfil' }"
+      >
         <img
         class="image-dimension"
         src="../../assets/navBar/Finance.png"
@@ -100,7 +109,7 @@ const handleManager = () => {
         />
         <RouterLink
         class="links-style"
-        to="/dashboard/perfil"
+        to="/dashboard/financas"
         >
         Finanças
       </RouterLink>

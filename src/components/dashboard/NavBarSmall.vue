@@ -36,7 +36,10 @@ const handleManager = () => {
 <template>
   <nav class="nav-links"  :style="navStyle">
     <ul>
-      <li class="links-button">
+      <li 
+        class="links-button"
+        :class="{ 'active': route.path === '/dashboard/perfil' }"
+      >
         <img
         class="image-dimension"
         src="../../assets/navBar/Home.png"
@@ -49,7 +52,10 @@ const handleManager = () => {
         Início
       </RouterLink>
       </li>
-      <li class="links-button" :class="{ 'active': $route.path === '/dashboard/pedidos' }">
+      <li 
+        class="links-button" 
+        :class="{ 'active': $route.path === '/dashboard/pedidos' }"
+        >
         <img
         class="image-dimension"
         src="../../assets/navBar/Order.png"
@@ -62,7 +68,9 @@ const handleManager = () => {
         Pedidos
       </RouterLink>
       </li>
-      <li class="links-button">
+      <li 
+        class="links-button"
+        >
         <img
         :class="{ 'active': $route.path === '/dashboard/gerenciar-loja' }"
         class="image-dimension"
@@ -89,7 +97,9 @@ const handleManager = () => {
         Relatórios
       </RouterLink>
       </li>
-      <li class="links-button">
+      <li 
+        :class="{ 'active': route.path === '/dashboard/perfil' }"
+        class="links-button">
         <img
           class="image-dimension"
           src="../../assets/navBar/Finance.png"
