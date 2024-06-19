@@ -4,6 +4,7 @@ import NavBar from '../components/dashboard/NavBar.vue';
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import Report from '../assets/icons/Report.png';
+import PageInfo from '../components/dashboard/PageInfo.vue';
 
 const BignavBar = ref(true);
 

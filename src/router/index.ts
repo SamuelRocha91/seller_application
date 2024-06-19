@@ -10,6 +10,7 @@ import PerfilPage from '@/views/PerfilPage.vue';
 import ManageStorePage from '@/views/ManageStorePage.vue';
 import OrderPage from '@/views/OrderPage.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
+import ReportPage from '@/views/ReportPage.vue';
 
 
 const router = createRouter({
@@ -67,7 +68,7 @@ const router = createRouter({
       path: '/dashboard/relatorios',
       name: '/dashboard/relatorios',
       meta: { requiresAuth: true },
-      component: () => import('@/views/ReportPage.vue')
+      component: ReportPage
     },
     {
       path: '/:catchAll(.*)',
