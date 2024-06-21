@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 defineProps<{
-  sendEmail?: () => void
+  sendEmail?: (email: string) => void
 }>();
 
 const email = defineModel('email', { default: '' });
@@ -33,7 +33,7 @@ const validateEmailOnBlur = () => {
           <span v-if="emailError" class="error">{{ emailError }}</span>
         </div>
       </label>
-      <button @click="sendEmail" id="register-form-btn">Recuperar senha</button>
+      <button v-if="sendEmail" @click="sendEmail(email)" id="register-form-btn">Recuperar senha</button>
       <div class="links-redirect">
         <p>
           Ainda não tem cadastro?
