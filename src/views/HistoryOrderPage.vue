@@ -4,6 +4,7 @@ import NavBar from '../components/dashboard/NavBar.vue';
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import History from '../assets/icons/History.png';
+import PageInfo from '../components/dashboard/PageInfo.vue';
 
 const BignavBar = ref(true);
 
@@ -46,10 +47,9 @@ const handleClick = () => {
       <main>
         <PageInfo
           :src="History"
-          alt="ícone de perfil"
-          title="Perfil"
-          description="Gerencie aqui as informações de sua loja
-          e permissões de acesso"
+          alt="Histórico de pedidos"
+          title="Histórico de pedidos"
+          description="Tenha acesso a todos os seus pedidos feitos na plataforma."
         />
       </main>
     </div>
