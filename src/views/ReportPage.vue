@@ -5,6 +5,7 @@ import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import Report from '../assets/icons/Report.png';
 import PageInfo from '../components/dashboard/PageInfo.vue';
+import ReportsComponent from '../components/dashboard/ReportsComponent.vue';
 
 const BignavBar = ref(true);
 
@@ -51,6 +52,7 @@ const handleClick = () => {
           title="Relatórios"
           description="Acompanhe de perto o desempenho do seu negócio"
         />
+        <ReportsComponent />
       </main>
     </div>
   </div>
