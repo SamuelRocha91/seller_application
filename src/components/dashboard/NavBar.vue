@@ -100,7 +100,7 @@ const handleManager = () => {
       </li>
       <li 
         class="links-button" 
-        :class="{ 'active': route.path === '/dashboard/financas' }"
+        :class="{ 'active': route.path === '/dashboard/historico' }"
       >
         <img
         class="image-dimension"
@@ -109,9 +109,9 @@ const handleManager = () => {
         />
         <RouterLink
         class="links-style"
-        to="/dashboard/financas"
+        to="/dashboard/historico"
         >
-        Finanças
+        Histórico de vendas
       </RouterLink>
       </li>
       <li
