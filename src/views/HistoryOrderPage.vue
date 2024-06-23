@@ -9,7 +9,7 @@ import HistoryOrder from '../components/dashboard/HistoryOrder.vue';
 import OrderService from '../api/orderService';
 import { useStoreActive } from '@/store/storeActive';
 import debounce from 'lodash.debounce';
-import OrderContent from '@/components/dashboard/OrderContent.vue';
+import OrderDetails from '@/components/dashboard/OrderDetails.vue';
 
 const category = defineModel('category', { default: '' });
 const date = defineModel('date', { default: '' });
@@ -51,9 +51,16 @@ const handleClick = () => {
 };
 
 const selectOrder = (id: number) => {
+  console.log(id);
   OrderService.getOrderById(id, (data: any) => {
+    console.log(data);
     orderSelected.value = data;
+    orderDetails.value = true;
   });
+};
+
+const turnToHistory = () => {
+  orderDetails.value = false;
 };
 onMounted(() => {
   getOrders(1, '', '');
@@ -106,11 +113,12 @@ onMounted(() => {
         v-model:category="category"
         v-model:date="date"
         />
-        <OrderContent 
+        <OrderDetails
         v-else
-        order="orderSelected"
+        :order="orderSelected"
+        :turnToHistory="turnToHistory"
         />
-        <nav>
+        <nav v-if="!orderDetails">
         <ul class="pagination justify-content-end">
           <li class="page-item" :class="{ disabled: current === 1 }">
             <a class="page-link" href="#" @click.prevent="handlePage(previous)">
