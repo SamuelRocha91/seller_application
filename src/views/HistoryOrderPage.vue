@@ -25,7 +25,7 @@ const debouncedSearch = debounce(filteredOrders, 300);
 const getOrders = (page: number, date: string, category: string) => {
   OrderService.getOrders(store.id, (data: any) => {
     console.log(data);
-    orders.value = data;
+    orders.value = data.result.orders;
   }, page, date, category, );
 };
 

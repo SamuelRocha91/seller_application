@@ -28,18 +28,18 @@ const category = defineModel('category', { default: '' });
       <table>
         <thead>
           <tr>
-            <th>Número do pedido</th>
-            <th>Valor</th>
-            <th>Status</th>
-            <th>Data</th>
+            <th scope="col">Número do pedido</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Status</th>
+            <th scope="col">Data</th>
           </tr>
         </thead>
         <tbody v-if="orders" >
           <tr v-for="order in orders" :key="order.id">
-            <td>{{ order.id }}</td>
-            <td>{{ order.price }}</td>
-            <td>{{ order.state }}</td>
-            <td>{{ order.date }}</td>
+            <td scope="row">{{ `###${order.id}` }}</td>
+            <td scope="row">{{ `R$${order.total_value}0` }}</td>
+            <td scope="row">{{ order.state }}</td>
+            <td scope="row">{{ order.created_at.split('T')[0] }}</td>
           </tr>
         </tbody>
       </table>
@@ -65,5 +65,45 @@ const category = defineModel('category', { default: '' });
   gap: 30px;
   width: 100%;
   height: 20px;
+}
+
+.filters select {
+  width: 200px;
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: rgb(206, 201, 201);
+}
+
+.filters input {
+  width: 200px;
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: rgb(206, 201, 201);
+  padding: 5px
+}
+
+table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+caption {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+  caption-side: top;
+}
+
+th {
+  background-color: #d2d7dd;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+td {
+  padding: 10px;
+  border: 1px solid #ccc;
 }
 </style>
