@@ -2,6 +2,7 @@
 defineProps<{
   orders: any
   filteredOrders: () => void
+  selectOrder: (id: number) => void
 }>();
 
 const date = defineModel('date', { default: '' });
@@ -35,7 +36,7 @@ const category = defineModel('category', { default: '' });
           </tr>
         </thead>
         <tbody v-if="orders" >
-          <tr v-for="order in orders" :key="order.id">
+          <tr v-for="order in orders" :key="order.id" @click="selectOrder(order.id)">
             <td scope="row">{{ `###${order.id}` }}</td>
             <td scope="row">{{ `R$${order.total_value}0` }}</td>
             <td scope="row">{{ order.state }}</td>

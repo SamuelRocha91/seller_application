@@ -9,6 +9,7 @@ import HistoryOrder from '../components/dashboard/HistoryOrder.vue';
 import OrderService from '../api/orderService';
 import { useStoreActive } from '@/store/storeActive';
 import debounce from 'lodash.debounce';
+import OrderContent from '@/components/dashboard/OrderContent.vue';
 
 const category = defineModel('category', { default: '' });
 const date = defineModel('date', { default: '' });
@@ -17,6 +18,8 @@ const orders = ref<any[]>([]);
 const store = useStoreActive().storeActive;
 const current = ref(0);
 const next = ref(0);
+const orderDetails = ref(false);
+const orderSelected = ref(null);
 const previous = ref(0);
 const pages = ref(0);
 
@@ -47,6 +50,11 @@ const handleClick = () => {
   BignavBar.value = !BignavBar.value;
 };
 
+const selectOrder = (id: number) => {
+  OrderService.getOrderById(id, (data: any) => {
+    orderSelected.value = data;
+  });
+};
 onMounted(() => {
   getOrders(1, '', '');
 });
@@ -91,10 +99,16 @@ onMounted(() => {
           description="Tenha acesso a todos os seus pedidos feitos na plataforma."
         />
         <HistoryOrder
+        v-if="!orderDetails"
         :orders="orders"
         :filteredOrders="debouncedSearch"
+        :selectOrder="selectOrder"
         v-model:category="category"
         v-model:date="date"
+        />
+        <OrderContent 
+        v-else
+        order="orderSelected"
         />
         <nav>
         <ul class="pagination justify-content-end">

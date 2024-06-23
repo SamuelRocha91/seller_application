@@ -1,10 +1,10 @@
 <script setup lang="ts">
 defineProps<{
   order: any,
-  acceptOrder: (id: number) => void,
-  cancelOrder: (id: number) => void,
-  startPreparation: (id: number) => void,
-  readyForDelivery: (id: number) => void,
+  acceptOrder?: (id: number) => void,
+  cancelOrder?: (id: number) => void,
+  startPreparation?: (id: number) => void,
+  readyForDelivery?: (id: number) => void,
 }>();
 </script>
 <template>
@@ -27,16 +27,16 @@ defineProps<{
       <p class="total" >Total: R${{ order.total }}</p>
     </div>
     <div v-if="order.status == 'payment_confirmed'" class="card-footer d-flex justify-content-end">
-      <button @click="acceptOrder(order.id)" class="btn btn-success me-2">Aceitar</button>
-      <button @click="cancelOrder(order.id)" class="btn btn-danger">Recusar</button>
+      <button v-if="acceptOrder" @click="acceptOrder(order.id)" class="btn btn-success me-2">Aceitar</button>
+      <button v-if="cancelOrder" @click="cancelOrder(order.id)" class="btn btn-danger">Recusar</button>
     </div>
     <div v-if="order.status == 'accepted'" class="card-footer d-flex justify-content-end">
-      <button @click="startPreparation(order.id)" class="btn btn-success me-2">Começar preparo</button>
-      <button @click="cancelOrder(order.id)" class="btn btn-danger">Cancelar</button>
+      <button v-if="startPreparation" @click="startPreparation(order.id)" class="btn btn-success me-2">Começar preparo</button>
+      <button v-if="cancelOrder" @click="cancelOrder(order.id)" class="btn btn-danger">Cancelar</button>
     </div>
     <div v-if="order.status == 'in_progress'" class="card-footer d-flex justify-content-end">
-      <button @click="readyForDelivery(order.id)" class="btn btn-success me-2">Pronto para entrega</button>
-      <button @click="cancelOrder(order.id)" class="btn btn-danger">Cancelar</button>
+      <button v-if="readyForDelivery" @click="readyForDelivery(order.id)" class="btn btn-success me-2">Pronto para entrega</button>
+      <button v-if="cancelOrder" @click="cancelOrder(order.id)" class="btn btn-danger">Cancelar</button>
     </div>
   </div>
 </template>
