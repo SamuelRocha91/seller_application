@@ -5,6 +5,7 @@ import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import History from '../assets/icons/History.png';
 import PageInfo from '../components/dashboard/PageInfo.vue';
+import HistoryOrder from '../components/dashboard/HistoryOrder.vue';
 
 const BignavBar = ref(true);
 
@@ -51,6 +52,7 @@ const handleClick = () => {
           title="Histórico de pedidos"
           description="Tenha acesso a todos os seus pedidos feitos na plataforma."
         />
+        <HistoryOrder />
       </main>
     </div>
   </div>
