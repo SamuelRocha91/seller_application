@@ -1,17 +1,41 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import NavBar from '../components/dashboard/NavBar.vue';
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import History from '../assets/icons/History.png';
 import PageInfo from '../components/dashboard/PageInfo.vue';
 import HistoryOrder from '../components/dashboard/HistoryOrder.vue';
+import OrderService from '../api/orderService';
+import { useStoreActive } from '@/store/storeActive';
+import debounce from 'lodash.debounce';
 
+const category = defineModel('category', { default: '' });
+const date = defineModel('date', { default: '' });
 const BignavBar = ref(true);
+const orders = ref<any[]>([]);
+const store = useStoreActive().storeActive;
+
+const filteredOrders = () => {
+  getOrders(1, date.value, category.value.toLowerCase());
+};
+
+const debouncedSearch = debounce(filteredOrders, 300);
+
+const getOrders = (page: number, date: string, category: string) => {
+  OrderService.getOrders(store.id, (data: any) => {
+    console.log(data);
+    orders.value = data;
+  }, page, date, category, );
+};
 
 const handleClick = () => {
   BignavBar.value = !BignavBar.value;
 };
+
+onMounted(() => {
+  getOrders(1, '', '');
+});
 </script>
 
 <template>
@@ -52,7 +76,12 @@ const handleClick = () => {
           title="Histórico de pedidos"
           description="Tenha acesso a todos os seus pedidos feitos na plataforma."
         />
-        <HistoryOrder />
+        <HistoryOrder
+        :orders="orders"
+        :filteredOrders="debouncedSearch"
+        v-model:category="category"
+        v-model:date="date"
+        />
       </main>
     </div>
   </div>

@@ -1,39 +1,48 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+defineProps<{
+  orders: any
+  filteredOrders: () => void
+}>();
 
-const orders = ref<any[]>([]);
+const date = defineModel('date', { default: '' });
+const category = defineModel('category', { default: '' });
 
 </script>
 <template>
   <div class="order-page">
     <div class="filters">
-        <select name="status" id="status">
-            <option hidden>Busca por status</option>
-            <option value="in_delivery">Em entrega</option>
-            <option value="delivered">Finalizado</option>
-            <option value="canceled">Cancelado</option>
+        <select 
+          name="status"
+          id="status" 
+          v-model="category"
+          @change="filteredOrders"
+        >
+          <option hidden>Busca por status</option>
+          <option value="in_delivery">Em entrega</option>
+          <option value="delivered">Finalizado</option>
+          <option value="canceled">Cancelado</option>
         </select>
-        <input type="date">
+        <input type="date" @change="filteredOrders" v-model="date">
     </div>
     <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Número do pedido</th>
-                    <th>Valor</th>
-                    <th>Status</th>
-                    <th>Data</th>
-                </tr>
-            </thead>
-            <tbody v-if="orders" >
-                <tr v-for="order in orders" :key="order.id">
-                  <td>{{ order.id }}</td>
-                  <td>{{ order.price }}</td>
-                  <td>{{ order.state }}</td>
-                  <td>{{ order.date }}</td>
-                </tr>
-            </tbody>
-        </table>
+      <table>
+        <thead>
+          <tr>
+            <th>Número do pedido</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody v-if="orders" >
+          <tr v-for="order in orders" :key="order.id">
+            <td>{{ order.id }}</td>
+            <td>{{ order.price }}</td>
+            <td>{{ order.state }}</td>
+            <td>{{ order.date }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
