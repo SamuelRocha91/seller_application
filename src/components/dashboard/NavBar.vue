@@ -32,6 +32,30 @@ const handleManager = () => {
     Swal.fire('É necessário ativar uma loja pra poder fazer o gerenciamento');
   }
 };
+
+const handleOrder = () => {
+  if (useStoreActive().storeActive.active) {
+    router.push('/dashboard/pedidos');
+  } else {
+    Swal.fire('É necessário ativar uma loja pra poder ver os pedidos');
+  }
+};
+
+const handleReports = () => {
+  if (useStoreActive().storeActive.active) {
+    router.push('/dashboard/relatorios');
+  } else {
+    Swal.fire('É necessário ativar uma loja pra poder ver os relatórios');
+  }
+};
+
+const handleHistory = () => {
+  if (useStoreActive().storeActive.active) {
+    router.push('/dashboard/historico');
+  } else {
+    Swal.fire('É necessário ativar uma loja pra poder ver o histórico de vendas');
+  }
+};
 </script>
 <template>
   <nav class="nav-links"
@@ -59,12 +83,13 @@ const handleManager = () => {
         src="../../assets/navBar/Order.png"
         alt="ícone de pedidos"
         />
-        <RouterLink
+        <a
         class="links-style" 
-        to="/dashboard/pedidos"
+        @click.prevent="handleOrder"
+
         >
         Pedidos
-        </RouterLink>
+        </a>
       </li>
       <li class="links-button" 
           :class="{ 'active': $route.path === '/dashboard/gerenciar-loja' }"
@@ -91,12 +116,12 @@ const handleManager = () => {
         src="../../assets/navBar/Reports.png" 
         alt="ícone de relatório"
         />
-        <RouterLink
+        <a
         class="links-style"
-        to="/dashboard/relatorios"
+        @click.prevent="handleReports"
         >
         Relatórios
-      </RouterLink>
+      </a>
       </li>
       <li 
         class="links-button" 
@@ -107,12 +132,12 @@ const handleManager = () => {
         src="../../assets/navBar/Finance.png"
         alt="ícone de finanças"
         />
-        <RouterLink
+        <a
         class="links-style"
-        to="/dashboard/historico"
+        @click="handleHistory"
         >
         Histórico de vendas
-      </RouterLink>
+      </a>
       </li>
       <li
       class="links-button"
