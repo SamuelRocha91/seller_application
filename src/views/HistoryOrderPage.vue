@@ -10,10 +10,11 @@ import OrderService from '../api/orderService';
 import { useStoreActive } from '@/store/storeActive';
 import debounce from 'lodash.debounce';
 import OrderDetails from '@/components/dashboard/OrderDetails.vue';
+import { useNavStore } from '@/store/navStore';
 
+const navStore = useNavStore();
 const category = defineModel('category', { default: '' });
 const date = defineModel('date', { default: '' });
-const BignavBar = ref(true);
 const orders = ref<any[]>([]);
 const store = useStoreActive().storeActive;
 const current = ref(0);
@@ -47,11 +48,10 @@ const handlePage = (page: number) => {
 };
 
 const handleClick = () => {
-  BignavBar.value = !BignavBar.value;
+  navStore.setNav();
 };
 
 const selectOrder = (id: number) => {
-  console.log(id);
   OrderService.getOrderById(id, (data: any) => {
     console.log(data);
     orderSelected.value = data;
@@ -69,7 +69,7 @@ onMounted(() => {
 
 <template>
 <div class="d-flex">
-    <template v-if="BignavBar">
+    <template v-if="navStore.navActive">
       <div class="header-nav bg-danger d-flex flex-column align-items-center">
         <div class="filter py-3">
           <img
