@@ -11,6 +11,7 @@ import ManageStorePage from '@/views/ManageStorePage.vue';
 import OrderPage from '@/views/OrderPage.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
 import ReportPage from '@/views/ReportPage.vue';
+import HistoryOrderPage from '@/views/HistoryOrderPage.vue';
 
 
 const router = createRouter({
@@ -58,6 +59,12 @@ const router = createRouter({
       name: '/dashboard/pedidos',
       meta: { requiresAuth: true },
       component: OrderPage
+    },
+    {
+      path: '/dashboard/historico',
+      name: '/dashboard/historico',
+      meta: { requiresAuth: true },
+      component: HistoryOrderPage
     },
     {
       path: '/chat',

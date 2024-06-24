@@ -32,6 +32,30 @@ const handleManager = () => {
   }
 };
 
+const handleOrder = () => {
+  if (useStoreActive().storeActive.active) {
+    router.push('/dashboard/pedidos');
+  } else {
+    Swal.fire('É necessário ativar uma loja pra poder ver os pedidos');
+  }
+};
+
+const handleReports = () => {
+  if (useStoreActive().storeActive.active) {
+    router.push('/dashboard/relatorios');
+  } else {
+    Swal.fire('É necessário ativar uma loja pra poder ver os relatórios');
+  }
+};
+
+const handleHistory = () => {
+  if (useStoreActive().storeActive.active) {
+    router.push('/dashboard/historico');
+  } else {
+    Swal.fire('É necessário ativar uma loja pra poder ver o histórico de vendas');
+  }
+};
+
 </script>
 <template>
   <nav class="nav-links"  :style="navStyle">
@@ -55,62 +79,66 @@ const handleManager = () => {
       <li 
         class="links-button" 
         :class="{ 'active': $route.path === '/dashboard/pedidos' }"
+        @click.prevent="handleOrder"
+
         >
         <img
         class="image-dimension"
         src="../../assets/navBar/Order.png"
         alt="ícone de pedidos"
         />
-        <RouterLink
+        <a
         class="links-style"
-        to="/dashboard/pedidos"
         >
         Pedidos
-      </RouterLink>
+      </a>
       </li>
       <li 
         class="links-button"
+        @click.prevent="handleManager"
+        :class="{ 'active': $route.path === '/dashboard/gerenciar-loja' }"
         >
         <img
-        :class="{ 'active': $route.path === '/dashboard/gerenciar-loja' }"
         class="image-dimension"
         src="../../assets/navBar/Store.png"
         alt="ícone de loja"
          />
         <a
          class="links-style"
-         @click.prevent="handleManager"
          >
          Gerenciar loja
         </a>
       </li>
-      <li class="links-button">
+      <li class="links-button"
+      @click.prevent="handleReports"
+       :class="{ 'active': $route.path === '/dashboard/relatorios' }"
+      >
         <img
           class="image-dimension"
           src="../../assets/navBar/Reports.png"
           alt="ícone de relatório"
         />
-        <RouterLink
+        <a
         class="links-style"
-        to="/dashboard/relatorios"
+        
         >
         Relatórios
-      </RouterLink>
+      </a>
       </li>
       <li 
-        :class="{ 'active': route.path === '/dashboard/perfil' }"
+        @click.prevent="handleHistory"
+        :class="{ 'active': route.path === '/dashboard/historico' }"
         class="links-button">
         <img
           class="image-dimension"
           src="../../assets/navBar/Finance.png"
           alt="ícone de finanças"
         />
-        <RouterLink
+        <a
         class="links-style"
-        to="/dashboard/finacas"
         >
-        Finanças
-      </RouterLink>
+        Histórico de vendas
+      </a>
       </li>
       <li
       class="links-button"

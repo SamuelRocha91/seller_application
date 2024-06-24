@@ -5,9 +5,21 @@ import HeaderAccess from '../components/access/HeaderAccess.vue';
 import ImageContainer from '../components/access/ImageContainer.vue';
 import Hamburguer from '../assets/imageContainer/Hamburger.jpg';
 import FormRecoveryPassword from '../components/forms/FormRecoveryPassword.vue';
+import { Auth } from '@/utils/auth';
+
+const auth = new Auth();
 const isEmailHasBeenSent = ref(false);
-const sendEmail = () => {
-  isEmailHasBeenSent.value = !isEmailHasBeenSent.value;
+
+const reSendEmail = () => {
+  isEmailHasBeenSent.value = false;
+};
+
+const sendEmail = (email: string) => {
+  auth.resetPassword(email, () => {
+    isEmailHasBeenSent.value = true;
+  }, () => {
+    isEmailHasBeenSent.value = false;
+  });
 };
 </script>
 <template>
@@ -47,7 +59,7 @@ const sendEmail = () => {
                   </div>
                   <button
                   id="register-form-btn"
-                  @click="sendEmail"
+                  @click="reSendEmail"
                   >
                   Reenviar email
                 </button>

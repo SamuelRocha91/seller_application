@@ -387,41 +387,41 @@ onMounted(() => {
     </template>
     <template v-else>
       <div class="main-content" >
-          <PageInfo
-              :src="Menu"
-              alt="ícone de menu"
-              title="Cardápios"
-              description="Gerencie os itens disponíveis em sua loja
+        <PageInfo
+          :src="Menu"
+          alt="ícone de menu"
+          title="Cardápios"
+          description="Gerencie os itens disponíveis em sua loja
               através do cardápio"
-              :display="true"
-              :handleClick="goToFormCreate"
+          :display="true"
+          :handleClick="goToFormCreate"
             />
-            <div class="filters-menu">
-              <label for="">
-                <input
-                 class="bg-input-2"
-                 placeholder="Busque pelo nome do item"
-                 type="search"
-                 v-model="filterName"
-                 @input="debouncedSearch"
-                 >
-              </label>
-              <select
-              class="select-box-2"
-              v-model="category"
-               @change="debouncedSearch">
-                  <option value="" disabled selected>
-                    Filtrar por categoria
-                  </option>
-                 <option
-                  v-for="(categoria, index) in catergoriesProducts"
-                  :key="index"
-                  :value="categoria"
-                  >
-                    {{ categoria }}
-                  </option>
-                </select>
-            </div>
+        <div class="filters-menu">
+          <label for="">
+          <input
+            class="bg-input-2"
+            placeholder="Busque pelo nome do item"
+            type="search"
+            v-model="filterName"
+            @input="debouncedSearch"
+            >
+          </label>
+          <select
+            class="select-box-2"
+            v-model="category"
+            @change="debouncedSearch">
+            <option value="" disabled selected>
+                Filtrar por categoria
+            </option>
+            <option
+              v-for="(categoria, index) in catergoriesProducts"
+              :key="index"
+              :value="categoria"
+              >
+                  {{ categoria }}
+            </option>
+          </select>
+        </div>
             <div class="content-menu">
               <TableList
               title="Produtos cadastrados"
@@ -454,7 +454,6 @@ onMounted(() => {
                 </li>
               </ul>
              </nav>
-  
           </div>
      </template>
   </template>

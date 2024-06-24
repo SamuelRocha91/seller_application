@@ -121,6 +121,31 @@ class Auth {
     });
   }
 
+  async resetPassword(email: string, onSuccess: () => void, onFailure: () => void) {
+    const body = {
+      user: {
+        email: email
+      }
+    };
+    await fetch(`${Auth.URL}/users/password`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-API-KEY': Auth.X_API_KEY,
+        'Authorization': 'Bearer ' + this.getFallback('token')
+      },
+      body: JSON.stringify(body)
+    }).then((response) => {
+      if (response.ok) {
+        onSuccess();
+      } else {
+        onFailure();
+      }
+    });
+  }
+
+
   async refreshTokens(refresh_token: string) {
     const response = await fetch(`${Auth.URL}/refresh`, {
       method: 'POST',

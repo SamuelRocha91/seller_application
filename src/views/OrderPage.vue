@@ -9,8 +9,9 @@ import { onMounted } from 'vue';
 import orderService from '@/api/orderService';
 import { useStoreActive } from '@/store/storeActive';
 import LoadingSpiner from '@/components/dashboard/LoadingSpiner.vue';
+import { useNavStore } from '@/store/navStore';
 
-const BignavBar = ref(true);
+const navStore = useNavStore();
 const hasNewOrder = ref(false);
 const isLoading = ref(false);
 const newOrder = ref([]);
@@ -18,9 +19,8 @@ const orderSelected = ref(null);
 const storeActive = useStoreActive().storeActive;
 
 const handleClick = () => {
-  BignavBar.value = !BignavBar.value;
+  navStore.setNav();
 };
-
 const selectOrder = (id: number) => {
   orderService.getOrderById(id, (data: any) => {
     orderSelected.value = data;
@@ -96,7 +96,7 @@ onMounted(() => {
   </template>
   <template v-else>
     <div class="d-flex color-back">
-      <template v-if="BignavBar">
+      <template v-if="navStore.navActive">
         <div class="header-nav bg-danger d-flex flex-column align-items-center">
           <div class="filter py-3">
             <img

@@ -33,6 +33,14 @@ class OrderService extends BaseService {
     });
   }
 
+  async getOrders(storeId: number, success: (data: any) => void, page: number = 1, data: string = '', status: string = '') {
+    const response = await this.getEntity(`stores/${storeId}/orders?page=${page}&created_at=${data}&status=${status}`);
+    if (response.ok) {
+      const data = await response.json();
+      success(data);
+    }
+  }
+
   async getOrderById(orderId: number, success: (data: any) => void) {
     const response = await this.getEntity(`buyers/orders/${orderId}`);
     if (response.ok) {

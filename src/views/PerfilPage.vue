@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import NavBar from '../components/dashboard/NavBar.vue';
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import PageInfo from '@/components/dashboard/PageInfo.vue';
 import UserCircle from '../assets/icons/UserCircle.png';
 import FormRegisterStore from '@/components/forms/FormRegisterStore.vue';
+import { useNavStore } from '@/store/navStore';
 
-const BignavBar = ref(true);
+const navStore = useNavStore();
 
 const handleClick = () => {
-  BignavBar.value = !BignavBar.value;
+  navStore.setNav();
 };
 </script>
 
 <template>
 <div class="d-flex">
-    <template v-if="BignavBar">
+    <template v-if="navStore.navActive">
       <div class="header-nav bg-danger d-flex flex-column align-items-center">
         <div class="filter py-3">
           <img
