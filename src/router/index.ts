@@ -67,11 +67,6 @@ const router = createRouter({
       component: HistoryOrderPage
     },
     {
-      path: '/chat',
-      name: 'chat',
-      component: () => import('@/views/ChatPage.vue')
-    },
-    {
       path: '/dashboard/relatorios',
       name: '/dashboard/relatorios',
       meta: { requiresAuth: true },

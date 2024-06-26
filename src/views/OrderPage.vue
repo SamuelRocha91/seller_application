@@ -10,12 +10,13 @@ import orderService from '@/api/orderService';
 import { useStoreActive } from '@/store/storeActive';
 import LoadingSpiner from '@/components/dashboard/LoadingSpiner.vue';
 import { useNavStore } from '@/store/navStore';
+import ChatComponent from '@/components/dashboard/ChatComponent.vue';
 
 const navStore = useNavStore();
 const hasNewOrder = ref(false);
 const isLoading = ref(false);
 const newOrder = ref([]);
-const orderSelected = ref(null);
+const orderSelected = ref<any>(null);
 const storeActive = useStoreActive().storeActive;
 
 const handleClick = () => {
@@ -140,6 +141,7 @@ onMounted(() => {
                  :startPreparation="startPreparation"
                  :readyForDelivery="readyForDelivery"
                  />
+              <ChatComponent class="chat-component" v-if="orderSelected" :orderId="orderSelected.id"/>
               <div v-else class="d-flex align-items-center justify-content-center not-content">
                 <h2>Você ainda não selecionou nenhum pedido</h2>
               </div>
@@ -208,6 +210,13 @@ main {
   background-color: gray;
 }
 
+.chat-component {
+  position: fixed;
+  bottom: 0;
+  background-color: rgb(216, 197, 197);
+  max-width: 20%;
+  box-shadow: 0px 0px 10px 0px #000000;
+}
 @media (max-width: 860px) {
   .header-nav, .header-nav-small {
     width: 30vw;
