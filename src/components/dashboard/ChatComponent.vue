@@ -1,13 +1,16 @@
 <script setup lang="ts"> 
 import { onBeforeMount, onMounted, ref } from 'vue';
 import consumer from '../../utils/cable'; 
+import { useStoreActive } from '@/store/storeActive';
+
 let subscription: any;
 
 const messages = ref<any[]>([]);
-const newMessage = defineModel('newMessage', {default: ''});
+const newMessage = defineModel('newMessage', { default: '' });
+const storeActive = useStoreActive().storeActive;
 const sendMessage = () => {
   if (newMessage.value.trim() === '') return;
-  subscription.perform('speak', { message: newMessage.value });
+  subscription.perform('speak', { message: newMessage.value, email:storeActive.name });
   newMessage.value = '';
 };
 
@@ -22,7 +25,6 @@ onMounted(() => {
   subscription = consumer.subscriptions.create(
 
     { channel: 'ChatChannel', order_id: orderId },
-    // tenho que recuperar esse id pra criar a sala de chat
     {
 
       connected: (): void => {
