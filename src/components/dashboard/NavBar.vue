@@ -72,7 +72,7 @@ const handleHistory = () => {
         />
         <RouterLink
         class="links-style"
-        to="/dashboard"
+        to="/dashboard/home"
         >
         Início
         </RouterLink>
