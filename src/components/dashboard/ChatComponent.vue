@@ -41,6 +41,10 @@ onMounted(() => {
 
       received: (data: any):void => {
         console.log(data);
+        if (Array.isArray(data)) {
+          messages.value = data;
+          return;
+        }
         messages.value.push(data);
       },
 
