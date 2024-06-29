@@ -96,6 +96,25 @@ const handlePrice = (event: Event) => {
   price.value = newPrice;
 };
 
+const handleInventory = (id: number) => {
+  data.value
+    .map((entity: any) => {
+      if (entity.id == id) {
+        entity.is_inventory_product = !entity.is_inventory_product;
+        productService.updateProductInventory(storeActive.id, id, entity.is_inventory_product,
+          () => Swal.fire("Gerenciamento de estoque atualizado com sucesso"),
+          () => Swal.fire('Falha ao atualizar gerenciamento de estoque'));
+      }
+    });
+};
+
+
+const handleStock = (event: Event, id: number) => {
+  const value = (event.target as HTMLInputElement).value;
+  productService.updateProductStock(storeActive.id, id, Number(value),
+    () => Swal.fire("Estoque atualizado com sucesso"),
+    () => Swal.fire('Falha ao atualizar estoque'));
+};
 const validateFields = () => {
   const fields = [name, description, category];
   if (fields.some((field) => field.value.length < 3)) {
@@ -432,6 +451,8 @@ onMounted(() => {
               :handleEdit="editForm"
               :handleClick="handleDelete"
               :handleStatus="handleStatus"
+              :handleInventory="handleInventory"
+              :handleStock="handleStock"
               :data="data"
               />
             </div>
