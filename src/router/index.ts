@@ -12,6 +12,7 @@ import OrderPage from '@/views/OrderPage.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
 import ReportPage from '@/views/ReportPage.vue';
 import HistoryOrderPage from '@/views/HistoryOrderPage.vue';
+import DashboardPage from '@/views/DashboardPage.vue';
 
 
 const router = createRouter({
@@ -71,6 +72,12 @@ const router = createRouter({
       name: '/dashboard/relatorios',
       meta: { requiresAuth: true },
       component: ReportPage
+    },
+    {
+      path: '/dashboard/home',
+      name: '/dashboard/home',
+      meta: { requiresAuth: true },
+      component: DashboardPage
     },
     {
       path: '/:catchAll(.*)',
