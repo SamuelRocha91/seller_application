@@ -163,6 +163,75 @@ class ProductService extends BaseService{
     }
   }
 
+  async updateProductInventory(
+    id: number,
+    idProduct: number,
+    productInventory: boolean,
+    onSuccess: (data?: any) => void,
+    onFailure: () => void,
+  ) {
+    const formData = new FormData();
+    formData.append('product[is_inventory_product]', productInventory ? "true" : "false");
+    if (!productInventory) {
+      formData.append('product[quantity_in_stock]', "0");
+    }
+    const response = await this.update(
+      idProduct,
+      `stores/${id}/products`,
+      formData
+    );
+    if (response.ok) {
+      this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this.update(
+        idProduct,
+        `stores/${id}/products`,
+        formData
+      );
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
+    } else {
+      this.failure(response, onFailure);
+    }
+  }
+
+  async updateProductStock(
+    id: number,
+    idProduct: number,
+    quantity: number,
+    onSuccess: (data?: any) => void,
+    onFailure: () => void,
+  ) {
+    const formData = new FormData();
+    formData.append('product[quantity_in_stock]', quantity.toString());
+    const response = await this.update(
+      idProduct,
+      `stores/${id}/products`,
+      formData
+    );
+    if (response.ok) {
+      this.success(response, onSuccess);
+    } else if (response.status === 401) {
+      await this.refreshToken();
+      const newResponse = await this.update(
+        idProduct,
+        `stores/${id}/products`,
+        formData
+      );
+      if (newResponse.ok) {
+        this.success(newResponse, onSuccess);
+      } else {
+        this.auth.signOut();
+      }
+    } else {
+      this.failure(response, onFailure);
+    }
+  }
+
   async deleteProduct(
     id: number,
     idProduct: number,
