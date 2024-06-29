@@ -25,4 +25,6 @@ export type entity = {
     price?: string,
     category?: string,
     isOpen?: boolean
+    is_inventory_product?: boolean
+    quantity_in_stock?: number
 }
