@@ -5,6 +5,7 @@ import NavBar from '../components/dashboard/NavBar.vue';
 import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import { useNavStore } from '@/store/navStore';
+import HomeDashboard from '@/components/dashboard/HomeDashboard.vue';
 
 const navStore = useNavStore();
 
@@ -51,6 +52,7 @@ const handleClick = () => {
         title="Bem vindo ao Dashboard"
         description="Visão geral de sua loja"
         />
+        <HomeDashboard />
       </main>
     </div>
   </div>
