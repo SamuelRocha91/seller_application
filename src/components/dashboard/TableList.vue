@@ -12,6 +12,8 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
   tableThree: string
   tableFour: string
   handleActive?: (id: number) => void
+  handleInventory?: (id: number) => void
+  handleStock?: (event: Event, id: number) => void
 }>();
 </script>
 <template>
@@ -26,6 +28,7 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
           <th scope="col">{{ tableTwo }}</th>
           <th scope="col">{{ tableThree }}</th>
           <th scope="col">Ações</th>
+          <th scope="col" v-if="!handleActive">Gerenciamento de estoque</th>
           <th scope="col">{{ tableFour }}</th>
           <th v-if="handleActive" scope="col">Estado da loja</th>
         </tr>
@@ -43,9 +46,18 @@ const { data, handleClick, handleEdit, handleStatus } = defineProps<{
               <button class="btn btn-delete" @click.prevent="handleClick(entity.id)">Deletar</button>
           </div>
           </td>
+          <td v-if="!handleActive" scope="row">
+            <button v-if="!entity.is_inventory_product && handleInventory" class="btn btn-primary" @click.prevent="handleInventory(entity.id)">Ativar Gerenciamento</button>
+            <button v-else-if="entity.is_inventory_product && handleInventory" class="btn btn-danger" @click.prevent="handleInventory(entity.id)">Desativar Gerenciamento</button>
+          </td>
           <td scope="row">
-            <input type="checkbox" :id="'toggle-' + index" class="toggle-checkbox" :checked="entity.active" @change="handleStatus(entity.id)" title="Clique para ativar/desativar"/>
-            <label title="Clique para ativar/desativar" :for="'toggle-' + index" class="toggle-label"></label>
+            <div v-if="handleActive || !entity.is_inventory_product">
+              <input type="checkbox" :id="'toggle-' + index" class="toggle-checkbox" :checked="entity.active" @change="handleStatus(entity.id)" title="Clique para ativar/desativar"/>
+              <label title="Clique para ativar/desativar" :for="'toggle-' + index" class="toggle-label"></label>
+            </div>
+            <div v-else>
+              <input v-if="handleStock" type="number" :value="entity.quantity_in_stock || 0" @blur="(event) => handleStock?.(event, entity.id)" min="0">
+            </div>
           </td>
           <td v-if="handleActive">
             <button v-if="entity.isOpen" class="btn btn-primary" @click.prevent="handleActive(entity.id)">Fechar loja</button>
