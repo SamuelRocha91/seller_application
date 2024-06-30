@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import Home from '../assets/icons/Home.png';
 import PageInfo from '@/components/dashboard/PageInfo.vue';
 import NavBar from '../components/dashboard/NavBar.vue';
@@ -8,10 +9,14 @@ import { useNavStore } from '@/store/navStore';
 import HomeDashboard from '@/components/dashboard/HomeDashboard.vue';
 
 const navStore = useNavStore();
-
+const totalOrders = ref(0);
+const pendingOrders = ref(0);
+const totalRevenue = ref(0);
 const handleClick = () => {
   navStore.setNav();
 };
+
+
 </script>
 
 <template>
@@ -52,7 +57,11 @@ const handleClick = () => {
         title="Bem vindo ao Dashboard"
         description="Visão geral de sua loja"
         />
-        <HomeDashboard />
+        <HomeDashboard
+        :totalOrders="totalOrders"
+        :pendingOrders="pendingOrders"
+        :totalRevenue="totalRevenue"
+         />
       </main>
     </div>
   </div>
