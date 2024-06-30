@@ -31,7 +31,7 @@ const handlestats = () => router.push('/dashboard/relatorios');
     </div>
  </div>
 </template>
-<style>
+<style scoped>
 .container {
     display: flex;
     justify-content: space-around;
@@ -67,6 +67,5 @@ p {
     font-size: 1.5rem;
     margin-bottom: 10px;
 }
-
 
 </style>
