@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Home from '../assets/icons/Home.png';
 import PageInfo from '@/components/dashboard/PageInfo.vue';
 import NavBar from '../components/dashboard/NavBar.vue';
@@ -7,7 +7,11 @@ import NavBarSmall from '../components/dashboard/NavBarSmall.vue';
 import HeaderDashboard from '../components/dashboard/HeaderDashboard.vue';
 import { useNavStore } from '@/store/navStore';
 import HomeDashboard from '@/components/dashboard/HomeDashboard.vue';
+import { AnalysisService } from '@/api/analysisService';
+import { useStoreActive } from '@/store/storeActive';
 
+const analysisService = new AnalysisService();
+const storeActive = useStoreActive().storeActive;
 const navStore = useNavStore();
 const totalOrders = ref(0);
 const pendingOrders = ref(0);
@@ -15,7 +19,17 @@ const totalRevenue = ref(0);
 const handleClick = () => {
   navStore.setNav();
 };
-
+onMounted(() => {
+  analysisService.getTotalOrders(storeActive.id, (data) => {
+    totalOrders.value = data.result;
+  });
+  analysisService.getPendingOrders(storeActive.id, (data) => {
+    pendingOrders.value = data.result;
+  });
+  analysisService.getTotalSales(storeActive.id, (data) => {
+    totalRevenue.value = data.result;
+  });
+});
 
 </script>
 
