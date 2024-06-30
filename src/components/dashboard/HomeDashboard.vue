@@ -1,19 +1,25 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps<{
+    totalOrders: number;
+    pendingOrders: number;
+    totalRevenue: number;
+}>();
+</script>
 <template>
  <div class="container">
     <div class="mini-container" >
         <h1>Total de pedidos</h1>
-        <p class="text-success">10</p>
+        <p class="text-info">{{ totalOrders }}</p>
         <button class="btn btn-primary">Ver histórico de vendas</button>
     </div>
     <div class="mini-container">
         <h1>Pedidos pendentes</h1>
-        <p class="text-warning">10</p>
+        <p class="text-warning">{{ pendingOrders }}</p>
         <button class="btn btn-primary">Ver pedidos</button>
     </div>
     <div class="mini-container">
         <h1>Arrecadação total</h1>
-        <p class="text-success">10</p>
+        <p class="text-success">{{ totalRevenue }}</p>
         <button class="btn btn-primary">Ver estatísticas</button>
     </div>
  </div>
@@ -22,7 +28,6 @@
 .container {
     display: flex;
     justify-content: space-around;
-    margin-top: 50px;
     margin-bottom: 50px;
     background-color: white;
     padding: 20px;
