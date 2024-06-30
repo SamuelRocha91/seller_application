@@ -1,26 +1,33 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 defineProps<{
     totalOrders: number;
     pendingOrders: number;
     totalRevenue: number;
 }>();
+
+const router = useRouter();
+const handleOrder = () => router.push('/dashboard/pedidos');
+const handleHistory = () => router.push('/dashboard/historico');
+const handlestats = () => router.push('/dashboard/relatorios');
+
 </script>
 <template>
  <div class="container">
     <div class="mini-container" >
         <h1>Total de pedidos</h1>
         <p class="text-info">{{ totalOrders }}</p>
-        <button class="btn btn-primary">Ver histórico de vendas</button>
+        <button @click.prevent="handleHistory" class="btn btn-primary">Ver histórico de vendas</button>
     </div>
     <div class="mini-container">
         <h1>Pedidos pendentes</h1>
         <p class="text-warning">{{ pendingOrders }}</p>
-        <button class="btn btn-primary">Ver pedidos</button>
+        <button @click.prevent="handleOrder" class="btn btn-primary">Ver pedidos</button>
     </div>
     <div class="mini-container">
         <h1>Arrecadação total</h1>
-        <p class="text-success">{{ totalRevenue }}</p>
-        <button class="btn btn-primary">Ver estatísticas</button>
+        <p class="text-success">{{`R$ ${totalRevenue.toFixed(2)}` }}</p>
+        <button @click.prevent="handlestats" class="btn btn-primary">Ver estatísticas</button>
     </div>
  </div>
 </template>
