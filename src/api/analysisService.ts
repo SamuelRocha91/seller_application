@@ -17,6 +17,30 @@ class AnalysisService extends BaseService {
     }
   }
 
+  async getTotalOrders(storeId: number, success: (data: any) => void) {
+    const response = await this.getEntity(`/analysis/total_orders?store_id=${storeId}`);
+    if (response.ok) {
+      const data = await response.json();
+      success(data);
+    }
+  }
+
+  async getTotalSales(storeId: number, success: (data: any) => void) {
+    const response = await this.getEntity(`/analysis/total_sales?store_id=${storeId}`);
+    if (response.ok) {
+      const data = await response.json();
+      success(data);
+    }
+  }
+
+  async getPendingOrders(storeId: number, success: (data: any) => void) {
+    const response = await this.getEntity(`/analysis/pending_orders?store_id=${storeId}`);
+    if (response.ok) {
+      const data = await response.json();
+      success(data);
+    }
+  }
+
 }
 
 export { AnalysisService };
