@@ -1,4 +1,4 @@
-FROM registry.docker.com/library/node:21.6.2-alpine
+FROM node:21.6.2-alpine
 
 RUN apk add --no-cache \
   build-base \
@@ -6,14 +6,13 @@ RUN apk add --no-cache \
   vips-dev \
   curl
 
-WORKDIR /seller-app
+WORKDIR /consumy-app
+
+COPY package*.json ./
+RUN npm install
 
 COPY . .
 
-COPY package*.json ./
-
-RUN npm install
-
 EXPOSE 5173
 
-CMD ["npm", "run", "dev", "--", "--host" ]
+CMD ["npm", "run", "dev", "--", "--host"]

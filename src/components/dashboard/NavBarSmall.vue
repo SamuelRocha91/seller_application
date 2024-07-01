@@ -56,25 +56,33 @@ const handleHistory = () => {
   }
 };
 
+const handleHome = () => {
+  if (useStoreActive().storeActive.active) {
+    router.push('/dashboard/home');
+  } else {
+    Swal.fire('É necessário ativar uma loja pra poder ver o dashboard');
+  }
+};
 </script>
 <template>
   <nav class="nav-links"  :style="navStyle">
     <ul>
       <li 
         class="links-button"
-        :class="{ 'active': route.path === '/dashboard/perfil' }"
+        :class="{ 'active': route.path === '/dashboard/home' }"
+        @click.prevent="handleHome"
       >
         <img
         class="image-dimension"
         src="../../assets/navBar/Home.png"
         alt="Ícone de home" 
         />
-        <RouterLink
+        <a
         class="links-style"
         to="/dashboard"
         >
         Início
-      </RouterLink>
+      </a>
       </li>
       <li 
         class="links-button" 
