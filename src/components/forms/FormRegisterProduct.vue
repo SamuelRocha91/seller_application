@@ -301,10 +301,6 @@ onMounted(() => {
 });
 </script>
 <template>
-   <template v-if="isLoading">
-    <LoadingSpiner :isLoading="isLoading"/>
-  </template>
-  <template v-else>
     <template v-if="menuPage">
       <div class="main-content" >
         <PageInfo
@@ -477,7 +473,6 @@ onMounted(() => {
              </nav>
           </div>
      </template>
-  </template>
 </template>
 <style scoped>
 
