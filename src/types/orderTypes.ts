@@ -18,3 +18,22 @@ export type orderColumn = {
     hour: string,
     date: string
 }
+
+export type orderHistory = {
+    result: {
+        orders: [{
+            created_at: string,
+            id: number,
+            state: string,
+            total_value: string,
+        }],
+        pagination: {
+            current: number,
+            count: number,
+            next: number,
+            pages: number,
+            previous: number,
+            per_page: number
+        }
+    }
+}
