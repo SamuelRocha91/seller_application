@@ -1,5 +1,5 @@
 import { BaseService } from "./abstractService";
-import { type analysis } from "../types/analysis";
+import { type analysis, type monthly_analysis } from "../types/analysis";
 
 class AnalysisService extends BaseService {
   async getAnalysisProductSalesByDayOfWeek(storeId: number, success: (data: any) => void) {
@@ -11,7 +11,7 @@ class AnalysisService extends BaseService {
     }
   }
 
-  async getAnalysisBilingDayOfTheWeek(storeId: number, success: (data: any) => void) {
+  async getAnalysisBilingDayOfTheWeek(storeId: number, success: (data: monthly_analysis) => void) {
     const response = await this.getEntity(`/analysis/monthly_analysis?store_id=${storeId}`);
     if (response.ok) {
       const data = await response.json();
