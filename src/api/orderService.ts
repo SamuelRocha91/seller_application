@@ -20,6 +20,7 @@ class OrderService extends BaseService {
         }
       },
       onmessage(msg) {
+        console.log(msg);
         if (msg.event === 'new orders') {
           success(msg.data);
         } else {

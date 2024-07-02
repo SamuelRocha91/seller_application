@@ -65,6 +65,7 @@ onMounted(() => {
   isLoading.value = true;
   orderService.connectToOrderStream(storeActive.id, (data: any) => {
     let parsedData = JSON.parse(data);
+    console.log(parsedData);
     if (parsedData.orders && Array.isArray(parsedData.orders)) {
       newOrder.value = parsedData.orders.map((order: any) => ({
         id: order.id,
@@ -89,7 +90,7 @@ onMounted(() => {
     <main class="p-3">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-4 w-100 details-order" style="max-height: 85vh; overflow-y: auto;">
+          <div class="col-md-4 w-100" style="max-height: 85vh; overflow-y: auto;">
             <OrderColumn v-if="hasNewOrder" :orders="newOrder" :handleSelect="selectOrder"/>
           </div>
           <div class="col-md-8 w-100 details-order">
@@ -113,6 +114,12 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.details-order {
+  background-color: rgb(248, 239, 239);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 main {
   height: 100vh;

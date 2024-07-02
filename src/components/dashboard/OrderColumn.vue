@@ -48,6 +48,10 @@ const getOrderStatusClass = (status: string) => {
   </div>
 </template>
 <style scoped>
+.card {
+  height: 100%;
+  box-shadow: 1px 1px 1px rgb(0, 0, 0);
+}
 .list-group-item-success {
   background-color: #d4edda;
   color: #155724;
