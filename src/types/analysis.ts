@@ -13,3 +13,7 @@ export type monthly_analysis = {
         Saturday?: number
     }
 }
+
+export type heathMap = {
+    plot_image: string
+}

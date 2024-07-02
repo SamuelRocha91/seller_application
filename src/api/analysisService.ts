@@ -1,12 +1,11 @@
 import { BaseService } from "./abstractService";
-import { type analysis, type monthly_analysis } from "../types/analysis";
+import { type analysis, type monthly_analysis, type heathMap } from "../types/analysis";
 
 class AnalysisService extends BaseService {
-  async getAnalysisProductSalesByDayOfWeek(storeId: number, success: (data: any) => void) {
+  async getAnalysisProductSalesByDayOfWeek(storeId: number, success: (data: heathMap) => void) {
     const response = await this.getEntity(`/analysis/anacor?store_id=${storeId}`);
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       success(data);
     }
   }
@@ -15,7 +14,6 @@ class AnalysisService extends BaseService {
     const response = await this.getEntity(`/analysis/monthly_analysis?store_id=${storeId}`);
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       success(data);
     }
   }
