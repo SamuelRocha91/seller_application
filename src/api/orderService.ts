@@ -1,6 +1,6 @@
 import { BaseService } from "./abstractService";
 import { fetchEventSource } from '@microsoft/fetch-event-source';
-import { type orderStream, type orderHistory } from "@/types/orderTypes";
+import { type orderStream, type orderHistory, type orderById } from "@/types/orderTypes";
 
 class OrderService extends BaseService {
   private controller: AbortController | undefined;
@@ -52,16 +52,14 @@ class OrderService extends BaseService {
     const response = await this.getEntity(`stores/${storeId}/orders?page=${page}&created_at=${data}&status=${status}`);
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       success(data);
     }
   }
 
-  async getOrderById(orderId: number, success: (data: any) => void) {
+  async getOrderById(orderId: number, success: (data: orderById) => void) {
     const response = await this.getEntity(`buyers/orders/${orderId}`);
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       success(data);
     }
   }

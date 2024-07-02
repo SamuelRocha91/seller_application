@@ -37,3 +37,14 @@ export type orderHistory = {
         }
     }
 }
+
+export type orderById = {
+    id: number,
+    status: string,
+    total: string,
+    items: [{
+        amount: number,
+        price: string,
+        product: string
+    }]
+}
