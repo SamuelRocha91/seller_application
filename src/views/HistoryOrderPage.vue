@@ -115,5 +115,8 @@ main {
   background-color: gray;
 }
 
+nav {
+  margin-top: 20px;
+}
 
 </style>

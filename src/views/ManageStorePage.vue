@@ -14,7 +14,7 @@ import DashboardLayout from './DashboardLayout.vue';
 
 <style scoped>
 main {
-  height: 80vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;

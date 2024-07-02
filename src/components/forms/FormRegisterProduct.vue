@@ -59,6 +59,7 @@ const handlePage = (page: number) => {
     getlist(page);
   }
 };
+
 const handleDelete = (id: number) => {
   swallWithDelete(() => deleteForm(id));
 };
@@ -108,13 +109,13 @@ const handleInventory = (id: number) => {
     });
 };
 
-
 const handleStock = (event: Event, id: number) => {
   const value = (event.target as HTMLInputElement).value;
   productService.updateProductStock(storeActive.id, id, Number(value),
     () => Swal.fire("Estoque atualizado com sucesso"),
     () => Swal.fire('Falha ao atualizar estoque'));
 };
+
 const validateFields = () => {
   const fields = [name, description, category];
   if (fields.some((field) => field.value.length < 3)) {
@@ -514,7 +515,7 @@ onMounted(() => {
   height: 100%;
   width: 100%;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   flex-direction: column;
 }
 .custom-file-upload {
@@ -579,7 +580,6 @@ form {
   cursor: pointer;
 }
 .filters-menu {
-  margin-top: 5px;
   background-color: white;  
   width: 72%;
   height: 10vh;
@@ -597,7 +597,6 @@ form {
 }
 .bg-input {
   border: 1px solid #dedede;
-  border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #fff;
   outline: none;
