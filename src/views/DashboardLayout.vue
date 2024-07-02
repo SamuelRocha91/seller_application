@@ -42,8 +42,7 @@ const handleClick = () => {
       <div class="header-content">
         <HeaderDashboard />
       </div>
-      <main>
-      </main>
+     <slot />
     </div>
   </div>
 </template>

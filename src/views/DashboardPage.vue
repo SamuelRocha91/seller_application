@@ -5,6 +5,7 @@ import PageInfo from '@/components/dashboard/PageInfo.vue';
 import HomeDashboard from '@/components/dashboard/HomeDashboard.vue';
 import { AnalysisService } from '@/api/analysisService';
 import { useStoreActive } from '@/store/storeActive';
+import DashboardLayout from './DashboardLayout.vue';
 
 const analysisService = new AnalysisService();
 const storeActive = useStoreActive().storeActive;
@@ -27,19 +28,21 @@ onMounted(() => {
 </script>
 
 <template>
-  <main>
-    <PageInfo
-      :src="Home"
-      alt="Home"
-      title="Bem vindo ao Dashboard"
-      description="Visão geral de sua loja"
-    />
-    <HomeDashboard
-      :totalOrders="totalOrders"
-      :pendingOrders="pendingOrders"
-      :totalRevenue="totalRevenue"
-    />
+  <DashboardLayout>
+    <main>
+      <PageInfo
+        :src="Home"
+        alt="Home"
+        title="Bem vindo ao Dashboard"
+        description="Visão geral de sua loja"
+      />
+      <HomeDashboard
+        :totalOrders="totalOrders"
+        :pendingOrders="pendingOrders"
+        :totalRevenue="totalRevenue"
+      />
     </main>
+  </DashboardLayout>
 </template>
 
 <style scoped>

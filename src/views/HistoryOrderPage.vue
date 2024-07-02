@@ -7,6 +7,7 @@ import OrderService from '../api/orderService';
 import { useStoreActive } from '@/store/storeActive';
 import debounce from 'lodash.debounce';
 import OrderDetails from '@/components/dashboard/OrderDetails.vue';
+import DashboardLayout from './DashboardLayout.vue';
 
 const category = defineModel('category', { default: '' });
 const date = defineModel('date', { default: '' });
@@ -59,46 +60,48 @@ onMounted(() => {
 </script>
 
 <template>
-  <main>
-    <PageInfo
-      :src="History"
-      alt="Histórico de pedidos"
-      title="Histórico de pedidos"
-      description="Tenha acesso a todos os seus pedidos feitos na plataforma."
-    />
-    <HistoryOrder
-      v-if="!orderDetails"
-      :orders="orders"
-      :filteredOrders="debouncedSearch"
-      :selectOrder="selectOrder"
-      v-model:category="category"
-      v-model:date="date"
-    />
-    <OrderDetails
-      v-else
-      :order="orderSelected"
-      :turnToHistory="turnToHistory"
-    />
-    <nav v-if="!orderDetails">
-      <ul class="pagination justify-content-end">
-        <li class="page-item" :class="{ disabled: current === 1 }">
-          <a class="page-link" href="#" @click.prevent="handlePage(previous)">
-            Anterior
-          </a>
-        </li>
-        <li class="page-item" v-for="page in pages" :key="page" :class="{ active: current === page }">
-          <a class="page-link" href="#" @click.prevent="handlePage(page)">
-            {{ page }}
-          </a>
-        </li>
-        <li class="page-item" :class="{ disabled: current === pages }">
-          <a class="page-link" href="#" @click.prevent="handlePage(next)">
-            Próxima
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </main>
+  <DashboardLayout>
+    <main>
+      <PageInfo
+        :src="History"
+        alt="Histórico de pedidos"
+        title="Histórico de pedidos"
+        description="Tenha acesso a todos os seus pedidos feitos na plataforma."
+      />
+      <HistoryOrder
+        v-if="!orderDetails"
+        :orders="orders"
+        :filteredOrders="debouncedSearch"
+        :selectOrder="selectOrder"
+        v-model:category="category"
+        v-model:date="date"
+      />
+      <OrderDetails
+        v-else
+        :order="orderSelected"
+        :turnToHistory="turnToHistory"
+      />
+      <nav v-if="!orderDetails">
+        <ul class="pagination justify-content-end">
+          <li class="page-item" :class="{ disabled: current === 1 }">
+            <a class="page-link" href="#" @click.prevent="handlePage(previous)">
+              Anterior
+            </a>
+          </li>
+          <li class="page-item" v-for="page in pages" :key="page" :class="{ active: current === page }">
+            <a class="page-link" href="#" @click.prevent="handlePage(page)">
+              {{ page }}
+            </a>
+          </li>
+          <li class="page-item" :class="{ disabled: current === pages }">
+            <a class="page-link" href="#" @click.prevent="handlePage(next)">
+              Próxima
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </main>
+  </DashboardLayout>
 </template>
 
 <style scoped>

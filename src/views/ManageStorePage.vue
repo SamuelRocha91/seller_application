@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import FormRegisterProduct from '@/components/forms/FormRegisterProduct.vue';
+import DashboardLayout from './DashboardLayout.vue';
 </script>
 
 <template>
-  <main>
-    <FormRegisterProduct />
-  </main>
+  <DashboardLayout>
+    <main>
+      <FormRegisterProduct />
+    </main>
+  </DashboardLayout>
  
 </template>
 

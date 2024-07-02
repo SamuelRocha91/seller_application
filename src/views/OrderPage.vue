@@ -6,6 +6,7 @@ import { onMounted } from 'vue';
 import orderService from '@/api/orderService';
 import { useStoreActive } from '@/store/storeActive';
 import ChatComponent from '@/components/dashboard/ChatComponent.vue';
+import DashboardLayout from './DashboardLayout.vue';
 
 const hasNewOrder = ref(false);
 const isLoading = ref(false);
@@ -84,29 +85,31 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="p-3">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-4 w-100 details-order" style="max-height: 85vh; overflow-y: auto;">
-          <OrderColumn v-if="hasNewOrder" :orders="newOrder" :handleSelect="selectOrder"/>
-        </div>
-        <div class="col-md-8 w-100 details-order">
-          <OrderContent
-            v-if="orderSelected"
-            :order="orderSelected"
-            :acceptOrder="acceptOrder"
-            :cancelOrder="cancelOrder"
-            :startPreparation="startPreparation"
-            :readyForDelivery="readyForDelivery"
-          />
-          <ChatComponent class="chat-component" v-if="orderSelected" :orderId="orderSelected.id"/>
-          <div v-else class="d-flex align-items-center justify-content-center not-content">
-            <h2>Você ainda não selecionou nenhum pedido</h2>
+  <DashboardLayout>
+    <main class="p-3">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-4 w-100 details-order" style="max-height: 85vh; overflow-y: auto;">
+            <OrderColumn v-if="hasNewOrder" :orders="newOrder" :handleSelect="selectOrder"/>
+          </div>
+          <div class="col-md-8 w-100 details-order">
+            <OrderContent
+              v-if="orderSelected"
+              :order="orderSelected"
+              :acceptOrder="acceptOrder"
+              :cancelOrder="cancelOrder"
+              :startPreparation="startPreparation"
+              :readyForDelivery="readyForDelivery"
+            />
+            <ChatComponent class="chat-component" v-if="orderSelected" :orderId="orderSelected.id"/>
+            <div v-else class="d-flex align-items-center justify-content-center not-content">
+              <h2>Você ainda não selecionou nenhum pedido</h2>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </main>    
+    </main> 
+  </DashboardLayout>   
 </template>
 
 <style scoped>
