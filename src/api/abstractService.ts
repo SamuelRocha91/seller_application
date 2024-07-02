@@ -37,7 +37,7 @@ abstract class BaseService {
     return response;
   }
     
-  protected async create(path: string, data: any): Promise<Response> {
+  protected async create<T extends BodyInit | null | undefined>(path: string, data: T): Promise<Response> {
     const token = this.getFallback('token');
     const response = await fetch(`${this.apiUrl}/${path}`, {
       method: 'POST',
@@ -52,25 +52,26 @@ abstract class BaseService {
     return response;
   }
   
-  protected async update(
+  protected async update
+    <T extends BodyInit | null | undefined>
+  (
     id: number,
     path: string,
-    data: any
+    data: T
   ): Promise<Response> {
-    const token = this.getFallback('token');
+      const token = this.getFallback('token');
 
-    const response = await fetch(`${this.apiUrl}/${path}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'X-API-KEY': BaseService.X_API_KEY
-
-      },
-      body: data
-    });
-    return response;
-  }
+      const response = await fetch(`${this.apiUrl}/${path}/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'X-API-KEY': BaseService.X_API_KEY
+        },
+        body: data
+      });
+      return response;
+    }
 
   protected patch(path: string) {
     const token = this.getFallback('token');

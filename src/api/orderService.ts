@@ -1,11 +1,16 @@
 import { BaseService } from "./abstractService";
 import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { type orderStream, type orderHistory, type orderById } from "@/types/orderTypes";
 
 class OrderService extends BaseService {
-  async connectToOrderStream(storeId: number, success: (data: any) => void, noConnection: () => void) {
+  private controller: AbortController | undefined;
+  async connectToOrderStream(storeId: number, success: (data: orderStream) => void, noConnection: () => void) {
+    this.controller = new AbortController();
+    const signal = this.controller.signal;
     const token = this.getFallback('token');
     fetchEventSource(`${this.apiUrl}/stores/${storeId}/orders/new`, {
       method: 'GET',
+      signal,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -21,7 +26,9 @@ class OrderService extends BaseService {
       },
       onmessage(msg) {
         if (msg.event === 'new orders') {
-          success(msg.data);
+          console.log(msg);
+          const data = JSON.parse(msg.data);
+          success(data);
         } else {
           console.log('Evento desconhecido');
           noConnection();
@@ -33,7 +40,15 @@ class OrderService extends BaseService {
     });
   }
 
-  async getOrders(storeId: number, success: (data: any) => void, page: number = 1, data: string = '', status: string = '') {
+  disconnectFromOrderStream() {
+    if (this.controller) {
+      this.controller.abort();
+      this.controller = undefined;
+      console.log('Conexão encerrada');
+    }
+  }
+
+  async getOrders(storeId: number, success: (data: orderHistory) => void, page: number = 1, data: string = '', status: string = '') {
     const response = await this.getEntity(`stores/${storeId}/orders?page=${page}&created_at=${data}&status=${status}`);
     if (response.ok) {
       const data = await response.json();
@@ -41,7 +56,7 @@ class OrderService extends BaseService {
     }
   }
 
-  async getOrderById(orderId: number, success: (data: any) => void) {
+  async getOrderById(orderId: number, success: (data: orderById) => void) {
     const response = await this.getEntity(`buyers/orders/${orderId}`);
     if (response.ok) {
       const data = await response.json();
