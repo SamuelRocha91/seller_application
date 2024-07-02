@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onBeforeUnmount, ref } from 'vue';
 import OrderColumn from '../components/dashboard/OrderColumn.vue';
 import OrderContent from '../components/dashboard/OrderContent.vue';
 import { onMounted } from 'vue';
@@ -7,10 +7,11 @@ import orderService from '@/api/orderService';
 import { useStoreActive } from '@/store/storeActive';
 import ChatComponent from '@/components/dashboard/ChatComponent.vue';
 import DashboardLayout from './DashboardLayout.vue';
+import { type orderStream, type orderColumn } from '../types/orderTypes';
 
 const hasNewOrder = ref(false);
 const isLoading = ref(false);
-const newOrder = ref([]);
+const newOrder = ref<orderColumn[]>([]);
 const orderSelected = ref<any>(null);
 const storeActive = useStoreActive().storeActive;
 
@@ -63,15 +64,14 @@ const readyForDelivery = (id: number) => {
 
 onMounted(() => {
   isLoading.value = true;
-  orderService.connectToOrderStream(storeActive.id, (data: any) => {
-    let parsedData = JSON.parse(data);
+  orderService.connectToOrderStream(storeActive.id, (parsedData: orderStream) => {
     console.log(parsedData);
     if (parsedData.orders && Array.isArray(parsedData.orders)) {
-      newOrder.value = parsedData.orders.map((order: any) => ({
-        id: order.id,
-        hour: order.created_at.split('T')[1].split('.')[0],
-        date: order.created_at.split('T')[0],
-        status: order.state,
+      newOrder.value = parsedData.orders.map((or: any) => ({
+        id: or.id,
+        hour: or.created_at.split('T')[1].split('.')[0],
+        date: or.created_at.split('T')[0],
+        status: or.state,
       }));
       isLoading.value = false;
       hasNewOrder.value = true;
@@ -82,6 +82,10 @@ onMounted(() => {
   }, () => {
     isLoading.value = false;
   });
+});
+
+onBeforeUnmount(() => {
+  orderService.disconnectFromOrderStream();
 });
 </script>
 

@@ -1,11 +1,16 @@
 import { BaseService } from "./abstractService";
 import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { type orderStream } from "@/types/orderTypes";
 
 class OrderService extends BaseService {
-  async connectToOrderStream(storeId: number, success: (data: any) => void, noConnection: () => void) {
+  private controller: AbortController | undefined;
+  async connectToOrderStream(storeId: number, success: (data: orderStream) => void, noConnection: () => void) {
+    this.controller = new AbortController();
+    const signal = this.controller.signal;
     const token = this.getFallback('token');
     fetchEventSource(`${this.apiUrl}/stores/${storeId}/orders/new`, {
       method: 'GET',
+      signal,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -20,9 +25,10 @@ class OrderService extends BaseService {
         }
       },
       onmessage(msg) {
-        console.log(msg);
         if (msg.event === 'new orders') {
-          success(msg.data);
+          console.log(msg);
+          const data = JSON.parse(msg.data);
+          success(data);
         } else {
           console.log('Evento desconhecido');
           noConnection();
@@ -32,6 +38,14 @@ class OrderService extends BaseService {
         console.log(err);
       }
     });
+  }
+
+  disconnectFromOrderStream() {
+    if (this.controller) {
+      this.controller.abort();
+      this.controller = undefined;
+      console.log('Conexão encerrada');
+    }
   }
 
   async getOrders(storeId: number, success: (data: any) => void, page: number = 1, data: string = '', status: string = '') {
