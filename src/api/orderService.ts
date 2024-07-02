@@ -34,7 +34,7 @@ class OrderService extends BaseService {
   }
 
   async getOrders(storeId: number, success: (data: any) => void, page: number = 1, data: string = '', status: string = '') {
-    const response = await this.getEntity(`stores/${storeId}/orders?page=${page}&created_at=${data}&status=${status}`);
+    const response = await this.getEntity(`stores/${storeId}/orders?page=${page}&created_at=${data}&status=${status}?locale=pt-BR`);
     if (response.ok) {
       const data = await response.json();
       success(data);
