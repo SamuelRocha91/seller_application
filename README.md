@@ -3,6 +3,8 @@
 Este repositório contém a aplicação do vendedor para a plataforma de delivery, desenvolvida em Vue.js. Esta aplicação oferece uma interface para gerenciamento de pedidos e produtos por parte dos vendedores.
 
 ![Ilustração de cadastro de usuário](./assets/registerSeller.gif)
+
+
 ![Ilustração de funcionalidades internas](./assets/Internal.gif)
 
 
