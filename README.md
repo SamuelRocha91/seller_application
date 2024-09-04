@@ -2,10 +2,7 @@
 
 Este repositório contém a aplicação do vendedor para a plataforma de delivery, desenvolvida em Vue.js. Esta aplicação oferece uma interface para gerenciamento de pedidos e produtos por parte dos vendedores.
 
-![Ilustração de cadastro de usuário](./assets/registerSeller.gif)
-
-
-![Ilustração de funcionalidades internas](./assets/Internal.gif)
+![Ilustração de cadastro de usuário](./assets/internal.gif)
 
 
 ## Repositórios Relacionados
@@ -13,6 +10,8 @@ Este repositório contém a aplicação do vendedor para a plataforma de deliver
 - [Delivery Application](https://github.com/SamuelRocha91/delivery_back) - Backend em Rails para a aplicação de delivery.
 - [Consumer Application](https://github.com/SamuelRocha91/consumy) - Aplicação do consumidor.
 
+
+![Ilustração de funcionalidades internas](./assets/registerseller.gif)
 
 **Links do Projeto:**
 
