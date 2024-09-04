@@ -2,7 +2,9 @@
 
 Este repositório contém a aplicação do vendedor para a plataforma de delivery, desenvolvida em Vue.js. Esta aplicação oferece uma interface para gerenciamento de pedidos e produtos por parte dos vendedores.
 
-[![Em desenvolvimento](https://img.shields.io/badge/Status-Em%20desenvolvimento-yellow)](https://github.com/SamuelRocha91/seller_application)
+![Ilustração de cadastro de usuário](./assets/registerSeller.gif)
+![Ilustração de funcionalidades internas](./assets/Internal.gif)
+
 
 ## Repositórios Relacionados
 
@@ -42,6 +44,12 @@ Este repositório contém a aplicação do vendedor para a plataforma de deliver
 
 
 ## Setup do Projeto
+
+Para um uso integrado, observe o passo a passo em:
+
+- [Delivery Backend](https://github.com/SamuelRocha91/delivery_back) - Aplicação backend em Rails para a plataforma de delivery
+
+Para configurar e executar o repositório individualmente, siga os passos abaixo:
 
 Para configurar e executar o projeto localmente, siga os passos abaixo:
 
