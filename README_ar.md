@@ -1,14 +1,6 @@
-# مشروع البائع - تطبيق توصيل
+# <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Full Stack Projects" width="52" height="40" /> مشروع البائع - تطبيق توصيل<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Java Projects Logo" width="52" height="40" />  
 
-<h2>🌐</h2>
-<ul>
-  <li><a href="https://github.com/SamuelRocha91/seller_application" target="_blank">Português</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md" target="_blank">Español</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md" target="_blank">English</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md" target="_blank">Русский</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md" target="_blank">中文</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md" target="_blank">العربية</a></li>
-</ul>
+## 🌐 [![Português](https://img.shields.io/badge/Português-green)](https://github.com/SamuelRocha91/seller_application/blob/main/README.md) [![Español](https://img.shields.io/badge/Español-yellow)](https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md) [![English](https://img.shields.io/badge/English-blue)](https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md) [![Русский](https://img.shields.io/badge/Русский-lightgrey)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md) [![中文](https://img.shields.io/badge/中文-red)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md) [![العربية](https://img.shields.io/badge/العربية-orange)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md)
 
 هذا المستودع يحتوي على تطبيق البائع لمنصة التوصيل، والذي تم تطويره باستخدام Vue.js. يوفر هذا التطبيق واجهة لإدارة الطلبات والمنتجات من قبل البائعين.
 
@@ -16,8 +8,9 @@
 
 ## المستودعات ذات الصلة
 
-- [تطبيق التوصيل](https://github.com/SamuelRocha91/delivery_back) - خلفية Rails لتطبيق التوصيل.
-- [تطبيق المستهلك](https://github.com/SamuelRocha91/consumy) - تطبيق للمستهلكين.
+- 💎[تطبيق التوصيل](https://github.com/SamuelRocha91/delivery_back) - خلفية Rails لتطبيق التوصيل.
+- 🛒[تطبيق المستهلك](https://github.com/SamuelRocha91/consumy) - تطبيق للمستهلكين
+- 💲 [Paymenty API](https://github.com/SamuelRocha91/paymenty).
 
 ![توضيح الوظائف الداخلية](./assets/registerseller.gif)
 
@@ -82,9 +75,8 @@ npm run dev
 ```sh
 npm run test:unit
 ```
+## مشاريع أخرى
 
----
 
-تم إنشاء هذا المشروع كمتطلب لتقييم برنامج Quero Ser Dev النسخة التاسعة من LWSA.
-
----
+- 📏 [تطبيق الدقة React](https://github.com/SamuelRocha91/precisionReactApplication/blob/main/README_ar.md) - واجهة تسجيل قياسات الغاز والماء
+- 🤖 [واجهة برمجة التطبيقات Node](https://github.com/SamuelRocha91/apiMeasureWaterAndGas/blob/main/README_ar.md) - واجهة برمجة التطبيقات لقياس وتسجيل استهلاك الماء والغاز
