@@ -1,14 +1,7 @@
-# 卖家项目 - 配送应用
+# <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Full Stack Projects" width="52" height="40" /> 卖家项目 - 配送应用 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Java Projects Logo" width="52" height="40" /> 
 
-<h2>🌐</h2>
-<ul>
-  <li><a href="https://github.com/SamuelRocha91/seller_application" target="_blank">Português</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md" target="_blank">Español</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md" target="_blank">English</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md" target="_blank">Русский</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md" target="_blank">中文</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md" target="_blank">العربية</a></li>
-</ul>
+## 🌐 [![Português](https://img.shields.io/badge/Português-green)](https://github.com/SamuelRocha91/seller_application/blob/main/README.md) [![Español](https://img.shields.io/badge/Español-yellow)](https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md) [![English](https://img.shields.io/badge/English-blue)](https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md) [![Русский](https://img.shields.io/badge/Русский-lightgrey)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md) [![中文](https://img.shields.io/badge/中文-red)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md) [![العربية](https://img.shields.io/badge/العربية-orange)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md)
+
 
 这个仓库包含了为配送平台开发的卖家应用，使用 Vue.js 开发。该应用提供了一个界面，用于卖家管理订单和产品。
 
@@ -16,8 +9,9 @@
 
 ## 相关仓库
 
-- [配送应用](https://github.com/SamuelRocha91/delivery_back) - 用于配送应用的 Rails 后端。
-- [消费者应用](https://github.com/SamuelRocha91/consumy) - 消费者应用。
+- 💎 [配送应用](https://github.com/SamuelRocha91/delivery_back) - 用于配送应用的 Rails 后端。
+- 🛒 [消费者应用](https://github.com/SamuelRocha91/consumy) - 消费者应用。
+- 💲 [Paymenty API](https://github.com/SamuelRocha91/paymenty)
 
 ![内部功能示意图](./assets/registerseller.gif)
 
@@ -82,9 +76,7 @@ npm run dev
 ```sh
 npm run test:unit
 ```
+## 其他项目
 
----
-
-该项目是 LWSA Quero Ser Dev 第 9 版评估程序的要求之一。
-
----
+- 📏 [React 精准应用程序](https://github.com/SamuelRocha91/precisionReactApplication/blob/main/README_ch.md) - 燃气和水的测量登记界面
+- 🤖 [Node API](https://github.com/SamuelRocha91/apiMeasureWaterAndGas/blob/main/README_ch.md) - 用于测量和登记水和燃气消耗的 API
