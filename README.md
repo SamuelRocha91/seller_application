@@ -1,14 +1,6 @@
-# Projeto do Lojista - Aplicação de Delivery
+# <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Full Stack Projects" width="52" height="40" /> Projeto do Lojista - Aplicação de Delivery <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Java Projects Logo" width="52" height="40" />
 
-<h2>🌐</h2>
-<ul>
-  <li><a href="https://github.com/SamuelRocha91/seller_application" target="_blank">Português</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md" target="_blank">Español</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md" target="_blank">English</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md" target="_blank">Русский</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md" target="_blank">中文</a></li>
-  <li><a href="https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md" target="_blank">العربية</a></li>
-</ul>
+## 🌐 [![Português](https://img.shields.io/badge/Português-green)](https://github.com/SamuelRocha91/seller_application/blob/main/README.md) [![Español](https://img.shields.io/badge/Español-yellow)](https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md) [![English](https://img.shields.io/badge/English-blue)](https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md) [![Русский](https://img.shields.io/badge/Русский-lightgrey)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md) [![中文](https://img.shields.io/badge/中文-red)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md) [![العربية](https://img.shields.io/badge/العربية-orange)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md)
 
 Este repositório contém a aplicação do vendedor para a plataforma de delivery, desenvolvida em Vue.js. Esta aplicação oferece uma interface para gerenciamento de pedidos e produtos por parte dos vendedores.
 
@@ -17,8 +9,9 @@ Este repositório contém a aplicação do vendedor para a plataforma de deliver
 
 ## Repositórios Relacionados
 
-- [Delivery Application](https://github.com/SamuelRocha91/delivery_back) - Backend em Rails para a aplicação de delivery.
-- [Consumer Application](https://github.com/SamuelRocha91/consumy) - Aplicação do consumidor.
+- 💎 [Delivery Application](https://github.com/SamuelRocha91/delivery_back) - Backend em Rails para a aplicação de delivery.
+- 🛒 [Consumer Application](https://github.com/SamuelRocha91/consumy) - Aplicação do consumidor.
+- 💲 [Paymenty API](https://github.com/SamuelRocha91/paymenty) - API de pagamento
 
 
 ![Ilustração de funcionalidades internas](./assets/registerseller.gif)
@@ -90,8 +83,7 @@ Para executar os testes unitários, utilize:
 npm run test:unit
 ```
 
----
+## Outros repositórios>
 
-Este projeto foi criado como requisito avaliativo para o programa Quero Ser Dev 9ª edição da LWSA.
-
----
+- 📏 [React Precision Application](https://github.com/SamuelRocha91/precisionReactApplication) - Interface de cadastro de medições de gás e de água
+- 🤖 [Node API](https://github.com/SamuelRocha91/apiMeasureWaterAndGas) - Api de medição e cadastro de consumo
