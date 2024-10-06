@@ -1,54 +1,66 @@
-# <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Full Stack Projects" width="52" height="40" /> Проект Продавца - Приложение для Доставки <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Java Projects Logo" width="52" height="40" />
+# <img src="https://cdn-icons-png.flaticon.com/128/83/83522.png" alt="Full Projects Logo" width="42" height="30" /> Проект Продавца - Приложение для Доставки <img src="https://cdn-icons-png.flaticon.com/128/83/83522.png" alt="Full Projects Logo" width="42" height="30" />
 
-## 🌐 [![Português](https://img.shields.io/badge/Português-green)](https://github.com/SamuelRocha91/seller_application/blob/main/README.md) [![Español](https://img.shields.io/badge/Español-yellow)](https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md) [![English](https://img.shields.io/badge/English-blue)](https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md) [![Русский](https://img.shields.io/badge/Русский-lightgrey)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md) [![中文](https://img.shields.io/badge/中文-red)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md) [![العربية](https://img.shields.io/badge/العربية-orange)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md)
+## 🌐 Доступные Языки
 
-Этот репозиторий содержит приложение для продавцов для платформы доставки, разработанное на Vue.js. Это приложение предоставляет интерфейс для управления заказами и продуктами продавцами.
+[![Português](https://img.shields.io/badge/Português-green)](https://github.com/SamuelRocha91/seller_application/blob/main/README.md) [![Español](https://img.shields.io/badge/Español-yellow)](https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md) [![English](https://img.shields.io/badge/English-blue)](https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md) [![Русский](https://img.shields.io/badge/Русский-lightgrey)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md) [![中文](https://img.shields.io/badge/中文-red)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md) [![العربية](https://img.shields.io/badge/العربية-orange)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md)
+
+Этот репозиторий содержит приложение для продавцов на платформе доставки, разработанное на Vue.js. Это приложение предоставляет интерфейс для управления заказами и продуктами со стороны продавцов.
 
 ![Иллюстрация регистрации пользователя](./assets/internal.gif)
 
-## Связанные Репозитории
+<details>
+  <summary><h2>🔗 Связанные Репозитории</h2></summary>
 
-- 💎 [Приложение для Доставки](https://github.com/SamuelRocha91/delivery_back) - Бэкэнд на Rails для приложения доставки.
-- 🛒 [Приложение для Потребителя](https://github.com/SamuelRocha91/consumy) - Приложение для потребителя.
-- 💲 [Paymenty API](https://github.com/SamuelRocha91/paymenty)
+  - 💎 [Приложение для Доставки](https://github.com/SamuelRocha91/delivery_back/blob/main/README_ru.md) - Бэкенд на Rails для приложения доставки.
+  - 🛒 [Приложение для Потребителей](https://github.com/SamuelRocha91/consumy/blob/main/README_ru.md) - Приложение для потребителей.
+  - 💲 [API Paymenty](https://github.com/SamuelRocha91/paymenty/blob/main/README_ru.md) - API для платежей.
 
-![Иллюстрация внутренних функций](./assets/registerseller.gif)
+</details>
 
-**Ссылки на Проект:**
+![Иллюстрация функционала](./assets/registerseller.gif)
+
+<details>
+  <summary><h2>📑 Ссылки на Проект</h2></summary>
 
 - [Дизайн в Figma](https://www.figma.com/file/tS8r4eROXBknYixtDcijXd/Meu-portf%C3%B3lio?type=design&node-id=0-1&mode=design&t=pL6yJYx6lOSWBGdw-0)
 
-## Зависимости и Функциональности
+</details>
+
+<details>
+  <summary><h2>📦 Зависимости и Функционал</h2></summary>
 
 ### Основные Зависимости
 
-- **Vue.js:** Прогрессивный JavaScript-фреймворк для создания интерфейсов.
+- **Vue.js:** Прогрессивный JavaScript фреймворк для создания интерфейсов.
 - **Vue Router:** Для маршрутизации страниц в Vue.js.
-- **Vite:** Инструмент сборки для быстрой и оптимизированной разработки.
-- **Vitest:** Фреймворк для юнит-тестирования для Vue.js.
-- **ESLint & Prettier:** Инструменты для анализа и форматирования кода для поддержания качества кода.
-- **TypeScript:** Поддержка TypeScript для более безопасной и масштабируемой разработки.
-- **Pinia:** Библиотека для управления состоянием, вдохновленная Vuex.
+- **Vite:** Инструмент сборки для быстрого и оптимизированного развития.
+- **Vitest:** Фреймворк для юнит-тестов для Vue.js.
+- **ESLint & Prettier:** Инструменты для линтинга и форматирования кода для поддержания качества кода.
+- **TypeScript:** Поддержка TypeScript для более безопасного и масштабируемого развития.
+- **Pinia:** Библиотека управления состоянием, вдохновленная Vuex.
 
 ### Реализованные Функции
 
-- **Fetch Event Source:** Для реального времени общения с бэкэндом.
-- **SweetAlert2:** Для отображения красивых и настраиваемых оповещений и диалогов.
-- **Vuedraggable:** Для функции перетаскивания элементов в интерфейсе.
+- **Fetch Event Source:** Для реального времени общения с бэкендом.
+- **SweetAlert2:** Для отображения красивых и настраиваемых предупреждений и диалогов.
+- **Vuedraggable:** Для перетаскивания элементов в интерфейсе.
 
 ### Другие Инструменты и Плагины
 
-- **@rails/actioncable:** Для интеграции с WebSockets в бэкэнде Rails.
-- **lodash.debounce:** Утилита для упрощения операций с debounce.
-- **@types/rails__actioncable:** Типы TypeScript для ActionCable.
+- **@rails/actioncable:** Для интеграции с WebSockets на бэкенде Rails.
+- **lodash.debounce:** Утилита функций для упрощения операций с debounce.
+- **@types/rails__actioncable:** Типизация TypeScript для ActionCable.
 
-## Настройка Проекта
+</details>
 
-Для интегрированного использования следуйте инструкциям:
+<details>
+  <summary><h2>🛠️ Настройка Проекта</h2></summary>
 
-- [Бэкэнд Доставки](https://github.com/SamuelRocha91/delivery_back) - Бэкэнд на Rails для платформы доставки.
+Для интегрированного использования следуйте инструкциям в:
 
-Для настройки и запуска репозитория отдельно следуйте этим шагам:
+- [Бэкенд Доставки](https://github.com/SamuelRocha91/delivery_back/blob/main/README_ru.md) - Бэкенд-приложение на Rails для платформы доставки.
+
+Чтобы настроить и запустить репозиторий отдельно, следуйте следующим шагам:
 
 ### Предварительные Требования
 
@@ -68,15 +80,20 @@ npm install
 npm run dev
 ```
 
-### Запуск Тестов
+### Выполнение Тестов
 
-Чтобы запустить юнит-тесты, используйте:
+Чтобы выполнить юнит-тесты, используйте:
 
 ```sh
 npm run test:unit
 ```
 
-## Другие проекты
+</details>
 
-- 📏 [Приложение для точных измерений на React](https://github.com/SamuelRocha91/precisionReactApplication/blob/main/README_ru.md) - Интерфейс для регистрации измерений газа и воды
-- 🤖 [Node API](https://github.com/SamuelRocha91/apiMeasureWaterAndGas/blob/main/README_ru.md) - API для измерения и регистрации потребления воды и газа
+<details>
+  <summary><h2>📂 Другие Репозитории</h2></summary>
+
+- 📏 [Приложение Точности на React](https://github.com/SamuelRocha91/precisionReactApplication/blob/main/README_ru.md) - Интерфейс для регистрации измерений газа и воды.
+- 🤖 [API Node](https://github.com/SamuelRocha91/apiMeasureWaterAndGas/blob/main/README_ru.md) - API для измерения и регистрации потребления.
+
+</details>

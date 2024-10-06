@@ -1,58 +1,70 @@
-# <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Full Stack Projects" width="52" height="40" /> مشروع البائع - تطبيق توصيل<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Java Projects Logo" width="52" height="40" />  
+# <img src="https://cdn-icons-png.flaticon.com/128/83/83522.png" alt="Full Projects Logo" width="42" height="30" /> مشروع البائع - تطبيق توصيل <img src="https://cdn-icons-png.flaticon.com/128/83/83522.png" alt="Full Projects Logo" width="42" height="30" />
 
-## 🌐 [![Português](https://img.shields.io/badge/Português-green)](https://github.com/SamuelRocha91/seller_application/blob/main/README.md) [![Español](https://img.shields.io/badge/Español-yellow)](https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md) [![English](https://img.shields.io/badge/English-blue)](https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md) [![Русский](https://img.shields.io/badge/Русский-lightgrey)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md) [![中文](https://img.shields.io/badge/中文-red)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md) [![العربية](https://img.shields.io/badge/العربية-orange)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md)
+## 🌐 اللغات المتاحة
 
-هذا المستودع يحتوي على تطبيق البائع لمنصة التوصيل، والذي تم تطويره باستخدام Vue.js. يوفر هذا التطبيق واجهة لإدارة الطلبات والمنتجات من قبل البائعين.
+[![Português](https://img.shields.io/badge/Português-green)](https://github.com/SamuelRocha91/seller_application/blob/main/README.md) [![Español](https://img.shields.io/badge/Español-yellow)](https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md) [![English](https://img.shields.io/badge/English-blue)](https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md) [![Русский](https://img.shields.io/badge/Русский-lightgrey)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md) [![中文](https://img.shields.io/badge/中文-red)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md) [![العربية](https://img.shields.io/badge/العربية-orange)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md)
 
-![توضيح تسجيل المستخدم](./assets/internal.gif)
+يحتوي هذا المستودع على تطبيق البائع على منصة التوصيل، تم تطويره باستخدام Vue.js. يوفر هذا التطبيق واجهة لإدارة الطلبات والمنتجات من قبل البائعين.
 
-## المستودعات ذات الصلة
+![صورة توضيحية لتسجيل المستخدم](./assets/internal.gif)
 
-- 💎[تطبيق التوصيل](https://github.com/SamuelRocha91/delivery_back) - خلفية Rails لتطبيق التوصيل.
-- 🛒[تطبيق المستهلك](https://github.com/SamuelRocha91/consumy) - تطبيق للمستهلكين
-- 💲 [Paymenty API](https://github.com/SamuelRocha91/paymenty).
+<details>
+  <summary><h2>🔗 المستودعات ذات الصلة</h2></summary>
 
-![توضيح الوظائف الداخلية](./assets/registerseller.gif)
+  - 💎 [تطبيق التوصيل](https://github.com/SamuelRocha91/delivery_back/blob/main/README_ar.md) - الباكيند على Rails لتطبيق التوصيل.
+  - 🛒 [تطبيق المستهلك](https://github.com/SamuelRocha91/consumy/blob/main/README_ar.md) - تطبيق المستهلك.
+  - 💲 [API للدفع](https://github.com/SamuelRocha91/paymenty/blob/main/README_ar.md) - API للدفع.
 
-**روابط المشروع:**
+</details>
 
-- [تصميم على Figma](https://www.figma.com/file/tS8r4eROXBknYixtDcijXd/Meu-portf%C3%B3lio?type=design&node-id=0-1&mode=design&t=pL6yJYx6lOSWBGdw-0)
+![صورة توضيحية للوظائف الداخلية](./assets/registerseller.gif)
 
-## الاعتماديات والوظائف
+<details>
+  <summary><h2>📑 روابط المشروع</h2></summary>
+
+- [تصميم في Figma](https://www.figma.com/file/tS8r4eROXBknYixtDcijXd/Meu-portf%C3%B3lio?type=design&node-id=0-1&mode=design&t=pL6yJYx6lOSWBGdw-0)
+
+</details>
+
+<details>
+  <summary><h2>📦 الاعتماديات والوظائف</h2></summary>
 
 ### الاعتماديات الرئيسية
 
-- **Vue.js:** إطار عمل جافا سكريبت تقدمي لبناء الواجهات.
-- **Vue Router:** للتوجيه في Vue.js.
-- **Vite:** أداة بناء للتطوير السريع والمحسن.
-- **Vitest:** إطار عمل لاختبارات الوحدة لـ Vue.js.
-- **ESLint & Prettier:** أدوات للتحقق من جودة الكود وتنسيقه.
-- **TypeScript:** دعم لـ TypeScript لتطوير أكثر أمانًا وقابلية للتوسع.
+- **Vue.js:** إطار عمل JavaScript تقدمي لبناء الواجهات.
+- **Vue Router:** لتوجيه الصفحات في Vue.js.
+- **Vite:** أداة بناء لتطوير سريع ومحسن.
+- **Vitest:** إطار عمل للاختبارات الوحدوية لـ Vue.js.
+- **ESLint & Prettier:** أدوات لتنسيق وتحليل الشيفرة للحفاظ على جودة الكود.
+- **TypeScript:** دعم TypeScript لتطوير أكثر أمانًا وقابلية للتوسع.
 - **Pinia:** مكتبة لإدارة الحالة مستوحاة من Vuex.
 
 ### الوظائف المنفذة
 
-- **Fetch Event Source:** للتواصل في الوقت الفعلي مع الخادم.
-- **SweetAlert2:** لعرض التنبيهات والنوافذ الحوارية بشكل جميل وقابل للتخصيص.
+- **Fetch Event Source:** للتواصل في الوقت الحقيقي مع الباكيند.
+- **SweetAlert2:** لعرض تنبيهات وحوارات جميلة وقابلة للتخصيص.
 - **Vuedraggable:** للسحب والإفلات للعناصر في الواجهة.
 
 ### أدوات وإضافات أخرى
 
-- **@rails/actioncable:** للتكامل مع WebSockets في الخلفية Rails.
-- **lodash.debounce:** أداة للمساعدة في عمليات debounce.
-- **@types/rails__actioncable:** تعريفات TypeScript لـ ActionCable.
+- **@rails/actioncable:** للتكامل مع WebSockets في الباكيند Rails.
+- **lodash.debounce:** أداة للوظائف لتسهيل عمليات debounce.
+- **@types/rails__actioncable:** نوعيات TypeScript لـ ActionCable.
 
-## إعداد المشروع
+</details>
 
-للاستخدام المتكامل، راجع الخطوات التالية:
+<details>
+  <summary><h2>🛠️ إعداد المشروع</h2></summary>
 
-- [خلفية التوصيل](https://github.com/SamuelRocha91/delivery_back) - خلفية Rails لمنصة التوصيل.
+للاستخدام المتكامل، يرجى اتباع الخطوات في:
 
-لتكوين وتشغيل المستودع بشكل منفصل، اتبع الخطوات التالية:
+- [باك إند التوصيل](https://github.com/SamuelRocha91/delivery_back/blob/main/README_ar.md) - تطبيق الباكيند على Rails لمنصة التوصيل.
 
-### المتطلبات الأساسية
+لإعداد وتشغيل المستودع بشكل فردي، اتبع الخطوات التالية:
 
-تأكد من أنك قمت بتثبيت [Node.js](https://nodejs.org/) و [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/) على جهازك.
+### المتطلبات المسبقة
+
+تأكد من تثبيت [Node.js](https://nodejs.org/) و [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/) على جهازك.
 
 ### تثبيت الاعتماديات
 
@@ -62,21 +74,26 @@ npm install
 
 ### بدء خادم التطوير
 
-لتشغيل خادم التطوير، قم بتنفيذ:
+للبدء في خادم التطوير، نفذ:
 
 ```sh
 npm run dev
 ```
 
-### تشغيل الاختبارات
+### تنفيذ الاختبارات
 
-لتشغيل اختبارات الوحدة، استخدم:
+لتنفيذ الاختبارات الوحدوية، استخدم:
 
 ```sh
 npm run test:unit
 ```
-## مشاريع أخرى
 
+</details>
 
-- 📏 [تطبيق الدقة React](https://github.com/SamuelRocha91/precisionReactApplication/blob/main/README_ar.md) - واجهة تسجيل قياسات الغاز والماء
-- 🤖 [واجهة برمجة التطبيقات Node](https://github.com/SamuelRocha91/apiMeasureWaterAndGas/blob/main/README_ar.md) - واجهة برمجة التطبيقات لقياس وتسجيل استهلاك الماء والغاز
+<details>
+  <summary><h2>📂 مستودعات أخرى</h2></summary>
+
+- 📏 [تطبيق الدقة على React](https://github.com/SamuelRocha91/precisionReactApplication/blob/main/README_ar.md) - واجهة لتسجيل قياسات الغاز والماء.
+- 🤖 [API Node](https://github.com/SamuelRocha91/apiMeasureWaterAndGas/blob/main/README_ar.md) - API لقياس وتسجيل الاستهلاك.
+
+</details>
