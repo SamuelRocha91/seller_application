@@ -1,27 +1,33 @@
-# <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Full Stack Projects" width="52" height="40" /> Projeto do Lojista - Aplicação de Delivery <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Java Projects Logo" width="52" height="40" />
+# <img src="https://cdn-icons-png.flaticon.com/128/83/83522.png" alt="Full Projects Logo" width="42" height="30" /> Projeto do Lojista - Aplicação de Delivery <img src="https://cdn-icons-png.flaticon.com/128/83/83522.png" alt="Full Projects Logo" width="42" height="30" />
 
-## 🌐 [![Português](https://img.shields.io/badge/Português-green)](https://github.com/SamuelRocha91/seller_application/blob/main/README.md) [![Español](https://img.shields.io/badge/Español-yellow)](https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md) [![English](https://img.shields.io/badge/English-blue)](https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md) [![Русский](https://img.shields.io/badge/Русский-lightgrey)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md) [![中文](https://img.shields.io/badge/中文-red)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md) [![العربية](https://img.shields.io/badge/العربية-orange)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md)
+## 🌐 Idiomas Disponíveis
+
+[![Português](https://img.shields.io/badge/Português-green)](https://github.com/SamuelRocha91/seller_application/blob/main/README.md) [![Español](https://img.shields.io/badge/Español-yellow)](https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md) [![English](https://img.shields.io/badge/English-blue)](https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md) [![Русский](https://img.shields.io/badge/Русский-lightgrey)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md) [![中文](https://img.shields.io/badge/中文-red)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md) [![العربية](https://img.shields.io/badge/العربية-orange)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md)
 
 Este repositório contém a aplicação do vendedor para a plataforma de delivery, desenvolvida em Vue.js. Esta aplicação oferece uma interface para gerenciamento de pedidos e produtos por parte dos vendedores.
 
 ![Ilustração de cadastro de usuário](./assets/internal.gif)
 
+<details>
+  <summary><h2>🔗 Repositórios Relacionados</h2></summary>
 
-## Repositórios Relacionados
+  - 💎 [Delivery Application](https://github.com/SamuelRocha91/delivery_back) - Backend em Rails para a aplicação de delivery.
+  - 🛒 [Consumer Application](https://github.com/SamuelRocha91/consumy) - Aplicação do consumidor.
+  - 💲 [Paymenty API](https://github.com/SamuelRocha91/paymenty) - API de pagamento.
 
-- 💎 [Delivery Application](https://github.com/SamuelRocha91/delivery_back) - Backend em Rails para a aplicação de delivery.
-- 🛒 [Consumer Application](https://github.com/SamuelRocha91/consumy) - Aplicação do consumidor.
-- 💲 [Paymenty API](https://github.com/SamuelRocha91/paymenty) - API de pagamento
-
+</details>
 
 ![Ilustração de funcionalidades internas](./assets/registerseller.gif)
 
-**Links do Projeto:**
+<details>
+  <summary><h2>📑 Links do Projeto</h2></summary>
 
 - [Design no Figma](https://www.figma.com/file/tS8r4eROXBknYixtDcijXd/Meu-portf%C3%B3lio?type=design&node-id=0-1&mode=design&t=pL6yJYx6lOSWBGdw-0)
 
+</details>
 
-## Dependências e Funcionalidades
+<details>
+  <summary><h2>📦 Dependências e Funcionalidades</h2></summary>
 
 ### Dependências Principais
 
@@ -45,17 +51,16 @@ Este repositório contém a aplicação do vendedor para a plataforma de deliver
 - **lodash.debounce:** Utilitário de funções para facilitar operações com debounce.
 - **@types/rails__actioncable:** Tipagens TypeScript para ActionCable.
 
+</details>
 
-
-## Setup do Projeto
+<details>
+  <summary><h2>🛠️ Setup do Projeto</h2></summary>
 
 Para um uso integrado, observe o passo a passo em:
 
-- [Delivery Backend](https://github.com/SamuelRocha91/delivery_back) - Aplicação backend em Rails para a plataforma de delivery
+- [Delivery Backend](https://github.com/SamuelRocha91/delivery_back) - Aplicação backend em Rails para a plataforma de delivery.
 
 Para configurar e executar o repositório individualmente, siga os passos abaixo:
-
-Para configurar e executar o projeto localmente, siga os passos abaixo:
 
 ### Pré-requisitos
 
@@ -83,7 +88,12 @@ Para executar os testes unitários, utilize:
 npm run test:unit
 ```
 
-## Outros repositórios>
+</details>
 
-- 📏 [React Precision Application](https://github.com/SamuelRocha91/precisionReactApplication) - Interface de cadastro de medições de gás e de água
-- 🤖 [Node API](https://github.com/SamuelRocha91/apiMeasureWaterAndGas) - Api de medição e cadastro de consumo
+<details>
+  <summary><h2>📂 Outros Repositórios</h2></summary>
+
+- 📏 [React Precision Application](https://github.com/SamuelRocha91/precisionReactApplication) - Interface de cadastro de medições de gás e de água.
+- 🤖 [Node API](https://github.com/SamuelRocha91/apiMeasureWaterAndGas) - API de medição e cadastro de consumo.
+
+</details>

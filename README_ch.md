@@ -1,59 +1,70 @@
-# <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Full Stack Projects" width="52" height="40" /> 卖家项目 - 配送应用 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTchGHKMA3VyA1ySh2ITWb0CIm_cnhF1cGvlQ&s" alt="Java Projects Logo" width="52" height="40" /> 
+# <img src="https://cdn-icons-png.flaticon.com/128/83/83522.png" alt="Full Projects Logo" width="42" height="30" /> 商家项目 - 外卖应用 <img src="https://cdn-icons-png.flaticon.com/128/83/83522.png" alt="Full Projects Logo" width="42" height="30" />
 
-## 🌐 [![Português](https://img.shields.io/badge/Português-green)](https://github.com/SamuelRocha91/seller_application/blob/main/README.md) [![Español](https://img.shields.io/badge/Español-yellow)](https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md) [![English](https://img.shields.io/badge/English-blue)](https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md) [![Русский](https://img.shields.io/badge/Русский-lightgrey)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md) [![中文](https://img.shields.io/badge/中文-red)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md) [![العربية](https://img.shields.io/badge/العربية-orange)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md)
+## 🌐 可用语言
 
+[![Português](https://img.shields.io/badge/Português-green)](https://github.com/SamuelRocha91/seller_application/blob/main/README.md) [![Español](https://img.shields.io/badge/Español-yellow)](https://github.com/SamuelRocha91/seller_application/blob/main/README_es.md) [![English](https://img.shields.io/badge/English-blue)](https://github.com/SamuelRocha91/seller_application/blob/main/README_en.md) [![Русский](https://img.shields.io/badge/Русский-lightgrey)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ru.md) [![中文](https://img.shields.io/badge/中文-red)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ch.md) [![العربية](https://img.shields.io/badge/العربية-orange)](https://github.com/SamuelRocha91/seller_application/blob/main/README_ar.md)
 
-这个仓库包含了为配送平台开发的卖家应用，使用 Vue.js 开发。该应用提供了一个界面，用于卖家管理订单和产品。
+该仓库包含了外卖平台的商家应用程序，采用 Vue.js 开发。此应用程序为商家提供了一个管理订单和产品的界面。
 
-![用户注册示意图](./assets/internal.gif)
+![用户注册插图](./assets/internal.gif)
 
-## 相关仓库
+<details>
+  <summary><h2>🔗 相关仓库</h2></summary>
 
-- 💎 [配送应用](https://github.com/SamuelRocha91/delivery_back) - 用于配送应用的 Rails 后端。
-- 🛒 [消费者应用](https://github.com/SamuelRocha91/consumy) - 消费者应用。
-- 💲 [Paymenty API](https://github.com/SamuelRocha91/paymenty)
+  - 💎 [外卖应用](https://github.com/SamuelRocha91/delivery_back/blob/main/README_ch.md) - 使用 Rails 的后端。
+  - 🛒 [消费者应用](https://github.com/SamuelRocha91/consumy/blob/main/README_ch.md) - 消费者应用。
+  - 💲 [支付 API](https://github.com/SamuelRocha91/paymenty/blob/main/README_ch.md) - 支付 API。
 
-![内部功能示意图](./assets/registerseller.gif)
+</details>
 
-**项目链接：**
+![内部功能插图](./assets/registerseller.gif)
+
+<details>
+  <summary><h2>📑 项目链接</h2></summary>
 
 - [Figma 设计](https://www.figma.com/file/tS8r4eROXBknYixtDcijXd/Meu-portf%C3%B3lio?type=design&node-id=0-1&mode=design&t=pL6yJYx6lOSWBGdw-0)
 
-## 依赖与功能
+</details>
+
+<details>
+  <summary><h2>📦 依赖和功能</h2></summary>
 
 ### 主要依赖
 
 - **Vue.js:** 用于构建用户界面的渐进式 JavaScript 框架。
-- **Vue Router:** Vue.js 的页面路由。
-- **Vite:** 用于快速优化开发的构建工具。
+- **Vue Router:** 用于 Vue.js 中的页面路由。
+- **Vite:** 用于快速和优化的开发构建工具。
 - **Vitest:** 用于 Vue.js 的单元测试框架。
-- **ESLint & Prettier:** 用于代码质量控制的静态分析和格式化工具。
-- **TypeScript:** 提供 TypeScript 支持，以实现更安全和可扩展的开发。
-- **Pinia:** 受 Vuex 启发的状态管理库。
+- **ESLint & Prettier:** 代码检查和格式化工具，以保持代码质量。
+- **TypeScript:** 提供 TypeScript 支持，以进行更安全和可扩展的开发。
+- **Pinia:** 基于 Vuex 的状态管理库。
 
-### 实现功能
+### 实现的功能
 
-- **Fetch Event Source:** 用于与后端进行实时通信。
-- **SweetAlert2:** 用于显示美观且可自定义的警报和对话框。
-- **Vuedraggable:** 用于界面的拖放操作。
+- **Fetch Event Source:** 与后端进行实时通信。
+- **SweetAlert2:** 显示美观且可定制的警告和对话框。
+- **Vuedraggable:** 在界面中实现拖放功能。
 
 ### 其他工具和插件
 
-- **@rails/actioncable:** 用于在 Rails 后端集成 WebSockets。
-- **lodash.debounce:** 用于简化 debounce 操作的函数工具。
-- **@types/rails__actioncable:** ActionCable 的 TypeScript 类型定义。
+- **@rails/actioncable:** 用于与 Rails 后端的 WebSocket 集成。
+- **lodash.debounce:** 用于简化防抖操作的函数工具。
+- **@types/rails__actioncable:** ActionCable 的 TypeScript 类型。
 
-## 项目设置
+</details>
 
-要进行集成使用，请参见以下步骤：
+<details>
+  <summary><h2>🛠️ 项目设置</h2></summary>
 
-- [配送后端](https://github.com/SamuelRocha91/delivery_back) - 用于配送平台的 Rails 后端。
+要集成使用，请参阅以下步骤：
+
+- [外卖后端](https://github.com/SamuelRocha91/delivery_back/blob/main/README_ch.md) - 外卖平台的 Rails 后端应用。
 
 要单独配置和运行该仓库，请遵循以下步骤：
 
-### 前提条件
+### 前置条件
 
-确保您已在计算机上安装了 [Node.js](https://nodejs.org/) 和 [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/)。
+请确保在您的计算机上安装了 [Node.js](https://nodejs.org/) 和 [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/)。
 
 ### 安装依赖
 
@@ -76,7 +87,13 @@ npm run dev
 ```sh
 npm run test:unit
 ```
-## 其他项目
 
-- 📏 [React 精准应用程序](https://github.com/SamuelRocha91/precisionReactApplication/blob/main/README_ch.md) - 燃气和水的测量登记界面
-- 🤖 [Node API](https://github.com/SamuelRocha91/apiMeasureWaterAndGas/blob/main/README_ch.md) - 用于测量和登记水和燃气消耗的 API
+</details>
+
+<details>
+  <summary><h2>📂 其他仓库</h2></summary>
+
+- 📏 [React 精准应用](https://github.com/SamuelRocha91/precisionReactApplication/blob/main/README_ch.md) - 燃气和水的测量注册界面。
+- 🤖 [Node API](https://github.com/SamuelRocha91/apiMeasureWaterAndGas/blob/main/README_ch.md) - 用于测量和注册消费的 API。
+
+</details>
